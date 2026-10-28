@@ -150,6 +150,8 @@ nav button{font-size:10.5px}
 .lv4{font-size:12px;color:#cbd5e1;margin:4px 0}.lv5{margin:2px 0}.lvage{font-size:11.5px;color:#86efac}.lvage.stale{color:#fbbf24;font-weight:700}.lvage.old{color:#f87171;font-weight:800}
 .btn.lvx{border-color:#ef4444;color:#fecaca;background:rgba(239,68,68,.12);font-weight:800}.lvd{margin:8px 0}.lvdone{padding:10px;border-radius:10px;background:#111a2b;font-size:14px}
 .btn:disabled{opacity:.45}
+.slb{display:inline-block;font-size:10.5px;font-weight:800;color:#fde68a;background:rgba(245,158,11,.16);border:1px solid rgba(245,158,11,.45);border-radius:6px;padding:0 5px;margin-left:3px;vertical-align:1px}
+#slf-card{border:1px solid rgba(245,158,11,.35)}
 </style>
 </head>
 <body>
@@ -246,6 +248,19 @@ nav button{font-size:10.5px}
   </div>
   <div class="bar"><button class="btn" id="s-snd">🔔 Ton</button><button class="btn" id="s-ntf">📣 Benachrichtigung</button></div>
   <p class="small" id="ntfInfo"></p>
+ </div>
+ <div class="card" id="slf-card">
+  <h3>🛑 Stop-Abstand (SL-Faktor)</h3>
+  <p class="small">Wenn dir der Stop der Strategie zu eng ist: Stop als Vielfaches des Original-Stops. Gilt für die Signalanzeige, den Rechner (Lotgröße) und neue Trades (Live-Check). Pro Trade im „Trade genommen“-Fenster oder über Bearbeiten änderbar.</p>
+  <div class="seg" id="jc-slf"><button data-v="1">1R (Original)</button><button data-v="1.5">1,5R</button><button data-v="2">2R</button><button data-v="3">3R</button></div>
+  <p class="small" id="jc-slfi" style="margin-top:6px"></p>
+  <p class="small"><b>So rechnet die App:</b> 1R = Abstand Einstieg → <i>gewählter</i> Stop = dein Kontorisiko. Stop 2× weiter → halbe Lotgröße bei gleichem Risiko. Der Ziel-Preis der Strategie bleibt, liegt in R also näher (CRV halbiert). Break-even (+1R) und Trailing-Stufen zählen in diesem R – bei 2R-Stop rückt der Stop also erst nach doppelter Strecke nach. Bereits genommene Trades behalten ihren Stop.</p>
+  <details><summary class="small"><b>Backtest: Stop 1 / 1,5 / 2 / 3×</b> (vorhandene Daten, gleiche Signale)</summary><p class="small" id="slf-bt">Gleiche Signale und Auswertungs-Engine wie die App, ohne Kosten, unabhängig in Python gegengeprüft (15.336 Kombinationen, 0 Abweichungen). R = gewählter Stop, also gleiches $-Risiko je Trade – die Werte sind direkt vergleichbar. Reihenfolge: Stop 1× / 1,5× / 2× / 3×.<br>
+<b>Vera, alle Datensätze</b> (~180 Trades): Festes Ziel Ø −0,25 / −0,07 / −0,01 / −0,04 R · Summe −45,6 / −13,6 / −2,2 / −7,3 R · Treffer 25 / 40 / 50 / 57 % · max. DD 50,6 / 24,3 / 18,4 / 14,5 R. Trailing (BE) Ø −0,26 / −0,08 / <b>+0,09</b> / −0,03 R · Summe −47,4 / −14,8 / +16,0 / −4,4 R · max. DD 48,4 / 27,7 / 14,9 / 19,2 R.<br>
+Ausgestoppt und wieder hochgelaufen: 138 von 200 Vera-Signalen wurden beim 1R-Stop ausgestoppt; davon liefen 91 % später wieder über den Einstieg und 68 % erreichten danach noch das Ziel (vor dem Zeit-Ausstieg). Der Vera-Stop ist also oft zu eng.<br>
+Aber: Vera Gold M15 (21 Trades) bringt der weite Stop nichts (Summe ≈ −9 R in allen Varianten). Der Vorteil von 2× Trailing kommt fast nur aus der ersten Hälfte der Daten (+15,4 R gegen +0,6 R).<br>
+<b>TA-Kacheln</b> (~1.700 Signale, stark überlappend): ein weiter Stop <b>verschlechtert</b> das Ergebnis. Festes Ziel Ø +0,07 / −0,01 / −0,02 / −0,03 R, Trailing Ø +0,26 / +0,12 / +0,04 / +0,01 R, max. DD 58 → 79 → 93 → 85 R. Zwar liefen 71 % der ausgestoppten Trades wieder über den Einstieg, aber nur 35 % bis zum Ziel.<br>
+<b>Fazit:</b> 2× kann bei Vera helfen. Die Stichprobe ist klein (Wochen statt Jahre, ~180 Trades) und nicht stabil über die Zeit – kein Beweis. Bei den TA-Kacheln lieber 1×. Connors/ORB/E4: zu kurze Historie, nicht testbar. Keine Anlageberatung.</p></details>
  </div>
  <div class="card" id="jc-card">
   <h3>🏃 Trade-Management (genommene Trades)</h3>
@@ -1002,17 +1017,22 @@ async function fxCal(k){const F=FTMO[k];const v=parseFloat(String($("fx-in-"+k).
  const f=val/ref;if(f<F.f0*0.6||f>F.f0*1.4)return msg(`${k}: Faktor ${nf(f,4)} ist unplausibel (Standard ${nf(F.f0,2)}). Richtiges Symbol/Kurs eingegeben?`);
  fxs[k]=fxs[k]||{};fxs[k].man={f,at:Date.now(),ftmo:val,ref};SS("fx",fxs);
  const tv=fxs[k].tv;fxLast={ok:true,msg:`${k} kalibriert: ×${nf(f,5)}${tv&&tv.f&&Math.abs(f/tv.f-1)>0.01?` – weicht ${nf((f/tv.f-1)*100,1)} % von TradingView ab`:""}`,at:Date.now()};renderFx();rerender()}
-function rerender(){const now=Date.now();Object.values(lastOuts).forEach(S=>{if($("s-"+S.key))renderSymbol(S,now)});renderRank();renderTop()}
+function rerender(){const now=Date.now();(lastRank||[]).forEach(x=>{slApply(x)});Object.values(lastOuts).forEach(S=>{if($("s-"+S.key))renderSymbol(S,now)});renderRank();renderTop()}
 // ---------- Gültigkeit / Ablauf je Signal ----------
 // Quelle je Strategie siehe lifeOf(). „Standard: N Kerzen“ = Regel hat keinen späteren Einstieg definiert (EA steigt zum Signal ein).
 const MINms=60e3;
-function hitScan(x,m1,now){if(!m1)return{out:null};const d=x.dir;let filled=!x.limit;const R1=x.stop!=null?x.entry+d*Math.abs(x.entry-x.stop):null;
+// ---------- Stop-Abstand (v6): Vielfaches des Original-Stops der Strategie. R = Abstand zum GEWÄHLTEN Stop (= Kontorisiko) ----------
+const SLFS=[1,1.5,2,3];const slF=()=>{try{return SLFS.includes(JC.slf)?JC.slf:1}catch(e){return 1}};
+const slW=(e,s0,d,f)=>s0==null?null:e-d*f*Math.abs(e-s0);
+const slTxt=f=>(f%1?nf(f,1):String(f))+"×";
+function slApply(x){if(!("stop0" in x)){x.stop0=x.stop;x.crv0=x.crv}const f=slF();x.slf=f;x.stop=slW(x.entry,x.stop0,x.dir,f);x.crv=x.crv0==null?null:x.crv0/f;return x}
+function hitScan(x,m1,now){if(!m1)return{out:null};const d=x.dir;let filled=!x.limit;const s0=x.stop0!==undefined?x.stop0:x.stop;const R1=s0!=null?x.entry+d*Math.abs(x.entry-s0):null;
  for(const b of m1){if(b.t<x.t)continue;if(b.t>now)break;
   if(!filled){if(d>0?b.l<=x.entry:b.h>=x.entry)filled=true;else{if(R1!=null&&(d>0?b.h>=R1:b.l<=R1))return{out:"Einstieg verpasst",at:b.t};continue}}
   if(x.stop!=null&&(d>0?b.l<=x.stop:b.h>=x.stop))return{out:"Stop",at:b.t};
   if(x.tgt!=null&&(d>0?b.h>=x.tgt:b.l<=x.tgt))return{out:"Ziel",at:b.t}}
  return{out:null,filled}}
-function lifeOf(x,now){const bs=x.barSec*1000;let exp,src,tEnd=null,tSrc="";const STD=n=>`Standard: ${n} ${x.barSec===1?"Sekundenkerzen":"Kerzen"} (${x.tf})`;
+function lifeOf(x,now){slApply(x);const bs=x.barSec*1000;let exp,src,tEnd=null,tSrc="";const STD=n=>`Standard: ${n} ${x.barSec===1?"Sekundenkerzen":"Kerzen"} (${x.tf})`;
  const dayEnd=(fl)=>STRAT.S(x.t).day0+fl*MINms;
  switch(x.strat){
   case"CONNORS":exp=x.win.to;src="EA: Entscheidung 23:00–23:50 Server = 16:00–16:50 NY (InpDecisionHour/InpDecisionEndMin)";tSrc="Ausstieg: Schluss > SMA5 oder nach 10 Handelstagen (InpMaxHoldDays)";break;
@@ -1030,7 +1050,7 @@ function lifeOf(x,now){const bs=x.barSec*1000;let exp,src,tEnd=null,tSrc="";cons
  let out=x.out&&x.out!=="läuft"&&x.out!=="offen"?x.out:null,outAt=null;
  if(!out&&x.strat==="VERA"){const h=hitScan(x,ST[x.key]&&ST[x.key].m1,now);if(h.out){out=h.out;outAt=h.at}}
  let state="gültig",why="";
- if(out){if(/Stop/.test(out))state="Stop erreicht";else if(/^Ziel/.test(out))state="Ziel erreicht";else if(/verpasst/.test(out))state="Einstieg verpasst";else{state="abgelaufen";why=out==="Zeit"?"Zeit-Ausstieg":out}}
+ if(out){if(/Stop/.test(out)){state="Stop erreicht";if(x.slf>1&&x.strat!=="VERA")why="Original-Stop der Strategie – dein weiter Stop wird hier nicht geprüft"}else if(/^Ziel/.test(out))state="Ziel erreicht";else if(/verpasst/.test(out))state="Einstieg verpasst";else{state="abgelaufen";why=out==="Zeit"?"Zeit-Ausstieg":out}}
  else if(now>exp)state="abgelaufen";
  return{state,exp,src,tEnd,tSrc,why,outAt}}
 const durS=ms=>{const s=Math.max(0,Math.round(ms/1000));if(s<60)return s+" s";const m=Math.floor(s/60);if(m<60)return m+" min";const h=Math.floor(m/60);if(h<48)return`${h} h ${m%60} min`;return`${Math.floor(h/24)} T ${h%24} h`};
@@ -1073,7 +1093,7 @@ function evalTop(x,S,R,now){const c=[];const def=S.def,dl=x.dir>0?"Long":"Short"
  if(D1)c.push(x.prelim?ok("Frisch: Entscheidung heute (vorläufig bis Kassaschluss)"):ok("Frisch: heutige Entscheidung"));
  else if(x.fresh1s)c.push(ok("Frisch: Stop-Order aktiv"));else{const a=ageBars(x,now);c.push(a<=3?ok(`Frisch: ${a<1?"in der letzten Kerze":"vor "+nf(a,a%1?1:0)+" Kerzen"}`):no(`Nicht frisch: vor ${nf(a,a%1?1:0)} Kerzen`))}
  // 6 CRV
- if(x.stop==null)c.push(no("CRV: kein Stop definiert"));else if(x.crv!=null)c.push(x.crv>=1.5-1e-6?ok(`CRV ${nf(x.crv,2)}`):no(`CRV nur ${nf(x.crv,2)} (< 1,5)`));
+ if(x.stop==null)c.push(no("CRV: kein Stop definiert"));else if((x.crv0!==undefined?x.crv0:x.crv)!=null){const cv=x.crv0!==undefined?x.crv0:x.crv;c.push(cv>=1.5-1e-6?ok(`CRV ${nf(cv,2)}${x.slf>1?" (Strategie-Stop)":""}`):no(`CRV nur ${nf(cv,2)} (< 1,5)`))}
  else c.push(/^Ausstieg lt\. Regel/.test(x.exitTxt||"")?ok("CRV: offen, Ausstieg lt. Regel"):no("CRV unbekannt"));
  return c}
 // ---------- Darstellung ----------
@@ -1081,7 +1101,7 @@ const LBL={buy:"KAUFEN",sell:"VERKAUFEN",neu:"NEUTRAL"};
 let actx=null;function beep(){try{actx=actx||new (window.AudioContext||window.webkitAudioContext)();const o=actx.createOscillator(),g=actx.createGain();o.connect(g);g.connect(actx.destination);o.frequency.value=880;g.gain.setValueAtTime(.15,actx.currentTime);g.gain.exponentialRampToValueAtTime(.001,actx.currentTime+.5);o.start();o.stop(actx.currentTime+.5)}catch(e){}}
 function notify(t){if(cfg.snd)beep();if(cfg.ntf&&"Notification"in window&&Notification.permission==="granted"){try{new Notification("Signalgeber – Top-Setup",{body:t,icon:document.querySelector('link[rel=icon]').href})}catch(e){}}}
 const ago=(t,now)=>{const m=Math.round((now-t)/60000);return m<1?"gerade":m<60?`vor ${m} min`:m<1440?`vor ${Math.floor(m/60)} h ${m%60} min`:`vor ${Math.floor(m/1440)} T`};
-function lvl(x,k,d){return`E <b>${fp(k,x.entry,d)}</b>${x.limit?" (Limit)":""} · S <b>${x.stop==null?"–":fp(k,x.stop,d)}</b> · Z <b>${x.tgt==null?(x.exitTxt&&x.exitTxt!=="–"?"lt. Regel":"–"):fp(k,x.tgt,d)}</b>${x.crv!=null?` · CRV ${nf(x.crv,2)}`:""}`}
+function lvl(x,k,d){return`E <b>${fp(k,x.entry,d)}</b>${x.limit?" (Limit)":""} · S <b>${x.stop==null?"–":fp(k,x.stop,d)}</b>${x.stop!=null&&x.slf>1?` <span class="slb">SL ${slTxt(x.slf)}</span>`:""} · Z <b>${x.tgt==null?(x.exitTxt&&x.exitTxt!=="–"?"lt. Regel":"–"):fp(k,x.tgt,d)}</b>${x.crv!=null?` · CRV ${nf(x.crv,2)}${x.slf>1?" (bei weitem Stop)":""}`:""}`}
 function renderSymbol(S,now){const el=$("s-"+S.key);const def=S.def,d=S.d,ta=S.ta;
  const ovd=S.ov>=0.35?"buy":S.ov<=-0.35?"sell":"neu";const buys=TFS.filter(([n])=>ta[n].dir==="buy").length,sells=TFS.filter(([n])=>ta[n].dir==="sell").length;
  let h=`<div class="shead"><div><div class="sname">${def.name}</div><div class="ssub">${def.sub}${S.src!=="bf"?" · Quelle: "+({bs:"Binance Spot",okx:"OKX"})[S.src]+" (verkürzt)":""}${S.miss&&S.miss.length?` · fehlt: ${S.miss.join(", ")}`:""}</div></div>
@@ -1089,10 +1109,10 @@ function renderSymbol(S,now){const el=$("s-"+S.key);const def=S.def,d=S.d,ta=S.t
   <div class="overall"><span class="big b-${ovd}">${LBL[ovd]}</span><div style="flex:1"><div class="small">TA über alle Timeframes: ${buys}× Kauf · ${sells}× Verkauf · Wert ${S.ov>=0?"+":""}${nf(S.ov*100,0)}</div>
   <div class="meter"><i style="left:calc(${(S.ov+1)/2*100}% - 2px)"></i></div></div></div><div class="grid">`;
  TFS.forEach(([n])=>{const a=ta[n];if(a.err){h+=`<div class="tile"><div class="tf">${n}</div><div class="err">${a.err}</div></div>`;return}
-  const col=a.dir==="buy"?"var(--buy)":a.dir==="sell"?"var(--sell)":"var(--neu)";
-  h+=`<div class="tile ${a.dir}" data-e="${a.entry}" data-s="${a.stop??""}" data-t="${a.tgt??""}"><div class="trow"><span class="tf">${n}</span><span class="sig ${a.dir}">${LBL[a.dir]}</span></div>
+  const col=a.dir==="buy"?"var(--buy)":a.dir==="sell"?"var(--sell)":"var(--neu)";const sW=a.stop!=null?slW(a.entry,a.stop,a.dir==="sell"?-1:1,slF()):null;
+  h+=`<div class="tile ${a.dir}" data-e="${a.entry}" data-s="${sW??""}" data-t="${a.tgt??""}"><div class="trow"><span class="tf">${n}</span><span class="sig ${a.dir}">${LBL[a.dir]}</span></div>
    <div class="str"><i style="width:${a.str}%;background:${col}"></i></div><div class="why">${a.str}% · ${a.why.join(" · ")}</div>
-   <div class="lv"><span>E</span> ${fp(S.key,a.entry,d)}${a.stop!=null?`<br><span>S</span> ${fp(S.key,a.stop,d)} <span>Z</span> ${fp(S.key,a.tgt,d)}`:"<br><span>kein Einstieg</span>"}</div>
+   <div class="lv"><span>E</span> ${fp(S.key,a.entry,d)}${a.stop!=null?`<br><span>S</span> ${fp(S.key,sW,d)}${slF()>1?`<span class="slb">${slTxt(slF())}</span>`:""} <span>Z</span> ${fp(S.key,a.tgt,d)}`:"<br><span>kein Einstieg</span>"}</div>
    <div class="since">${a.dir==="neu"?"Stand":"seit"} ${fB.format(a.dir==="neu"?a.t:a.since)} · Kerze ${fB.format(a.t)}</div></div>`});
  h+=`</div><div class="rules"><h4>Regel-Strategien</h4>`;
  S.sigs.forEach(x=>{x.key=S.key;x.life=lifeOf(x,now)});const act=S.sigs.filter(x=>x.life.state==="gültig"),gone=S.sigs.filter(x=>x.life.state!=="gültig"&&now-x.t<864e5);
@@ -1112,7 +1132,7 @@ function renderSymbol(S,now){const el=$("s-"+S.key);const def=S.def,d=S.d,ta=S.t
  el.querySelectorAll(".rs[data-id]").forEach(t=>t.onclick=()=>{const x=act.find(y=>y.id===t.dataset.id);if(x)toCalc(S.key,x.entry,x.stop,x.tgt,d)})}
 function renderNoSrc(key){const def=PRESET[key];$("s-"+key).innerHTML=`<div class="sname">${def.name}</div><div class="rl na"><b>Keine Browser-Datenquelle.</b> ${def.why} Damit entfallen hier: ${def.rules}. Es werden keine Signale erfunden.</div>`}
 function toCalc(k,e,st,t,d){const F=FTMO[k],dd=F?F.dg:d,cv=v=>(+FXP(k,v)).toFixed(dd);$("c-entry").value=cv(e);$("c-stop").value=st!=null?cv(st):"";$("c-tgt").value=t!=null?cv(t):"";
- $("c-inst").value=F?k:($("c-inst").value in FTMO?"1":$("c-inst").value);$("c-from").textContent=F?`Übernommen aus ${k}, Preise ${fxLabel(k)}.`:`Übernommen aus ${k} (Ersatzkurs, keine FTMO-Umrechnung).`;show("v-calc");calc()}
+ $("c-inst").value=F?k:($("c-inst").value in FTMO?"1":$("c-inst").value);$("c-from").textContent=(F?`Übernommen aus ${k}, Preise ${fxLabel(k)}.`:`Übernommen aus ${k} (Ersatzkurs, keine FTMO-Umrechnung).`)+(st!=null&&slF()>1?` Stop ${slTxt(slF())} weiter als der Strategie-Stop → Lots entsprechend kleiner bei gleichem Risiko (1R = dieser Stop).`:"");show("v-calc");calc()}
 function rowHTML(x,i,top){const lg=x.dir>0,col=lg?"var(--buy)":"var(--sell)";const now=Date.now();
  return`<div class="ri${top&&i===0?" top":""}${x.life&&x.life.state!=="gültig"?" exp":""}" data-id="${x.id}"><div class="no" style="grid-row:1/7">#${i+1}</div>
  <div class="nm">${x.name}<span>${x.tf}</span></div><div class="dr ${lg?"long":"short"}">${lg?"LONG":"SHORT"} ${x.str}</div>
@@ -1139,7 +1159,7 @@ function renderTop(){const el=$("toplist"),now=Date.now();
  $("nearlist").innerHTML=lastNear.length?lastNear.map(t=>`<div class="rl"><b>${t.x.name} ${t.x.tf} ${t.x.dir>0?"LONG":"SHORT"}</b> · ${label(t.x)} (${t.n}/6) – fehlt: ${t.c.filter(k=>!k.ok).map(k=>k.txt).join("; ")}</div>`).join(""):`<div class="small">Keine Kandidaten mit 4 oder 5 von 6 Kriterien.</div>`}
 // ---------- Refresh-Steuerung ----------
 let tmr=null,nextAt=0,busy=false,pendingRun=false,lastRun=0,failStreak=0;const dbg={refreshes:0,scheduled:0,errors:[],lastMs:0,fx:[],fxCalls:0};
-window.__sg={dbg,net,timers:()=>tmr?1:0,state:()=>({rank:lastRank.length,top:lastTop.length,near:lastNear.length})};
+window.__sg={dbg,net,timers:()=>tmr?1:0,state:()=>({rank:lastRank.length,top:lastTop.length,near:lastNear.length}),rankList:()=>lastRank};
 function scheduleNext(ms){if(tmr){clearTimeout(tmr);tmr=null}if(+cfg.int>0&&!document.hidden){nextAt=Date.now()+ms;tmr=setTimeout(()=>{tmr=null;refresh()},ms);dbg.scheduled++}else nextAt=0}
 async function refresh(){if(busy){pendingRun=true;return}busy=true;const t0=Date.now();if(tmr){clearTimeout(tmr);tmr=null}nextAt=0;dbg.refreshes++;
  $("status").textContent="lädt …";let okN=0,bad=0;
@@ -1236,7 +1256,7 @@ sntf.onclick=async()=>{if(!cfg.ntf&&"Notification"in window){try{const p=await N
 let J=Object.assign({v:1,trades:[],tops:[],seen:{},recSince:null},LS("jr")||{});
 if(!J.recSince){J.recSince=Date.now();SS("jr",J)}
 const jrRep=(k,v)=>k==="_r"?undefined:v;const jrSave=()=>{try{localStorage.setItem("sg_jr",JSON.stringify(J,jrRep))}catch(e){toast("Speichern fehlgeschlagen (Speicher voll?) – bitte exportieren")}};
-let JC=Object.assign({mg:"trail",be:true,step:1,stepAlert:true,snd:true,ntf:false},LS("jrCfg")||{});const jcSave=()=>SS("jrCfg",JC);
+let JC=Object.assign({mg:"trail",be:true,step:1,stepAlert:true,snd:true,ntf:false,slf:1},LS("jrCfg")||{});const jcSave=()=>SS("jrCfg",JC);
 const MGN={trail:"🏃 Trailing (Runner)",fixed:"🎯 Festes Ziel"};
 const MT5="Die App kann deine FTMO-Position nicht schließen – schließe sie jetzt in MT5.";
 let jrMode=LS("jrMode")||"week",jrOff=0,jrUndo=null,jrDelArm=null;
@@ -1256,10 +1276,10 @@ function jrTEnd(x,start){const L=x.life||lifeOf(x,Date.now());const ek=STRAT.S(x
   case"KELT":return{tEnd:start+30*6e4,src:"Standard: 30 min (Regel hat nur das Gegensignal als Ausstieg)"};
   case"TA":case"CIPHER":return{tEnd:start+50*x.barSec*1000,src:`Standard: 50 Kerzen (${x.tf}) – Regel hat keinen Zeit-Ausstieg`};
   default:return L.tEnd?{tEnd:L.tEnd,src:L.tSrc}:{tEnd:start+50*x.barSec*1000,src:`Standard: 50 Kerzen (${x.tf})`}}}
-function jrSnap(x,kind,start,extra){const L=x.life||lifeOf(x,start);const te=jrTEnd(x,start);const fx=fxOf(x.key);
- const R1=x.limit&&x.stop!=null?x.entry+x.dir*Math.abs(x.entry-x.stop):null;
+function jrSnap(x,kind,start,extra){slApply(x);const L=x.life||lifeOf(x,start);const s0=x.stop0!==undefined?x.stop0:x.stop;const te=jrTEnd(x,start);const fx=fxOf(x.key);
+ const R1=x.limit&&s0!=null?x.entry+x.dir*Math.abs(x.entry-s0):null;
  return Object.assign({id:(kind==="top"?"p":"t")+start.toString(36)+Math.random().toString(36).slice(2,7),sid:x.id,kind,key:x.key,name:x.name||(symDef(x.key).short||x.key),dir:x.dir,tf:x.tf,barSec:x.barSec,
-  strat:x.strat,sub:x.sub||"",lbl:label(x),str:x.str,status:x.status,entry:x.entry,stop:x.stop,tgt:x.tgt,limit:!!x.limit,R1,exp:x.limit?L.exp:null,t:x.t,takenAt:start,start,
+  strat:x.strat,sub:x.sub||"",lbl:label(x),str:x.str,status:x.status,entry:x.entry,stop:x.stop,stop0:s0,slf:x.stop!=null?(x.slf||1):1,tgt:x.tgt,limit:!!x.limit,R1,exp:x.limit?L.exp:null,t:x.t,takenAt:start,start,
   tEnd:te.tEnd,tEndSrc:te.src,rule:te.rule||null,fx:fx.f,fxSrc:fx.src,actE:null,lots:null,note:"",a:jrA0(x.limit,start),man:null,test:false,
   src:(ST[x.key]&&ST[x.key].src)||symDef(x.key).src[0],mg:kind==="top"?"fixed":JC.mg,tc:{be:JC.be,step:JC.step}},extra||{})}
 function jrA0(lim,start){return{ph:lim?"wait":"open",cur:start,mfe:0,sR:-1}}
@@ -1459,7 +1479,7 @@ function eqSVG(list){const pts=list.map(T=>({t:T._r.exitT||T.takenAt,R:T._r.R}))
 function trHTML(T){const r=T._r||jrRes(T),lg=T.dir>0,arm=jrDelArm===T.id;
  return`<div class="jt ${r.cls}" data-jid="${T.id}"><div class="jt1"><b>${esc(T.name)}</b><span class="tfm">${T.tf}</span><span class="dr ${lg?"long":"short"}">${lg?"LONG":"SHORT"}</span>${T.test?'<span class="bdg bg-weak">TESTDATEN</span>':""}<span class="jc ${r.cls}">${r.chip}</span></div>
   <div class="small">${esc(T.lbl)} · Stärke ${T.str} · ${STR[T.status]?STR[T.status].txt:""} · genommen ${fBd.format(T.takenAt)}</div>
-  <div class="jlv">E <b>${jfmt(T,r.eF)}</b>${T.actE!=null?" (real)":""}${T.limit?" Limit":""} · S <b>${jfmt(T,r.sF)}</b> · Z <b>${jfmt(T,jF(T,T.tgt))}</b>${T.lots?` · ${nf(T.lots,2)} Lot`:""}</div>
+  <div class="jlv">E <b>${jfmt(T,r.eF)}</b>${T.actE!=null?" (real)":""}${T.limit?" Limit":""} · S <b>${jfmt(T,r.sF)}</b>${(T.slf||1)>1?` <span class="slb">SL ${slTxt(T.slf)}</span>`:""} · Z <b>${jfmt(T,jF(T,T.tgt))}</b>${T.lots?` · ${nf(T.lots,2)} Lot`:""}</div>
   <div class="jres">${r.cls==="open"||r.cls==="nofill"?`<span class="small">${T.a.info?esc(T.a.info)+" · ":""}${r.cls==="open"&&T.tEnd?"Zeit-Ausstieg spätestens "+atS(T.tEnd):""}</span>`:
    `<b class="${rcol(r.R)}">${r.R==null?"– R":sgn(r.R,2)+" R"}</b>${r.usd!=null?` · <b class="${rcol(r.usd)}">${sgn(r.usd,2)} $</b>${r.usdEst?' <span class="small">(geschätzt)</span>':""}`:""}${r.exF!=null?` · Ausstieg ${jfmt(T,r.exF)}`:""}${r.exitT?` · ${fBd.format(r.exitT)}`:""} <span class="small">· ${T.man&&T.man.kind?"im Journal geschlossen":r.src==="manuell"?"manuell eingetragen":"automatisch"}</span>`}</div>
   ${T.stop!=null&&T.a.ph!=="done"&&!(T.man&&T.man.res)?`<div class="jlive">Live <span class="lr" data-lr="${T.id}"></span> · <span data-lst="${T.id}">${jrStopTxt(T)}</span></div>`:""}
@@ -1499,9 +1519,13 @@ let toastT=null;function toast(msg,undo){const el=$("toast");el.innerHTML=`<span
 // --- Sheet: Trade aufnehmen / bearbeiten ---
 function jrFind(id){return lastRank.find(y=>y.id===id)||(lastTop.find(t=>t.x.id===id)||{}).x||Object.values(lastOuts).flatMap(S=>S.sigs).find(y=>y.id===id)}
 function jrSheet(x,T){const edit=!!T;if(!T){const ex=jrTaken(x.id);if(ex)return jrLive0(ex)?jrDetail(ex):jrSheet(null,ex)}
- const k=edit?T.key:x.key,F=FTMO[k],dg=F?F.dg:2;const V=edit?T:{name:x.name||k,dir:x.dir,tf:x.tf,lbl:label(x),str:x.str,status:x.status,t:x.t,entry:x.entry,stop:x.stop,tgt:x.tgt,limit:x.limit,fx:fxOf(k).f,key:k};
+ const k=edit?T.key:x.key,F=FTMO[k],dg=F?F.dg:2;if(!edit)slApply(x);const V=edit?T:{name:x.name||k,dir:x.dir,tf:x.tf,lbl:label(x),str:x.str,status:x.status,t:x.t,entry:x.entry,stop:x.stop,stop0:x.stop0,slf:x.slf||1,tgt:x.tgt,limit:x.limit,fx:fxOf(k).f,key:k};
+ const s0=V.stop0!==undefined&&V.stop0!==null?V.stop0:V.stop;let sf=V.stop!=null?(V.slf||1):1;const canSf=s0!=null&&!(edit&&T.man&&T.man.kind);
  const fv=v=>v==null?"–":nf(Math.round(v*V.fx/(F?F.tick:0.01))*(F?F.tick:0.01),dg);const r=edit?jrRes(T):null;
- let sug="";if(!edit&&V.stop!=null){const acc=Vv("c-acc"),rp=Vv("c-risk");const dist=Math.abs(V.entry-V.stop)*V.fx;if(F&&acc>0&&rp>0&&dist>0){const cost=F.spread*F.cs+V.entry*V.fx*F.cs*F.comm/100;const l=Math.floor(acc*rp/100/(dist*F.cs+cost)*100+1e-9)/100;if(l>=0.01)sug=nf(l,2)}}
+ const sugOf=st=>{if(edit||st==null)return"";const acc=Vv("c-acc"),rp=Vv("c-risk");const dist=Math.abs(V.entry-st)*V.fx;if(F&&acc>0&&rp>0&&dist>0){const cost=F.spread*F.cs+V.entry*V.fx*F.cs*F.comm/100;const l=Math.floor(acc*rp/100/(dist*F.cs+cost)*100+1e-9)/100;if(l>=0.01)return nf(l,2)}return""};
+ const stNow=()=>canSf?slW(V.entry,s0,V.dir,sf):V.stop;let sug=sugOf(stNow());
+ const sfH=()=>canSf?`<div class="mres" id="j-sfw"><h4>🛑 Stop-Abstand</h4><div class="seg" id="j-sf">${SLFS.map(v=>`<button data-v="${v}" class="${sf===v?"on":""}">${v===1?"1R (Original)":slTxt(v).replace("×","R")}</button>`).join("")}</div>
+  <div class="small">Stop <b>${fv(stNow())}</b>${sf>1?` = ${slTxt(sf)} so weit wie der Strategie-Stop (${fv(s0)})`:" = Strategie-Stop"}. <b>1R = Abstand zu diesem Stop = dein Kontorisiko.</b>${sf>1?` Stop ${slTxt(sf)} weiter → nur ${sf===2?"halbe":sf===3?"ein Drittel der":"⅔ der"} Lotgröße bei gleichem Risiko. Ziel-Preis bleibt, liegt in R also näher (CRV ÷ ${nf(sf,sf%1?1:0)}); BE/Trailing-Stufen zählen in diesem R.`:""}${edit&&V.stop!=null?" Änderung wertet den Trade ab dem Einstieg neu aus.":""}</div></div>`:"";
  const m=edit&&T.man||{};let mg=edit?(T.mg||"fixed"):JC.mg,tc=Object.assign({},edit?(T.tc||{be:true,step:1}):{be:JC.be,step:JC.step});
  const mgH=()=>`<div class="seg" id="j-mg">${["trail","fixed"].map(v=>`<button data-v="${v}" class="${mg===v?"on":""}">${MGN[v]}</button>`).join("")}</div>
   ${mg==="trail"?`<div class="seg" id="j-be" style="margin-top:6px"><button data-v="1" class="${tc.be!==false?"on":""}">BE ab +1R</button><button data-v="0" class="${tc.be===false?"on":""}">ohne BE</button></div>
@@ -1511,13 +1535,13 @@ function jrSheet(x,T){const edit=!!T;if(!T){const ex=jrTaken(x.id);if(ex)return 
  $("spanel").innerHTML=`<div class="sgrab"></div><h3>${edit?"Trade bearbeiten":"Trade genommen?"}</h3>
   <div class="shd"><b>${esc(V.name)}</b> · ${V.tf} · <span class="dr ${V.dir>0?"long":"short"}">${V.dir>0?"LONG":"SHORT"} ${V.str}</span></div>
   <div class="small">${esc(V.lbl)} <span class="bdg ${STR[V.status]?STR[V.status].cls:""}">${STR[V.status]?STR[V.status].txt:""}</span> · Signal ${fBd.format(V.t)} ${tzName(V.t)}</div>
-  <div class="sgrid"><div><small>Einstieg${V.limit?" (Limit)":""}</small><b>${fv(V.entry)}</b></div><div><small>Stop</small><b>${fv(V.stop)}</b></div><div><small>Ziel</small><b>${fv(V.tgt)}</b></div></div>
+  <div class="sgrid"><div><small>Einstieg${V.limit?" (Limit)":""}</small><b>${fv(V.entry)}</b></div><div><small>Stop${canSf&&sf>1?" ("+slTxt(sf)+")":""}</small><b id="j-sv">${fv(stNow())}</b></div><div><small>Ziel</small><b>${fv(V.tgt)}</b></div></div>
   ${F?`<div class="small">≈ FTMO ${F.sym}, umgerechnet ×${nf(V.fx,V.fx>5?3:4)}</div>`:""}
   <div class="f" style="margin-top:8px"><div><label>Tatsächlicher Einstieg (optional)</label><input id="j-e" inputmode="decimal" placeholder="${fv(V.entry)}" value="${edit&&T.actE!=null?nf(T.actE,dg).replace(/\./g,""):""}"></div>
-   <div><label>Lots (optional)${sug?` · Rechner: <a href="#" id="j-sug">${sug}</a>`:""}</label><input id="j-l" inputmode="decimal" placeholder="z. B. 0,5" value="${edit&&T.lots!=null?nf(T.lots,2):""}"></div>
+   <div><label>Lots (optional)<span id="j-sugw">${sug?` · Rechner: <a href="#" id="j-sug">${sug}</a>`:""}</span></label><input id="j-l" inputmode="decimal" placeholder="z. B. 0,5" value="${edit&&T.lots!=null?nf(T.lots,2):""}"></div>
    ${!edit&&V.stop==null?`<div><label>Stop (FTMO-Kurs) – sonst keine Auto-Auswertung</label><input id="j-s" inputmode="decimal"></div><div><label>Ziel (optional)</label><input id="j-t" inputmode="decimal"></div>`:""}
    <div style="grid-column:1/3"><label>Notiz (optional)</label><input id="j-n" maxlength="300" placeholder="z. B. Grund, Gefühl, Abweichung" value="${edit?esc(T.note):""}"></div></div>
-  <div class="mres"><h4>Trade-Management (Live-Check alle 10 s)</h4><div id="j-mgw">${mgH()}</div>${edit?`<div class="small">Änderung wertet den Trade ab dem Einstieg neu aus.</div>`:""}<div class="small warn">${MT5}</div></div>
+  ${sfH()}<div class="mres"><h4>Trade-Management (Live-Check alle 10 s)</h4><div id="j-mgw">${mgH()}</div>${edit?`<div class="small">Änderung wertet den Trade ab dem Einstieg neu aus.</div>`:""}<div class="small warn">${MT5}</div></div>
   ${edit?`<div class="mres"><h4>Ergebnis</h4><div class="small">Automatisch: <b>${esc(jrRes(Object.assign({},T,{man:null})).chip)}</b>. Weicht dein FTMO-Ergebnis ab, hier eintragen – das hat Vorrang.</div>
    <div class="seg" id="j-res">${[["","Automatisch"],["win","Gewinn"],["loss","Verlust"],["be","Break-even"]].map(([v,l])=>`<button data-r="${v}" class="${(m.res||"")===v?"on":""}">${l}</button>`).join("")}</div>
    <div class="f" style="margin-top:8px"><div><label>Ausstiegskurs (FTMO)</label><input id="j-x" inputmode="decimal" value="${m.px!=null?nf(m.px,dg).replace(/\./g,""):""}"></div><div><label>Ergebnis in $ (inkl. Kosten)</label><input id="j-u" inputmode="decimal" value="${m.usd!=null?nf(m.usd,2).replace(/\./g,""):""}"></div></div></div>`:""}
@@ -1526,7 +1550,9 @@ function jrSheet(x,T){const edit=!!T;if(!T){const ex=jrTaken(x.id);if(ex)return 
  $("sheet").classList.add("on");let mres=m.res||"";
  const wire=()=>{$("j-mgw").querySelectorAll("#j-mg button").forEach(b=>b.onclick=()=>{mg=b.dataset.v;$("j-mgw").innerHTML=mgH();wire()});
   $("j-mgw").querySelectorAll("#j-be button").forEach(b=>b.onclick=()=>{tc.be=b.dataset.v==="1";$("j-mgw").innerHTML=mgH();wire()});
-  $("j-mgw").querySelectorAll("#j-st button").forEach(b=>b.onclick=()=>{tc.step=+b.dataset.v;$("j-mgw").innerHTML=mgH();wire()})};wire();
+  $("j-mgw").querySelectorAll("#j-st button").forEach(b=>b.onclick=()=>{tc.step=+b.dataset.v;$("j-mgw").innerHTML=mgH();wire()});
+  if($("j-sfw"))$("j-sfw").querySelectorAll("#j-sf button").forEach(b=>b.onclick=()=>{sf=+b.dataset.v;$("j-sfw").outerHTML=sfH();$("j-sv").textContent=fv(stNow());$("j-sv").previousElementSibling.textContent="Stop"+(sf>1?" ("+slTxt(sf)+")":"");
+   sug=sugOf(stNow());$("j-sugw").innerHTML=sug?` · Rechner: <a href="#" id="j-sug">${sug}</a>`:"";if($("j-sug"))$("j-sug").onclick=e=>{e.preventDefault();$("j-l").value=sug};wire()})};wire();
  const close=()=>$("sheet").classList.remove("on");$("j-cancel").onclick=close;$("sheetbg").onclick=close;
  if($("j-sug"))$("j-sug").onclick=e=>{e.preventDefault();$("j-l").value=sug};
  if(edit){document.querySelectorAll("#j-res button").forEach(b=>b.onclick=()=>{mres=b.dataset.r;document.querySelectorAll("#j-res button").forEach(y=>y.classList.toggle("on",y===b))});
@@ -1535,10 +1561,12 @@ function jrSheet(x,T){const edit=!!T;if(!T){const ex=jrTaken(x.id);if(ex)return 
   if(edit){const mOld=T.man;T.actE=actE;T.lots=lots;T.note=note;const px=pf($("j-x").value),usd=pf($("j-u").value);T.man=mres||px!=null||usd!=null?{res:mres||(px!=null?((px-(actE!=null?actE:jF(T,T.entry)))*T.dir>0?"win":"loss"):usd>0?"win":usd<0?"loss":"be"),px,usd,at:Date.now()}:null;
    if(mOld&&mOld.kind)T.man=T.man?Object.assign({},mOld,{res:T.man.res,px:T.man.px!=null?T.man.px:mOld.px,usd:T.man.usd}):mOld;
    const o0=T.tc||{be:true,step:1};let re=false;if(T.stop!=null&&!(T.man&&T.man.kind)&&((T.mg||"fixed")!==mg||(mg==="trail"&&(o0.be!==tc.be||o0.step!==tc.step)))){T.mg=mg;T.tc=tc;T.a=jrA0(T.limit,T.start);re=true}
+   if(canSf&&sf!==(T.slf||1)){if(T.stop0==null)T.stop0=s0;T.slf=sf;T.stop=slW(T.entry,s0,T.dir,sf);T.a=jrA0(T.limit,T.start);re=true}
    jrSave();close();toast(re?"Gespeichert – wird ab Einstieg neu ausgewertet":"Gespeichert");jrAfter();if(re)jrKick({banner:false});return}
   if(jrTaken(x.id)){close();return}
   const now=Date.now();const T2=jrSnap(x,"trade",now,{actE,lots,note,mg,tc});
-  if(x.stop==null){const sF=pf($("j-s").value),tF=pf($("j-t").value);if(sF!=null){T2.stop=sF/T2.fx;T2.tgt=tF!=null?tF/T2.fx:null}}
+  if(x.stop==null){const sF=pf($("j-s").value),tF=pf($("j-t").value);if(sF!=null){T2.stop=sF/T2.fx;T2.stop0=T2.stop;T2.slf=1;T2.tgt=tF!=null?tF/T2.fx:null}}
+  else if(canSf){T2.stop0=s0;T2.slf=sf;T2.stop=slW(T2.entry,s0,T2.dir,sf)}
   J.trades.push(T2);jrSave();jrEvalOne(T2,now);jrSave();close();setTimeout(()=>jrKick(),50);toast(`Trade gespeichert: ${T2.name} ${T2.tf} ${T2.dir>0?"LONG":"SHORT"}`,()=>{J.trades=J.trades.filter(t=>t.id!==T2.id);jrSave();jrAfter()});jrAfter()}}
 document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-tk]");if(!b)return;e.stopPropagation();e.preventDefault();const x=jrFind(b.dataset.tk);if(x)jrSheet(x);else{const T=jrTaken(b.dataset.tk);if(T)jrLive0(T)?jrDetail(T):jrSheet(null,T)}},true);
 // =====================================================================================
@@ -1555,7 +1583,7 @@ function lvData(T){const a=T.a,r=jrRes(T),rk=Math.abs(T.entry-T.stop),risk=r.sF!
   since:Date.now()-(a.fillT||T.start),tr,mfe:a.mfe||0,wait:a.ph==="wait"}}
 const rc=v=>v==null?"":v>0.005?"pos":v<-0.005?"neg":"";
 function lvCore(T,D,big){const r=D.r,lg=T.dir>0;
- const slLbl=D.tr?(D.a.sR>-1?`SL · Trailing ${sgn(D.a.sR,D.a.sR%1?1:0)}R`:"SL · Anfangs-Stop"):"SL";
+ const slLbl=(D.tr?(D.a.sR>-1?`SL · Trailing ${sgn(D.a.sR,D.a.sR%1?1:0)}R`:"SL · Anfangs-Stop"):"SL")+((T.slf||1)>1&&!(D.tr&&D.a.sR>-1)?` (${slTxt(T.slf)})`:"");
  return`<div class="lv2"><div class="lvR ${rc(D.R)}${big?" big":""}">${D.wait?"⏳":D.R==null?"– R":sgn(D.R,2)+" R"}</div>
   <div class="lvpx"><small>Kurs (FTMO-Skala)</small><b>${jfmt(T,D.pF)}</b><small>${D.wait?"Limit noch nicht ausgelöst":`max. erreicht ${sgn(D.mfe,2)} R`}</small></div></div>
   <div class="lvg"><div><small>Einstieg${T.actE!=null?" (real)":""}</small><b>${jfmt(T,r.eF)}</b></div><div><small>${slLbl}</small><b>${jfmt(T,D.slF)}</b></div><div><small>Ziel</small><b>${D.tgF!=null?jfmt(T,D.tgF):D.tr?"– (Runner)":"–"}</b></div></div>
@@ -1564,10 +1592,10 @@ function lvCore(T,D,big){const r=D.r,lg=T.dir>0;
    · ${D.wait?"wartet seit":"seit Einstieg"} <b>${dur(Math.max(0,D.since))}</b></div>
   <div class="lv5">${ageHTML(D.a.lastPx!=null?D.a.cur:0)}</div>`}
 function lvTile(T){const D=lvData(T),lg=T.dir>0;
- return`<div class="lvt ${rc(D.R)}" data-lvopen="${T.id}"><div class="lv1"><b>${esc(T.name)}</b><span class="tfm">${T.tf}</span><span class="dr ${lg?"long":"short"}">${lg?"LONG":"SHORT"}</span><span class="lvmg">${D.tr?"🏃 Trailing":"🎯 Ziel"}</span>${T.test?'<span class="bdg bg-weak">TESTDATEN</span>':""}</div>
+ return`<div class="lvt ${rc(D.R)}" data-lvopen="${T.id}"><div class="lv1"><b>${esc(T.name)}</b><span class="tfm">${T.tf}</span><span class="dr ${lg?"long":"short"}">${lg?"LONG":"SHORT"}</span><span class="lvmg">${(T.slf||1)>1?`<span class="slb">SL ${slTxt(T.slf)}</span> `:""}${D.tr?"🏃 Trailing":"🎯 Ziel"}</span>${T.test?'<span class="bdg bg-weak">TESTDATEN</span>':""}</div>
   ${lvCore(T,D,false)}<div class="jbt"><button class="btn sm" data-lvopen="${T.id}">📡 Details</button><button class="btn sm lvx" data-lvclose="${T.id}">${D.wait?"✋ Limit streichen":"✋ Trade schließen"}</button></div></div>`}
 function lvBody(T){if(!jrLive0(T)){const r=jrRes(T);return`<div class="lvdone"><b>${esc(r.chip)}</b>${r.R!=null?` · <b class="${rcol(r.R)}">${sgn(r.R,2)} R</b>`:""}${r.exF!=null?` · Ausstieg ${jfmt(T,r.exF)}`:""}${r.exitT?` · ${fBd.format(r.exitT)}`:""}</div>`}
- const D=lvData(T);return lvCore(T,D,true)+`<div class="small" style="margin-top:6px">${jrStopTxt(T)}</div>`+((T.a.ev||[]).length?`<div class="small">Stop-Stufen: ${T.a.ev.slice(-6).map(e=>`${sgn(e.sR,e.sR%1?1:0)}R ${fBm.format(e.t)}`).join(" → ")}</div>`:"")+
+ const D=lvData(T);return lvCore(T,D,true)+`<div class="small" style="margin-top:6px">${jrStopTxt(T)}</div>`+((T.slf||1)>1&&T.stop0!=null?`<div class="small">🛑 Weiter Stop ${slTxt(T.slf)}: Strategie-Stop wäre ${jfmt(T,jF(T,T.stop0))}. R bezieht sich auf deinen weiten Stop (= Kontorisiko).</div>`:"")+((T.a.ev||[]).length?`<div class="small">Stop-Stufen: ${T.a.ev.slice(-6).map(e=>`${sgn(e.sR,e.sR%1?1:0)}R ${fBm.format(e.t)}`).join(" → ")}</div>`:"")+
   ((T.a.gaps||[]).length?`<div class="small warn">⚠ Datenlücke: ${T.a.gaps.map(g=>hm(g.f)+"–"+hm(g.t)).join(", ")}</div>`:"")}
 function jrDetail(T){const live=jrLive0(T);
  $("spanel").innerHTML=`<div class="sgrab"></div><h3>📡 Live: ${esc(T.name)} ${T.tf} <span class="dr ${T.dir>0?"long":"short"}">${T.dir>0?"LONG":"SHORT"}</span></h3>
@@ -1617,10 +1645,10 @@ setInterval(()=>{if(document.hidden)return;document.querySelectorAll("[data-age]
 // --- Export / Import ---
 function dl(name,txt,type){const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([txt],{type}));a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1000)}
 const stamp=()=>{const p=bParts(Date.now());return`${p.y}-${String(p.m+1).padStart(2,"0")}-${String(p.d).padStart(2,"0")}`};
-function jrCSV(){const H=["id","genommen_berlin","symbol","ftmo_symbol","richtung","tf","strategie","staerke","status","einstieg_ftmo","stop_ftmo","ziel_ftmo","einstieg_real","lots","ergebnis","quelle","R","usd","usd_geschaetzt","ausstieg_ftmo","ausstieg_berlin","zeit_ausstieg","notiz","faktor","testdaten","management","be","schritt_R","mfe_R","stop_zuletzt_R","zuletzt_geprueft_berlin","datenluecken","manuell_geschlossen","schlusskurs_quelle"];
+function jrCSV(){const H=["id","genommen_berlin","symbol","ftmo_symbol","richtung","tf","strategie","staerke","status","einstieg_ftmo","stop_ftmo","ziel_ftmo","einstieg_real","lots","ergebnis","quelle","R","usd","usd_geschaetzt","ausstieg_ftmo","ausstieg_berlin","zeit_ausstieg","notiz","faktor","testdaten","management","be","schritt_R","mfe_R","stop_zuletzt_R","zuletzt_geprueft_berlin","datenluecken","manuell_geschlossen","schlusskurs_quelle","sl_faktor","stop_strategie_ftmo"];
  const q=v=>{v=v==null?"":String(v);return/[;"\n]/.test(v)?`"${v.replace(/"/g,'""')}"`:v};const n=(v,d)=>v==null?"":(+v).toFixed(d).replace(".",",");
  const rows=J.trades.slice().sort((a,b)=>a.takenAt-b.takenAt).map(T=>{const r=jrRes(T);const F=FTMO[T.key],d=F?F.dg:4;
-  return[T.id,fBd.format(T.takenAt),T.key,F?F.sym:"",T.dir>0?"LONG":"SHORT",T.tf,T.lbl,T.str,STR[T.status]?STR[T.status].txt:"",n(r.eF!=null&&T.actE==null?r.eF:jF(T,T.entry),d),n(r.sF,d),n(jF(T,T.tgt),d),n(T.actE,d),n(T.lots,2),r.chip,r.src,n(r.R,3),n(r.usd,2),r.usdEst?"ja":"",n(r.exF,d),r.exitT?fBd.format(r.exitT):"",T.tEndSrc,T.note,n(T.fx,5),T.test?"ja":"",T.mg==="trail"?"trailing":"festes_ziel",T.mg==="trail"?(T.tc&&T.tc.be===false?"nein":"ja"):"",T.mg==="trail"?n(T.tc&&T.tc.step||1,1):"",n(T.a.mfe,2),T.mg==="trail"?n(T.a.sRx!=null?T.a.sRx:T.a.sR,1):"",T.a.cur?fBd.format(T.a.cur):"",(T.a.gaps||[]).length,T.man&&T.man.kind==="close"?"ja":T.man&&T.man.kind==="cancel"?"limit_gestrichen":"",T.man&&T.man.src?(T.man.src==="mt5"?"mt5_eingabe":"live_kurs"):""].map(q).join(";")});
+  return[T.id,fBd.format(T.takenAt),T.key,F?F.sym:"",T.dir>0?"LONG":"SHORT",T.tf,T.lbl,T.str,STR[T.status]?STR[T.status].txt:"",n(r.eF!=null&&T.actE==null?r.eF:jF(T,T.entry),d),n(r.sF,d),n(jF(T,T.tgt),d),n(T.actE,d),n(T.lots,2),r.chip,r.src,n(r.R,3),n(r.usd,2),r.usdEst?"ja":"",n(r.exF,d),r.exitT?fBd.format(r.exitT):"",T.tEndSrc,T.note,n(T.fx,5),T.test?"ja":"",T.mg==="trail"?"trailing":"festes_ziel",T.mg==="trail"?(T.tc&&T.tc.be===false?"nein":"ja"):"",T.mg==="trail"?n(T.tc&&T.tc.step||1,1):"",n(T.a.mfe,2),T.mg==="trail"?n(T.a.sRx!=null?T.a.sRx:T.a.sR,1):"",T.a.cur?fBd.format(T.a.cur):"",(T.a.gaps||[]).length,T.man&&T.man.kind==="close"?"ja":T.man&&T.man.kind==="cancel"?"limit_gestrichen":"",T.man&&T.man.src?(T.man.src==="mt5"?"mt5_eingabe":"live_kurs"):"",n(T.slf||1,1),n(jF(T,T.stop0!=null?T.stop0:T.stop),d)].map(q).join(";")});
  return"\ufeff"+H.join(";")+"\n"+rows.join("\n")}
 function jrImport(file){const rd=new FileReader();rd.onload=()=>{let d;try{d=JSON.parse(rd.result)}catch(e){toast("Import fehlgeschlagen: keine gültige JSON-Datei");return}
   if(!d||!Array.isArray(d.trades)){toast("Import fehlgeschlagen: keine Signalgeber-Journal-Datei");return}
@@ -1638,6 +1666,7 @@ function jrInit(){document.querySelectorAll("#jrseg button").forEach(b=>b.onclic
 function jcSync(){const q=(id,on)=>{const b=$(id);if(b)b.classList.toggle("on",on)};
  document.querySelectorAll("#jc-mg button").forEach(b=>b.classList.toggle("on",b.dataset.v===JC.mg));
  document.querySelectorAll("#jc-step button").forEach(b=>b.classList.toggle("on",+b.dataset.v===JC.step));
+ document.querySelectorAll("#jc-slf button").forEach(b=>b.classList.toggle("on",+b.dataset.v===slF()));if($("jc-slfi"))$("jc-slfi").innerHTML=slF()>1?`Aktiv: <b>Stop ${slTxt(slF())}</b> – alle Signale, der Rechner und neue Trades nutzen den weiten Stop. Bei gleichem Risiko ${slF()===2?"halbe":slF()===3?"ein Drittel der":"⅔ der"} Lotgröße.`:"Aktiv: <b>1R = Original-Stop der Strategie</b>.";
  q("jc-be",JC.be);$("jc-be").textContent=JC.be?"Break-even ab +1R: an":"Break-even ab +1R: aus";
  q("jc-sa",JC.stepAlert);$("jc-sa").textContent=JC.stepAlert?"Hinweis bei jeder Stop-Stufe: an":"Hinweis bei jeder Stop-Stufe: aus";
  q("jc-snd",JC.snd);$("jc-snd").textContent=JC.snd?"🔔 Ton + Vibration bei Alarm: an":"🔕 Ton + Vibration bei Alarm: aus";
@@ -1648,6 +1677,7 @@ function jcSync(){const q=(id,on)=>{const b=$(id);if(b)b.classList.toggle("on",o
 function jcInit(){if(!$("jc-mg"))return;
  document.querySelectorAll("#jc-mg button").forEach(b=>b.onclick=()=>{JC.mg=b.dataset.v;jcSave();jcSync()});
  document.querySelectorAll("#jc-step button").forEach(b=>b.onclick=()=>{JC.step=+b.dataset.v;jcSave();jcSync()});
+ document.querySelectorAll("#jc-slf button").forEach(b=>b.onclick=()=>{JC.slf=+b.dataset.v;jcSave();jcSync();try{rerender()}catch(e){}toast(`Stop-Abstand ${slTxt(JC.slf)}: gilt für Signale, Rechner und neue Trades. Bereits genommene Trades behalten ihren Stop.`)});
  $("jc-be").onclick=()=>{JC.be=!JC.be;jcSave();jcSync()};$("jc-sa").onclick=()=>{JC.stepAlert=!JC.stepAlert;jcSave();jcSync()};
  $("jc-snd").onclick=()=>{JC.snd=!JC.snd;jcSave();jcSync();if(JC.snd){beep();try{navigator.vibrate&&navigator.vibrate(200)}catch(e){}}};
  $("jc-ntf").onclick=async()=>{if(!("Notification"in window))return;if(JC.ntf&&Notification.permission==="granted"){JC.ntf=false}else{try{const p=await Notification.requestPermission();JC.ntf=p==="granted"}catch(e){JC.ntf=false}}jcSave();jcSync()};
