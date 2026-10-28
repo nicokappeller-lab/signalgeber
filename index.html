@@ -136,6 +136,12 @@ nav button{font-size:10.5px}
 .sbtn{display:flex;gap:8px;margin-top:12px}.sbtn .btn{flex:1;padding:10px;font-size:14px}.f a{color:var(--acc)}
 .toast{position:fixed;left:12px;right:12px;bottom:calc(70px + env(safe-area-inset-bottom));z-index:25;background:#1e293b;border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:none;align-items:center;justify-content:space-between;gap:10px;font-size:13px;box-shadow:0 6px 20px rgba(0,0,0,.4)}
 .toast.on{display:flex}.toast button{background:none;border:0;color:var(--acc);font-weight:800;font-size:13px;cursor:pointer}
+#jrlive{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--mut,#94a3b8);margin:0 2px 8px}#jrlive.on{color:#cbd5e1}#jrlive .dot{width:8px;height:8px;border-radius:50%;background:#22c55e;box-shadow:0 0 6px #22c55e;animation:pl 2s infinite}#jrlive .dot.err{background:#f59e0b;box-shadow:0 0 6px #f59e0b}@keyframes pl{50%{opacity:.35}}
+.lr{font-weight:800;font-variant-numeric:tabular-nums}.lr.pos{color:#4ade80}.lr.neg{color:#f87171}.tk .lr{margin-left:4px;font-size:11px}
+.jlive{margin:4px 0;padding:6px 8px;border-radius:8px;background:#0b1a2e;border:1px solid #1e3a5f;font-size:12px}.jlive .lr{font-size:14px}.warn{color:#fbbf24}
+#jralert{position:fixed;left:8px;right:8px;top:calc(8px + env(safe-area-inset-top));z-index:40;display:none;gap:10px;align-items:center;padding:12px 14px;border-radius:12px;font-size:14px;font-weight:700;line-height:1.35;box-shadow:0 10px 30px rgba(0,0,0,.6);border:2px solid #f59e0b;background:#2a1a05;color:#fde68a}
+#jralert.on{display:flex;flex-direction:column;align-items:stretch}#jralert button{align-self:flex-end}#jralert summary{font-size:12px;margin-top:6px;cursor:pointer}#jralert.win{border-color:#22c55e;background:#06270f;color:#bbf7d0}#jralert.loss{border-color:#ef4444;background:#2a0808;color:#fecaca}#jralert.step{border-color:#38bdf8;background:#062033;color:#bae6fd}
+#jralert div{flex:1;max-height:42vh;overflow:auto}#jralert p{margin:0}#jralert p.old{margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,.2);font-size:12px;font-weight:600;opacity:.85}#jralert button{background:#fff;color:#111;border:0;border-radius:8px;padding:8px 10px;font-weight:800;cursor:pointer}
 </style>
 </head>
 <body>
@@ -233,6 +239,25 @@ nav button{font-size:10.5px}
   <div class="bar"><button class="btn" id="s-snd">🔔 Ton</button><button class="btn" id="s-ntf">📣 Benachrichtigung</button></div>
   <p class="small" id="ntfInfo"></p>
  </div>
+ <div class="card" id="jc-card">
+  <h3>🏃 Trade-Management (genommene Trades)</h3>
+  <p class="small">Offene genommene Trades werden alle 10 s mit dem Live-Kurs abgeglichen (ein gebündelter Preisabruf, nur bei offener App und nur wenn Trades offen sind). Standard für neue Trades:</p>
+  <div class="seg" id="jc-mg"><button data-v="trail">🏃 Trailing (Runner)</button><button data-v="fixed">🎯 Festes Ziel</button></div>
+  <div class="bar" style="margin-top:8px"><button class="btn" id="jc-be">BE</button><button class="btn" id="jc-sa">Stufen</button></div>
+  <div class="small" style="margin-top:6px">Trailing-Schritt nach +2R:</div>
+  <div class="seg" id="jc-step"><button data-v="0.5">0,5R</button><button data-v="1">1R (Standard)</button><button data-v="2">2R</button></div>
+  <p class="small">Regel: +1R → Stop auf Einstieg (abschaltbar) · +2R → Stop +1R · danach je Schritt: Stop = erreichter Stand − 1R (5R → +4R, 10R → +9R). Wird der Stop berührt, trägt die App den Trade als „🏃 Trailing-Stop +xR“ ein und schlägt Alarm.</p>
+  <div class="bar"><button class="btn" id="jc-snd">Ton</button><button class="btn" id="jc-ntf">Benachrichtigung</button><button class="btn" id="jc-test">Test-Alarm</button></div>
+  <p class="small" id="jc-ntfi"></p>
+  <p class="small warn"><b>Die App kann deine FTMO-Position nicht schließen – schließe sie bei jedem Alarm selbst in MT5.</b></p>
+  <p class="small"><b>Grenzen:</b> JavaScript läuft nur, solange die App offen und sichtbar ist – bei ausgeschaltetem Bildschirm oder im Hintergrund prüft sie nichts und kann nicht alarmieren. Beim Zurückkommen holt sie die Zeit ab „zuletzt geprüft“ mit Kerzen nach (1m, bei langen Lücken gröber); innerhalb einer Kerze wird konservativ gerechnet: erst der Stop, der zu Kerzenbeginn galt, dann wird nachgezogen. Fehlen Kerzen, steht „Datenlücke“ – es wird nichts geraten. Kurse sind Ersatzkurse (Binance-Perp, auf FTMO umgerechnet); dein MT5-Kurs kann abweichen. Zeit-Ausstiege der Strategien gelten in beiden Modi.</p>
+  <details><summary class="small"><b>Backtest: Festes Ziel vs. Trailing</b> (vorhandene Daten)</summary>
+  <p class="small">Gleiche Auswertungs-Engine wie die App, ohne Kosten, unabhängig in Python gegengeprüft (0 Abweichungen). Werte: Festes Ziel / Trailing mit BE / Trailing ohne BE.<br>
+  <b>Vera, alle Datensätze</b> (184 Trades): Ø −0,25 / −0,26 / −0,22 R · Summe −45,6 / −47,4 / −40,3 R · Trefferquote 25 / 18 / 25 % · max. DD 50,6 / 48,4 / 41,6 R · ≥5R erreicht 0 / 3 / 7.<br>
+  <b>Vera Gold M15</b> (21 Trades): Summe −9,0 / −8,1 / −6,3 R.<br>
+  <b>TA-Kacheln</b> (1.711 Signale, stark überlappend, 3–53 Tage je Markt): Ø +0,07 / +0,26 / +0,29 R · Summe +126 / +452 / +490 R · max. DD 52 / 58 / 60 R. Der Vorsprung kommt fast nur aus Gold 5m und SPY 1m (nur 3 Tage Daten); Gold 15m, QQQ 5m, BTC 15m: praktisch gleich, ETH 15m mit BE schlechter.<br>
+  Connors RSI2 und ORB: nicht testbar (zu kurze Historie). <b>Fazit:</b> Für Vera kein belastbarer Vorteil durch Trailing; bei den TA-Kacheln half es in trendigen Abschnitten, die Stichprobe ist aber kurz. Keine Anlageberatung.</p></details>
+ </div>
  <div class="card">
   <h3>Alle Regeln: wo sie laufen und wie gut sie sind</h3>
   <table>
@@ -271,6 +296,7 @@ nav button{font-size:10.5px}
 <section class="view" id="v-jr">
  <div class="card jhead"><div class="jtop"><h3>📒 Journal</h3><div class="seg" id="jrseg"><button data-m="day">Heute</button><button data-m="week">Woche</button><button data-m="month">Monat</button><button data-m="all">Alle</button></div></div>
   <div class="jnav"><button class="btn" id="jrprev" aria-label="früher">‹</button><b id="jrlbl">–</b><button class="btn" id="jrnext" aria-label="später">›</button></div></div>
+ <div id="jrlive"></div>
  <div id="jrbody"></div>
  <div class="card"><h3>💾 Daten sichern</h3>
   <p class="small">Das Journal liegt nur in diesem Browser auf diesem Gerät (localStorage). Wird die Startbildschirm-App entfernt, der Browserverlauf/Websitedaten gelöscht oder ein anderes Gerät benutzt, ist es weg. Deshalb regelmäßig exportieren. JSON kann wieder importiert werden (Doppelte werden übersprungen), CSV ist für Excel/Numbers.</p>
@@ -281,6 +307,7 @@ nav button{font-size:10.5px}
 </main>
 <div id="sheet" class="sheet"><div class="sbg" id="sheetbg"></div><div class="spanel" id="spanel"></div></div>
 <div id="toast" class="toast"></div>
+<div id="jralert" role="alert" aria-live="assertive"></div>
 
 <nav>
  <button class="act" data-v="v-sig"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg>Signale</button>
@@ -774,15 +801,15 @@ function nyseOpen(ms){const p=STRAT.NY(ms);return p.dow>0&&p.dow<6&&!STRAT.US_HO
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 // ---------- Netz: Limiter, Gewicht, Backoff ----------
 const net={pauseUntil:0,req:0,err:0,w:[]};let active=0;const queue=[];
-function slot(){return new Promise(r=>{if(active<4){active++;r()}else queue.push(r)})}
+function slot(pri){return new Promise(r=>{if(active<4){active++;r()}else if(pri)queue.unshift(r);else queue.push(r)})}
 function release(){active--;if(queue.length){active++;queue.shift()()}}
 const wNow=()=>{const t=Date.now()-60000;net.w=net.w.filter(x=>x.t>t);return net.w.reduce((s,x)=>s+x.w,0)};
 async function wBudget(w){for(let i=0;i<70&&wNow()+w>1800;i++)await sleep(1000);net.w.push({t:Date.now(),w})}
 class HttpErr extends Error{constructor(s){super("HTTP "+s);this.status=s}}
-async function getJSON(u,w=1){
+async function getJSON(u,w=1,pri){
  for(let att=0;;att++){
   if(net.pauseUntil>Date.now())throw new Error("Rate-Limit-Pause bis "+fBs.format(net.pauseUntil));
-  await wBudget(w);await slot();let r;
+  await wBudget(w);await slot(pri);let r;
   try{const ac=new AbortController(),to=setTimeout(()=>ac.abort(),15000);try{r=await fetch(u,{cache:"no-store",signal:ac.signal})}finally{clearTimeout(to)}}
   catch(e){release();net.err++;if(att<2){await sleep(att?4000:1500);continue}throw new Error("Netzwerkfehler")}
   release();net.req++;
@@ -1201,11 +1228,15 @@ sntf.onclick=async()=>{if(!cfg.ntf&&"Notification"in window){try{const p=await N
 let J=Object.assign({v:1,trades:[],tops:[],seen:{},recSince:null},LS("jr")||{});
 if(!J.recSince){J.recSince=Date.now();SS("jr",J)}
 const jrRep=(k,v)=>k==="_r"?undefined:v;const jrSave=()=>{try{localStorage.setItem("sg_jr",JSON.stringify(J,jrRep))}catch(e){toast("Speichern fehlgeschlagen (Speicher voll?) – bitte exportieren")}};
+let JC=Object.assign({mg:"trail",be:true,step:1,stepAlert:true,snd:true,ntf:false},LS("jrCfg")||{});const jcSave=()=>SS("jrCfg",JC);
+const MGN={trail:"🏃 Trailing (Runner)",fixed:"🎯 Festes Ziel"};
+const MT5="Die App kann deine FTMO-Position nicht schließen – schließe sie jetzt in MT5.";
 let jrMode=LS("jrMode")||"week",jrOff=0,jrUndo=null,jrDelArm=null;
 const pf=s=>{s=String(s==null?"":s).trim().replace(/\s/g,"");if(!s)return null;if(/,/.test(s))s=s.replace(/\./g,"").replace(",",".");const v=parseFloat(s);return isFinite(v)?v:null};
 const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[c]);
 const jrTaken=sid=>J.trades.find(t=>t.sid===sid);
-function tkBtn(x){const on=!!jrTaken(x.id);return`<button class="tk${on?" on":""}" data-tk="${esc(x.id)}">${on?"✓ genommen":"＋ Trade genommen"}</button>`}
+function tkBtn(x){const on=!!jrTaken(x.id);const T=on&&jrTaken(x.id),lv=T&&T.a.ph!=="done";const R=lv?jrLR(T):null;
+ return`<button class="tk${on?" on":""}" data-tk="${esc(x.id)}">${on?"✓ genommen":"＋ Trade genommen"}${lv?` <span class="lr ${R==null?"":R>0.005?"pos":R<-0.005?"neg":""}" data-tkr="${esc(x.id)}">${T.a.ph==="wait"?"wartet":R==null?"":sgn(R,2)+"R"}</span>`:""}${on&&!lv?` <span class="lr">${esc(jrRes(T).chip)}</span>`:""}</button>`}
 // --- Handelstage / Zeit-Ausstieg je Strategie ---
 function dayClose(key){const y=Math.floor(key/1e4),m=Math.floor(key/100)%100,d=key%100;const U=Date.UTC(y,m-1,d);const off=STRAT.nyOff(U+12*36e5)+420;return U-off*6e4+(STRAT.US_EARLY.has(key)?20:23)*36e5}
 function tdAfter(key,n){let k=key;for(let i=0;i<n;i++)k=STRAT.nextTD(k);return k}
@@ -1221,37 +1252,144 @@ function jrSnap(x,kind,start,extra){const L=x.life||lifeOf(x,start);const te=jrT
  const R1=x.limit&&x.stop!=null?x.entry+x.dir*Math.abs(x.entry-x.stop):null;
  return Object.assign({id:(kind==="top"?"p":"t")+start.toString(36)+Math.random().toString(36).slice(2,7),sid:x.id,kind,key:x.key,name:x.name||(symDef(x.key).short||x.key),dir:x.dir,tf:x.tf,barSec:x.barSec,
   strat:x.strat,sub:x.sub||"",lbl:label(x),str:x.str,status:x.status,entry:x.entry,stop:x.stop,tgt:x.tgt,limit:!!x.limit,R1,exp:x.limit?L.exp:null,t:x.t,takenAt:start,start,
-  tEnd:te.tEnd,tEndSrc:te.src,rule:te.rule||null,fx:fx.f,fxSrc:fx.src,actE:null,lots:null,note:"",a:{ph:x.limit?"wait":"open",cur:Math.floor(start/6e4)*6e4},man:null,test:false},extra||{})}
+  tEnd:te.tEnd,tEndSrc:te.src,rule:te.rule||null,fx:fx.f,fxSrc:fx.src,actE:null,lots:null,note:"",a:jrA0(x.limit,start),man:null,test:false,
+  src:(ST[x.key]&&ST[x.key].src)||symDef(x.key).src[0],mg:kind==="top"?"fixed":JC.mg,tc:{be:JC.be,step:JC.step}},extra||{})}
+function jrA0(lim,start){return{ph:lim?"wait":"open",cur:start,mfe:0,sR:-1}}
 // --- Auswertung: reine Funktion auf Kerzen (für Tests exportiert) ---
 function jrFin(a,res,px,t,unc){a.ph="done";a.res=res;a.px=px;a.t=t;a.unc=!!unc}
-function jrCore(T,ser,now){const a=T.a,d=T.dir,ms=ser.ms;if(a.ph==="done")return a;
- for(const b of ser.bars){if(b.t+ms<=a.cur)continue;if(b.t+ms>now)break;
+// Trailing-Stop in R: +1R → Break-even (abschaltbar), +2R → +1R, danach je vollem Schritt (Standard 1R): Stop = erreichter Level − 1R
+function jrTS(mfe,tc){tc=tc||{};let s=-1;if(tc.be!==false&&mfe>=1-1e-9)s=0;if(mfe>=2-1e-9){const st=tc.step>0?tc.step:1;s=Math.max(s,1+Math.floor((mfe-2)/st+1e-9)*st)}return s}
+// Eine Beobachtung = Kerze (ms>0) oder Live-Tick (ms=0, o=h=l=c=Preis). Reihenfolge in der Kerze konservativ:
+// 1) Zeit-Ausstieg, 2) Stop, der zu Kerzenbeginn galt, 3) festes Ziel, 4) erst danach MFE/Trailing mit Hoch/Tief anheben.
+// Angebrochene Kerze (beginnt vor dem letzten Prüfzeitpunkt): Stop mit ganzer Spanne, Anheben nur mit dem Schlusskurs.
+function jrSAt(a,t){let s=-1;for(const e of a.ev||[])if(e.t<=t&&e.sR>s)s=e.sR;return Math.min(s,a.sR)}
+function jrCore(T,ser,now,o){o=o||{};const a=T.a,d=T.dir,ms=ser.ms,tick=!ms;if(a.ph==="done")return a;
+ const rk=T.stop!=null?Math.abs(T.entry-T.stop):null,tr=T.mg==="trail"&&rk>0;if(a.sR==null)a.sR=-1;if(a.mfe==null)a.mfe=0;
+ const Rof=p=>(p-T.entry)*d/rk,Pof=r=>T.entry+d*r*rk;
+ const raise=(p,t)=>{if(!rk)return;const r=Rof(p);if(r>a.mfe)a.mfe=r;if(tr){const s2=jrTS(a.mfe,T.tc);if(s2>a.sR+1e-9){a.sR=s2;(a.ev=a.ev||[]).push({t,sR:s2});if(a.ev.length>40)a.ev.splice(0,a.ev.length-40)}}};
+ const mark=(b,t)=>{a.cur=t;a.lc=b.c;a.lastPx=b.c;if(rk)a.lastR=Rof(b.c)};
+ for(const b of ser.bars){if(b.t+ms<=a.cur)continue;const forming=!tick&&b.t+ms>now;if(forming&&!(o.forming&&a.ph==="open"))break;
+  const asOf=forming?Math.min(now,o.asOf||now):(tick?b.t:b.t+ms),part=!tick&&b.t<a.cur;
+  if(!tick&&!part&&b.t-a.cur>=ms&&a.cur>=T.start){(a.gaps=a.gaps||[]).push({f:a.cur,t:b.t});if(a.gaps.length>5)a.gaps.shift()}
   if(a.ph==="wait"){if(T.exp&&b.t>=T.exp){jrFin(a,"nofill",null,T.exp);break}
    const fill=d>0?b.l<=T.entry:b.h>=T.entry;
-   if(!fill){if(T.R1!=null&&(d>0?b.h>=T.R1:b.l<=T.R1)){jrFin(a,"nofill",null,b.t+ms);break}a.cur=b.t+ms;continue}
+   if(!fill){if(T.R1!=null&&(d>0?b.h>=T.R1:b.l<=T.R1)){jrFin(a,"nofill",null,asOf);break}a.cur=asOf;a.lastPx=b.c;continue}
    a.ph="open";a.fillT=b.t;
-   const hs=T.stop!=null&&(d>0?b.l<=T.stop:b.h>=T.stop),ht=T.tgt!=null&&(d>0?b.h>=T.tgt:b.l<=T.tgt);
-   if(hs){jrFin(a,"loss",T.stop,b.t+ms,ht);break}if(ht){jrFin(a,"win",T.tgt,b.t+ms,true);break}a.cur=b.t+ms;a.lc=b.c;continue}
+   const hs=T.stop!=null&&(d>0?b.l<=T.stop:b.h>=T.stop),ht=!tr&&T.tgt!=null&&(d>0?b.h>=T.tgt:b.l<=T.tgt);
+   if(hs){jrFin(a,"loss",T.stop,asOf,ht);break}if(ht){jrFin(a,"win",T.tgt,asOf,true);break}raise(b.c,asOf);mark(b,asOf);continue}
   if(T.tEnd&&b.t>=T.tEnd){jrFin(a,"time",T.exitFix!=null?T.exitFix:(a.lc!=null?a.lc:b.o),T.tEnd);break}
-  const hs=T.stop!=null&&(d>0?b.l<=T.stop:b.h>=T.stop),ht=T.tgt!=null&&(d>0?b.h>=T.tgt:b.l<=T.tgt);
-  if(hs){jrFin(a,"loss",T.stop,b.t+ms,ht);break}
-  if(ht){jrFin(a,"win",T.tgt,b.t+ms);break}
-  a.cur=b.t+ms;a.lc=b.c;
-  if(T.tEnd&&b.t+ms>=T.tEnd){jrFin(a,"time",T.exitFix!=null?T.exitFix:b.c,T.tEnd);break}}
+  // angebrochene Kerze: ganze Spanne gegen den Stop, der zu Kerzenbeginn galt; Schlusskurs gegen den aktuellen Stop
+  const s0=tr&&part?jrSAt(a,b.t):a.sR;let sp=tr?Pof(s0):T.stop;
+  let hs=sp!=null&&(d>0?b.l<=sp:b.h>=sp);const ht=!tr&&T.tgt!=null&&(d>0?b.h>=T.tgt:b.l<=T.tgt);
+  if(!hs&&tr&&part&&s0<a.sR&&(d>0?b.c<=Pof(a.sR):b.c>=Pof(a.sR))){hs=true;sp=Pof(a.sR)}else if(hs&&tr)a.sR=s0;
+  if(hs){let px=sp,gap=false;
+   if(tick){if(rk&&Rof(b.c)<a.sR-0.5){px=b.c;gap=true}}else if(!part&&(d>0?b.o<sp:b.o>sp)){px=b.o;gap=true}
+   jrFin(a,tr&&a.sR>-1?"trail":"loss",px,asOf,!tr&&ht);a.sRx=a.sR;if(gap)a.gapFill=true;a.lastPx=b.c;break}
+  if(ht){jrFin(a,"win",T.tgt,asOf);break}
+  raise(part||forming||tick?b.c:(d>0?b.h:b.l),asOf);mark(b,asOf);
+  if(forming)break;
+  if(!tick&&T.tEnd&&b.t+ms>=T.tEnd){jrFin(a,"time",T.exitFix!=null?T.exitFix:b.c,T.tEnd);break}}
  return a}
-function jrSeries(key,from){const st=ST[key];if(!st||!st.src)return null;const [src,sym]=st.src;
- for(const iv of["1m","5m","15m","1h"]){const c=cache.get(src+"|"+sym+"|"+iv);if(c&&c.bars.length&&c.bars[0].t<=from)return{bars:c.bars,ms:IVMS[iv],iv}}
- const c=cache.get(src+"|"+sym+"|1h");return c&&c.bars.length?{bars:c.bars,ms:IVMS["1h"],iv:"1h",gap:true}:null}
 function jrConnorsRule(T,now){const st=ST[T.key];if(!st||!st.src)return;const c=cache.get(st.src.join("|")+"|1h");if(!c)return;
  const D=STRAT.serverDays(c.bars,16,23,true);const ek=STRAT.S(T.t).key;
  for(let i=4;i<D.length;i++){const d=D[i];if(d.key<=ek||d.lastHr<22)continue;const ct=dayClose(d.key);if(ct>now||ct>T.tEnd)break;
   const s5=(D[i].c+D[i-1].c+D[i-2].c+D[i-3].c+D[i-4].c)/5;if(d.c>s5){T.tEnd=ct;T.exitFix=d.c;T.tEndSrc="Regel: Schluss > SMA5 am "+STRAT.fmtKey(d.key);return}}}
+// --- Datenquelle je Trade ---
+const jrSrc=T=>T.src||(ST[T.key]&&ST[T.key].src)||symDef(T.key).src[0];
+// Kerzen für die Nachprüfung ab "from": erst frischer Cache (feinste Auflösung), sonst Binance mit startTime (feinste passende Auflösung, max. 3 Seiten)
+async function jrCandles(src,sym,from,now){const fresh=src==="bf"||src==="bs"?35000:Infinity;
+ for(const iv of["1m","5m","15m","1h"]){const c=cache.get(src+"|"+sym+"|"+iv);if(c&&c.bars.length&&c.bars[0].t<=from&&now-c.ts<fresh)return{bars:c.bars,ms:IVMS[iv],iv,cached:true}}
+ if(src!=="bf"&&src!=="bs")return null;
+ const gap=now-from,iv=gap<=3000*6e4?"1m":gap<=1500*3e5?"5m":gap<=1500*9e5?"15m":"1h",ms=IVMS[iv],mx=src==="bf"?1500:1000;
+ const base=src==="bf"?"https://fapi.binance.com/fapi/v1/klines":"https://data-api.binance.vision/api/v3/klines";let out=[],st=Math.floor(from/ms)*ms;
+ for(let p=0;p<3&&st<=now;p++){const lim=Math.max(1,Math.min(mx,Math.ceil((now-st)/ms)+1));const w=src==="bf"?bw(lim):2;
+  const d=await getJSON(`${base}?symbol=${sym}&interval=${iv}&startTime=${st}&limit=${lim}`,w,true);LV.w.push({t:Date.now(),w});
+  if(!Array.isArray(d))throw new Error("keine Daten");const b=d.map(k=>({t:k[0],o:+k[1],h:+k[2],l:+k[3],c:+k[4],v:+k[5]}));out=merge(out,b);if(b.length<lim)break;st=b[b.length-1].t+ms}
+ return{bars:out,ms,iv}}
+const jrLive0=T=>T.a.ph!=="done"&&!(T.man&&T.man.res)&&T.stop!=null;
+const jrOpen=()=>J.trades.filter(jrLive0);
+const LV={last:0,busy:false,tmr:null,err:null,w:[],nT:0,nC:0};
+const dur=ms=>{const m=Math.round(ms/6e4);return m<60?m+" min":Math.floor(m/60)+" h"+(m%60?" "+m%60+" min":"")};
+const fBm=fmt("Europe/Berlin",{hour:"2-digit",minute:"2-digit"});const hm=t=>Date.now()-t>20*36e5?fBd.format(t):fBm.format(t);
+// Nachholen: jeder offene Trade ab seinem gespeicherten "zuletzt geprüft" (a.cur) bis jetzt, Kerze für Kerze mit der vollen Logik
+async function jrCatchUp(o){o=o||{};const now=Date.now();const L=(o.ids?J.trades.filter(T=>o.ids.includes(T.id)):J.trades).filter(jrLive0);if(!L.length)return null;
+ const G={};for(const T of L){const [src,sym]=jrSrc(T);const k=src+"|"+sym;(G[k]=G[k]||{src,sym,L:[]}).L.push(T)}const msg=[];let maxGap=0;
+ for(const g of Object.values(G)){const from=Math.min(...g.L.map(T=>T.a.cur));let ser=null,err=null;
+  try{ser=await jrCandles(g.src,g.sym,from,now)}catch(e){err=e.message}
+  for(const T of g.L){const a=T.a,b0={ph:a.ph,sR:a.sR,cur:a.cur,ng:(a.gaps||[]).length};maxGap=Math.max(maxGap,now-a.cur);
+   if(T.rule==="SMA5")jrConnorsRule(T,now);
+   if(!ser||!ser.bars.length){a.info="Datenlücke: keine Kerzen ab "+hm(a.cur)+(err?" ("+err+")":"")+" – nicht geraten, wird erneut versucht";continue}
+   delete a.info;jrCore(T,ser,now,{forming:true,asOf:now});LV.nC++;
+   const nm=`${T.name} ${T.dir>0?"LONG":"SHORT"}`;
+   if(a.ph==="done"&&b0.ph!=="done")msg.push(nm+" "+jrDoneTxt(T)+" um "+hm(a.t)+" Uhr");
+   else if(a.ph==="open")msg.push(nm+(T.mg==="trail"?` läuft weiter, Stop jetzt ${a.sR>-1?sgn(a.sR,a.sR%1?1:0)+"R":"Anfangs-Stop"}`:" läuft weiter")+` (aktuell ${sgn(a.lastR,1)}R)`);
+   else if(a.ph==="wait")msg.push(nm+" wartet weiter auf Limit");
+   if((a.gaps||[]).length>b0.ng)msg.push("⚠ Datenlücke bei "+nm+" "+hm(a.gaps[a.gaps.length-1].f)+"–"+hm(a.gaps[a.gaps.length-1].t)+" – dort nicht geprüft");
+   a.evSeen=(a.ev||[]).length;jrPost(T,b0,true)}}
+ jrSave();LV.last=now;
+ if(o.banner&&maxGap>=60000&&msg.length)jrBanner("catch",`Nachgeholt: ${dur(maxGap)} geprüft – `+msg.join(" · "));
+ return msg}
+// Live-Tick: ein gebündelter Preisabruf je Quelle, nur für Symbole mit offenen Trades
+async function jrPrices(L){const P={},bf=[],bs=[],ok=[];for(const T of L){const [s,y]=jrSrc(T);(s==="bf"?bf:s==="bs"?bs:ok).includes(y)||(s==="bf"?bf:s==="bs"?bs:ok).push(y)}
+ const put=(s,y,p)=>{if(isFinite(p)&&p>0)P[s+"|"+y]=p};
+ if(bf.length===1){const j=await getJSON(`https://fapi.binance.com/fapi/v1/ticker/price?symbol=${bf[0]}`,1,true);LV.w.push({t:Date.now(),w:1});put("bf",bf[0],+j.price)}
+ else if(bf.length){const j=await getJSON(`https://fapi.binance.com/fapi/v1/ticker/price`,2,true);LV.w.push({t:Date.now(),w:2});for(const x of j)if(bf.includes(x.symbol))put("bf",x.symbol,+x.price)}
+ if(bs.length){const j=await getJSON(`https://data-api.binance.vision/api/v3/ticker/price?symbols=${encodeURIComponent(JSON.stringify(bs))}`,4,true);LV.w.push({t:Date.now(),w:4});for(const x of j)put("bs",x.symbol,+x.price)}
+ for(const y of ok){try{const j=await getJSON(`https://www.okx.com/api/v5/market/ticker?instId=${y}`,1,true);put("okx",y,+(j.data&&j.data[0]&&j.data[0].last))}catch(e){}}
+ return P}
+async function jrTick(){const L=jrOpen();if(!L.length)return 0;const P=await jrPrices(L),now=Date.now();let n=0;
+ for(const T of L){const p=P[jrSrc(T).join("|")];if(p==null)continue;const a=T.a,b0={ph:a.ph,sR:a.sR,cur:a.cur};
+  if(T.rule==="SMA5")jrConnorsRule(T,now);jrCore(T,{bars:[{t:now,o:p,h:p,l:p,c:p}],ms:0},now);n++;LV.nT++;jrPost(T,b0,false)}
+ jrSave();LV.last=now;return n}
+// Ereignisse nach jeder Prüfung → Alarm
+function jrDoneTxt(T){const a=T.a,r=jrRes(T);return a.res==="trail"?`per ${a.sRx===0?"Break-even-Stop (0R)":"Trailing-Stop bei "+sgn(a.sRx,a.sRx%1?1:0)+"R"} geschlossen${a.gapFill?" (Kurs sprang darüber: Ausstieg "+sgn(r.R,2)+"R)":""}`:a.res==="loss"?"Stop erreicht ("+sgn(r.R,2)+"R)":a.res==="win"?"Ziel erreicht ("+sgn(r.R,2)+"R)":a.res==="time"?"Zeit-Ausstieg fällig ("+sgn(r.R,2)+"R)":a.res==="nofill"?"Limit nicht ausgelöst":"beendet"}
+function jrPost(T,b0,quiet){const a=T.a;const nm=`${T.name} ${T.tf} ${T.dir>0?"LONG":"SHORT"}`;
+ if(a.ph==="done"&&b0.ph!=="done"&&!a.alerted){a.alerted=Date.now();
+  if(a.res==="nofill")jrAlert("info",`${nm}: Limit nicht ausgelöst – lösche die Limit-Order in MT5 (die App kann das nicht).`,quiet);
+  else{const r=jrRes(T);jrAlert(r.R>0.005?"win":r.R<-0.005?"loss":"info",`${a.res==="trail"?"🏃":a.res==="win"?"🎯":a.res==="time"?"⏱":"⛔"} ${nm}: ${jrDoneTxt(T)} – Kurs ${jfmt(T,r.exF)}. ${MT5}`,quiet)}}
+ else if(!quiet&&T.mg==="trail"&&a.ph==="open"&&(a.ev||[]).length>(a.evSeen||0)){a.evSeen=a.ev.length;
+  if(JC.stepAlert&&a.sR>-1)jrAlert("step",`🏃 ${nm}: Trailing-Stop jetzt ${sgn(a.sR,a.sR%1?1:0)}R (${jfmt(T,jF(T,T.entry+T.dir*a.sR*Math.abs(T.entry-T.stop)))}). Zieh den Stop in MT5 nach – die App kann deine FTMO-Position nicht ändern oder schließen.`,false,T.id+"|step")}
+ if(a.ph==="done"&&b0.ph!=="done"){try{jrAfter()}catch(e){}}}
+// Banner-Stapel: ein Schließ-Alarm wird nie von einem späteren Hinweis verdrängt; „Verstanden“ quittiert alle
+const BN=[];const BR={catch:5,loss:4,win:3,info:2,step:1};
+function jrBanner(kind,txt,key){const el=$("jralert");if(!el)return;if(key)for(let i=BN.length-1;i>=0;i--)if(BN[i].key===key)BN.splice(i,1);BN.unshift({kind,txt,key,t:Date.now()});
+ while(BN.length>6){let i=-1;for(let j=BN.length-1;j>=0;j--)if(BN[j].kind==="step"){i=j;break}BN.splice(i<0?BN.length-1:i,1)}
+ const top=BN.reduce((m,x)=>BR[x.kind]>BR[m.kind]?x:m,BN[0]);el.className="on "+top.kind;
+ const S=BN.slice().sort((x,y)=>BR[y.kind]-BR[x.kind]||y.t-x.t),pp=(x,i)=>`<p${i?' class="old"':""}>${esc(x.txt)}</p>`;
+ el.innerHTML=`<div>${S.slice(0,2).map(pp).join("")}${S.length>2?`<details><summary>+ ${S.length-2} weitere Hinweise</summary>${S.slice(2).map((x)=>pp(x,1)).join("")}</details>`:""}</div><button id="jrok">Verstanden</button>`;$("jrok").onclick=()=>{BN.length=0;el.className=""}}
+function jrAlert(kind,txt,quiet,key){jrBanner(kind,txt,key);if(quiet&&kind==="step")return;
+ if(JC.snd){beep();setTimeout(beep,600);if(kind!=="step")setTimeout(beep,1200)}
+ try{if(navigator.vibrate&&(!navigator.userActivation||navigator.userActivation.hasBeenActive))navigator.vibrate(kind==="step"?[200]:[400,150,400,150,800])}catch(e){}
+ if(JC.ntf&&"Notification"in window&&Notification.permission==="granted"){const ttl=kind==="step"?"Signalgeber – Trailing-Stop nachziehen":"Signalgeber – Position schließen";
+  const op={body:txt,tag:"sg-"+kind+"-"+Date.now(),requireInteraction:kind!=="step"};
+  (navigator.serviceWorker&&navigator.serviceWorker.getRegistration?navigator.serviceWorker.getRegistration().catch(()=>null):Promise.resolve(null)).then(r=>{try{if(r)r.showNotification(ttl,op);else new Notification(ttl,op)}catch(e){}})}}
+// Taktgeber: alle 10 s, nur bei sichtbarer Seite und nur mit offenen Trades. Rückstand > 45 s → erst Kerzen-Nachprüfung.
+async function jrLive(o){o=o||{};clearTimeout(LV.tmr);LV.tmr=null;if(document.hidden)return;
+ if(!jrOpen().length){jrLiveUI();return}
+ if(LV.busy){LV.tmr=setTimeout(jrLive,1500);return}
+ LV.busy=true;const t0=Date.now();
+ try{if(net.pauseUntil>t0)throw new Error("Rate-Limit-Pause");const lag=jrOpen().filter(T=>t0-T.a.cur>45000);
+  if(lag.length)await jrCatchUp({ids:lag.map(T=>T.id),banner:o.banner!==false});else await jrTick();LV.err=null}
+ catch(e){LV.err=e.message}finally{LV.busy=false}
+ jrLiveUI();if(!document.hidden&&jrOpen().length)LV.tmr=setTimeout(jrLive,Math.max(1000,10000-(Date.now()-t0)))}
+const jrKick=o=>{if(!LV.busy)jrLive(o)};
+function jrLR(T){const a=T.a;if(a.lastPx==null||T.stop==null)return null;const r=jrRes(T);if(!r.sF||!r.eF)return null;return(jF(T,a.lastPx)-r.eF)*T.dir/Math.abs(r.eF-r.sF)}
+function jrLiveUI(){const L=jrOpen(),el=$("jrlive");const w=LV.w.filter(x=>x.t>Date.now()-6e4);LV.w=w;
+ if(el){el.className=L.length?"on":"";el.innerHTML=L.length?`<span class="dot${LV.err?" err":""}"></span>Live-Check alle 10 s · zuletzt ${LV.last?fBs.format(LV.last):"–"} · ${L.length} offen${LV.err?` · ⚠ ${esc(LV.err)}`:""}${document.hidden?" · pausiert":""}`:"Keine offenen Trades – Live-Check ruht (0 Abrufe)."}
+ for(const T of L){const R=jrLR(T),c=R==null?"":R>0.005?"pos":R<-0.005?"neg":"";
+  document.querySelectorAll(`[data-lr="${T.id}"],[data-tkr="${CSS.escape(T.sid)}"]`).forEach(s=>{s.className="lr "+c;s.textContent=T.a.ph==="wait"?"wartet":R==null?"":sgn(R,2)+"R"});
+  document.querySelectorAll(`[data-lst="${T.id}"]`).forEach(s=>s.innerHTML=jrStopTxt(T))}}
+function jrStopTxt(T){const a=T.a;if(a.ph==="wait")return"wartet auf Limit";const rk=Math.abs(T.entry-T.stop);
+ const st=T.mg==="trail"?(a.sR>-1?`Trailing-Stop <b>${sgn(a.sR,a.sR%1?1:0)}R</b> (${jfmt(T,jF(T,T.entry+T.dir*a.sR*rk))})`:`Stop <b>−1R</b> (${jfmt(T,jF(T,T.stop))}) · Trailing ${T.tc&&T.tc.be===false?"ab +2R":"BE ab +1R"}`):`Stop ${jfmt(T,jF(T,T.stop))} · Ziel ${jfmt(T,jF(T,T.tgt))}`;
+ return`${st} · MFE ${sgn(a.mfe||0,2)}R · geprüft bis ${fBs.format(a.cur)}`}
 function jrEvalOne(T,now){const a=T.a;if(a.ph==="done")return false;
  if(T.stop==null&&!T.limit){a.ph="done";a.res="noauto";a.t=T.start;return true}
  if(T.rule==="SMA5")jrConnorsRule(T,now);
- const ser=jrSeries(T.key,a.cur);if(!ser){a.info="keine Kursdaten – Symbol steht nicht in der Watchlist";return false}
- const b0=JSON.stringify(a);if(ser.gap)a.info="Datenlücke: nur H1-Kerzen verfügbar";else delete a.info;jrCore(T,ser,now);return JSON.stringify(a)!==b0}
-function jrEvalAll(now){let ch=false;for(const T of J.trades.concat(J.tops))if(jrEvalOne(T,now))ch=true;if(ch)jrSave();return ch}
+ const [src,sym]=jrSrc(T);let ser=null;for(const iv of["1m","5m","15m","1h"]){const c=cache.get(src+"|"+sym+"|"+iv);if(c&&c.bars.length&&c.bars[0].t<=a.cur){ser={bars:c.bars,ms:IVMS[iv]};break}}
+ if(!ser){a.info="keine Kursdaten – Symbol steht nicht in der Watchlist";return false}
+ const b0=JSON.stringify(a);delete a.info;jrCore(T,ser,now);return JSON.stringify(a)!==b0}
+// Top-Setups (hypothetisch) weiter über den Kerzen-Cache; genommene Trades über Live-Check + Nachprüfung
+function jrEvalAll(now){let ch=false;for(const T of J.tops)if(jrEvalOne(T,now))ch=true;for(const T of J.trades)if(T.a.ph!=="done"&&T.stop==null&&!T.limit&&jrEvalOne(T,now))ch=true;if(ch)jrSave();jrKick();return ch}
 function jrRecord(T,valid,now){let ch=false;
  for(const x of valid){if(x.strat==="TA")continue;if(!J.seen[x.id]){J.seen[x.id]={k:x.key,s:x.strat,t:now};ch=true}}
  for(const t of T){if(!J.tops.some(p=>p.sid===t.x.id)){J.tops.push(jrSnap(t.x,"top",now));ch=true}}
@@ -1267,13 +1405,15 @@ function jrRes(T){const eF=T.actE!=null?T.actE:jF(T,T.entry),sF=jF(T,T.stop),ris
   if(exF!=null&&risk)R=(exF-eF)*T.dir/risk;else if(m.usd!=null&&T.lots&&risk)R=m.usd/(T.lots*(F?F.cs:1)*risk);else if(m.res==="be")R=0;
   chip={win:"✍️ Gewinn",loss:"✍️ Verlust",be:"✍️ Break-even"}[m.res]+" (manuell)"}
  else{const r=a.res;
-  if(a.ph!=="done"){cls="open";chip=a.ph==="wait"?"⏳ wartet auf Limit":"● offen"}
+  if(a.ph!=="done"){cls="open";chip=a.ph==="wait"?"⏳ wartet auf Limit":T.mg==="trail"?"● offen · 🏃 Trailing":"● offen · 🎯 festes Ziel"}
   else if(r==="nofill"){cls="nofill";chip="↷ Einstieg nicht ausgelöst"}
   else if(r==="noauto"){cls="open";chip="✍️ manuell auswerten (kein Stop)"}
   else{exF=jF(T,a.px);if(risk&&exF!=null)R=(exF-eF)*T.dir/risk;
+   const c3=R==null?"be":R>0.005?"win":R<-0.005?"loss":"be";
    if(r==="win"){cls="win";chip="🎯 Ziel erreicht"}else if(r==="loss"){cls="loss";chip="⛔ Stop erreicht"}
+   else if(r==="trail"){cls=c3;chip=a.sRx===0?"🏃 Break-even-Stop (0R)":`🏃 Trailing-Stop ${sgn(a.sRx,a.sRx%1?1:0)}R`}
    else{cls=R==null?"be":R>0.005?"win":R<-0.005?"loss":"be";chip="⏱ Zeit-Ausstieg"}
-   if(a.unc)chip+=" · unklar (gleiche Kerze)"}}
+   if(a.gapFill)chip+=" · Kurslücke";if(a.unc)chip+=" · unklar (gleiche Kerze)"}}
  if(m&&m.usd!=null)usd=m.usd;
  else if(T.lots&&exF!=null){const cs=F?F.cs:1,cost=F?T.lots*(F.spread*cs+eF*cs*F.comm/100):0;usd=T.lots*cs*(exF-eF)*T.dir-cost}
  return{cls,R,exF,eF,sF,src,chip,usd,usdEst:!(m&&m.usd!=null)&&usd!=null,exitT:m&&m.res?(m.at||T.takenAt):a.t}}
@@ -1311,6 +1451,9 @@ function trHTML(T){const r=T._r||jrRes(T),lg=T.dir>0,arm=jrDelArm===T.id;
   <div class="jlv">E <b>${jfmt(T,r.eF)}</b>${T.actE!=null?" (real)":""}${T.limit?" Limit":""} · S <b>${jfmt(T,r.sF)}</b> · Z <b>${jfmt(T,jF(T,T.tgt))}</b>${T.lots?` · ${nf(T.lots,2)} Lot`:""}</div>
   <div class="jres">${r.cls==="open"||r.cls==="nofill"?`<span class="small">${T.a.info?esc(T.a.info)+" · ":""}${r.cls==="open"&&T.tEnd?"Zeit-Ausstieg spätestens "+atS(T.tEnd):""}</span>`:
    `<b class="${rcol(r.R)}">${r.R==null?"– R":sgn(r.R,2)+" R"}</b>${r.usd!=null?` · <b class="${rcol(r.usd)}">${sgn(r.usd,2)} $</b>${r.usdEst?' <span class="small">(geschätzt)</span>':""}`:""}${r.exF!=null?` · Ausstieg ${jfmt(T,r.exF)}`:""}${r.exitT?` · ${fBd.format(r.exitT)}`:""} <span class="small">· ${r.src==="manuell"?"manuell eingetragen":"automatisch"}</span>`}</div>
+  ${T.stop!=null&&T.a.ph!=="done"&&!(T.man&&T.man.res)?`<div class="jlive">Live <span class="lr" data-lr="${T.id}"></span> · <span data-lst="${T.id}">${jrStopTxt(T)}</span></div>`:""}
+  ${T.a.ph==="done"&&(T.a.mfe||0)>0?`<div class="small">${MGN[T.mg||"fixed"]} · bester Stand (MFE) ${sgn(T.a.mfe,2)}R</div>`:""}
+  ${(T.a.gaps||[]).length?`<div class="small warn">⚠ Datenlücke: ${T.a.gaps.map(g=>hm(g.f)+"–"+hm(g.t)).join(", ")} – dort nicht geprüft</div>`:""}
   <div class="small">Zeit-Ausstieg: ${esc(T.tEndSrc||"–")}</div>${T.note?`<div class="jn">📝 ${esc(T.note)}</div>`:""}
   <div class="jbt"><button class="btn sm" data-jed="${T.id}">✎ Bearbeiten / Ergebnis</button><button class="btn sm del${arm?" arm":""}" data-jdel="${T.id}">${arm?"Wirklich löschen?":"🗑 Löschen"}</button></div></div>`}
 function renderJournal(){const el=$("jrbody");if(!el)return;const now=Date.now();const P=jrPeriod(jrMode,jrOff);
@@ -1334,7 +1477,7 @@ function renderJournal(){const el=$("jrbody");if(!el)return;const now=Date.now()
   h+=`<div class="card"><h3>Nach Strategie</h3>${groupTbl(L,T=>T.strat+"|"+T.sub,T=>T.lbl)}<h3 style="margin-top:12px">Nach Symbol</h3>${groupTbl(L,T=>T.key,T=>T.name)}</div>`;
   h+=`<div class="card"><h3>Trades (${L.length})</h3>${L.map(trHTML).join("")}</div>`}
  else if(J.trades.length)h+=`<div class="empty" style="font-size:14px">Keine Trades in diesem Zeitraum.<div class="small" style="font-weight:400">Mit ‹ › blättern oder „Alle“ wählen.</div></div>`;
- el.innerHTML=h;
+ el.innerHTML=h;jrLiveUI();
  el.querySelectorAll("[data-jed]").forEach(b=>b.onclick=()=>{const T=J.trades.find(t=>t.id===b.dataset.jed);if(T)jrSheet(null,T)});
  el.querySelectorAll("[data-jdel]").forEach(b=>b.onclick=()=>{const id=b.dataset.jdel;if(jrDelArm!==id){jrDelArm=id;renderJournal();setTimeout(()=>{if(jrDelArm===id){jrDelArm=null;renderJournal()}},4000);return}jrDelArm=null;jrDelete(id)})}
 function jrDelete(id){const i=J.trades.findIndex(t=>t.id===id);if(i<0)return;const [T]=J.trades.splice(i,1);jrSave();jrUndo=T;toast(`Trade gelöscht (${T.name} ${T.tf})`,()=>{if(jrUndo&&!J.trades.some(t=>t.id===jrUndo.id)){J.trades.push(jrUndo);jrSave();jrUndo=null;jrAfter()}});jrAfter()}
@@ -1346,7 +1489,12 @@ function jrSheet(x,T){const edit=!!T;if(!T){const ex=jrTaken(x.id);if(ex)return 
  const k=edit?T.key:x.key,F=FTMO[k],dg=F?F.dg:2;const V=edit?T:{name:x.name||k,dir:x.dir,tf:x.tf,lbl:label(x),str:x.str,status:x.status,t:x.t,entry:x.entry,stop:x.stop,tgt:x.tgt,limit:x.limit,fx:fxOf(k).f,key:k};
  const fv=v=>v==null?"–":nf(Math.round(v*V.fx/(F?F.tick:0.01))*(F?F.tick:0.01),dg);const r=edit?jrRes(T):null;
  let sug="";if(!edit&&V.stop!=null){const acc=Vv("c-acc"),rp=Vv("c-risk");const dist=Math.abs(V.entry-V.stop)*V.fx;if(F&&acc>0&&rp>0&&dist>0){const cost=F.spread*F.cs+V.entry*V.fx*F.cs*F.comm/100;const l=Math.floor(acc*rp/100/(dist*F.cs+cost)*100+1e-9)/100;if(l>=0.01)sug=nf(l,2)}}
- const m=edit&&T.man||{};
+ const m=edit&&T.man||{};let mg=edit?(T.mg||"fixed"):JC.mg,tc=Object.assign({},edit?(T.tc||{be:true,step:1}):{be:JC.be,step:JC.step});
+ const mgH=()=>`<div class="seg" id="j-mg">${["trail","fixed"].map(v=>`<button data-v="${v}" class="${mg===v?"on":""}">${MGN[v]}</button>`).join("")}</div>
+  ${mg==="trail"?`<div class="seg" id="j-be" style="margin-top:6px"><button data-v="1" class="${tc.be!==false?"on":""}">BE ab +1R</button><button data-v="0" class="${tc.be===false?"on":""}">ohne BE</button></div>
+  <div class="seg" id="j-st" style="margin-top:6px">${[0.5,1,2].map(v=>`<button data-v="${v}" class="${(tc.step||1)===v?"on":""}">Schritt ${nf(v,v%1?1:0)}R</button>`).join("")}</div>
+  <div class="small">${tc.be!==false?"+1R → Stop auf Einstieg (BE). ":""}+2R → Stop +1R, danach je ${nf(tc.step||1,(tc.step||1)%1?1:0)}R weiter: Stop = erreichter Stand − 1R (z. B. 5R → +4R, 10R → +9R). Kein festes Ziel.</div>`:
+  `<div class="small">Ausstieg am Ziel ${V.tgt!=null?"("+fv(V.tgt)+")":""} oder Stop.</div>`}`;
  $("spanel").innerHTML=`<div class="sgrab"></div><h3>${edit?"Trade bearbeiten":"Trade genommen?"}</h3>
   <div class="shd"><b>${esc(V.name)}</b> · ${V.tf} · <span class="dr ${V.dir>0?"long":"short"}">${V.dir>0?"LONG":"SHORT"} ${V.str}</span></div>
   <div class="small">${esc(V.lbl)} <span class="bdg ${STR[V.status]?STR[V.status].cls:""}">${STR[V.status]?STR[V.status].txt:""}</span> · Signal ${fBd.format(V.t)} ${tzName(V.t)}</div>
@@ -1356,30 +1504,36 @@ function jrSheet(x,T){const edit=!!T;if(!T){const ex=jrTaken(x.id);if(ex)return 
    <div><label>Lots (optional)${sug?` · Rechner: <a href="#" id="j-sug">${sug}</a>`:""}</label><input id="j-l" inputmode="decimal" placeholder="z. B. 0,5" value="${edit&&T.lots!=null?nf(T.lots,2):""}"></div>
    ${!edit&&V.stop==null?`<div><label>Stop (FTMO-Kurs) – sonst keine Auto-Auswertung</label><input id="j-s" inputmode="decimal"></div><div><label>Ziel (optional)</label><input id="j-t" inputmode="decimal"></div>`:""}
    <div style="grid-column:1/3"><label>Notiz (optional)</label><input id="j-n" maxlength="300" placeholder="z. B. Grund, Gefühl, Abweichung" value="${edit?esc(T.note):""}"></div></div>
+  <div class="mres"><h4>Trade-Management (Live-Check alle 10 s)</h4><div id="j-mgw">${mgH()}</div>${edit?`<div class="small">Änderung wertet den Trade ab dem Einstieg neu aus.</div>`:""}<div class="small warn">${MT5}</div></div>
   ${edit?`<div class="mres"><h4>Ergebnis</h4><div class="small">Automatisch: <b>${esc(jrRes(Object.assign({},T,{man:null})).chip)}</b>. Weicht dein FTMO-Ergebnis ab, hier eintragen – das hat Vorrang.</div>
    <div class="seg" id="j-res">${[["","Automatisch"],["win","Gewinn"],["loss","Verlust"],["be","Break-even"]].map(([v,l])=>`<button data-r="${v}" class="${(m.res||"")===v?"on":""}">${l}</button>`).join("")}</div>
    <div class="f" style="margin-top:8px"><div><label>Ausstiegskurs (FTMO)</label><input id="j-x" inputmode="decimal" value="${m.px!=null?nf(m.px,dg).replace(/\./g,""):""}"></div><div><label>Ergebnis in $ (inkl. Kosten)</label><input id="j-u" inputmode="decimal" value="${m.usd!=null?nf(m.usd,2).replace(/\./g,""):""}"></div></div></div>`:""}
   <div class="sbtn"><button class="btn" id="j-cancel">Abbrechen</button>${edit?`<button class="btn del" id="j-del">🗑 Löschen</button>`:""}<button class="btn pri" id="j-ok">${edit?"Speichern":"✓ Trade speichern"}</button></div>
   <div class="small" style="margin-top:6px">${edit?"":"Gespeichert wird nur auf diesem Gerät. Es wird keine Order platziert. "}Auswertung auf Ersatzkursen (Binance-Perp, FTMO-umgerechnet) – deine echte Ausführung kann abweichen.</div>`;
  $("sheet").classList.add("on");let mres=m.res||"";
+ const wire=()=>{$("j-mgw").querySelectorAll("#j-mg button").forEach(b=>b.onclick=()=>{mg=b.dataset.v;$("j-mgw").innerHTML=mgH();wire()});
+  $("j-mgw").querySelectorAll("#j-be button").forEach(b=>b.onclick=()=>{tc.be=b.dataset.v==="1";$("j-mgw").innerHTML=mgH();wire()});
+  $("j-mgw").querySelectorAll("#j-st button").forEach(b=>b.onclick=()=>{tc.step=+b.dataset.v;$("j-mgw").innerHTML=mgH();wire()})};wire();
  const close=()=>$("sheet").classList.remove("on");$("j-cancel").onclick=close;$("sheetbg").onclick=close;
  if($("j-sug"))$("j-sug").onclick=e=>{e.preventDefault();$("j-l").value=sug};
  if(edit){document.querySelectorAll("#j-res button").forEach(b=>b.onclick=()=>{mres=b.dataset.r;document.querySelectorAll("#j-res button").forEach(y=>y.classList.toggle("on",y===b))});
   $("j-del").onclick=()=>{close();jrDelete(T.id)}}
  $("j-ok").onclick=()=>{const actE=pf($("j-e").value),lots=pf($("j-l").value),note=$("j-n").value.trim().slice(0,300);
-  if(edit){T.actE=actE;T.lots=lots;T.note=note;const px=pf($("j-x").value),usd=pf($("j-u").value);T.man=mres||px!=null||usd!=null?{res:mres||(px!=null?((px-(actE!=null?actE:jF(T,T.entry)))*T.dir>0?"win":"loss"):usd>0?"win":usd<0?"loss":"be"),px,usd,at:Date.now()}:null;jrSave();close();toast("Gespeichert");jrAfter();return}
+  if(edit){T.actE=actE;T.lots=lots;T.note=note;const px=pf($("j-x").value),usd=pf($("j-u").value);T.man=mres||px!=null||usd!=null?{res:mres||(px!=null?((px-(actE!=null?actE:jF(T,T.entry)))*T.dir>0?"win":"loss"):usd>0?"win":usd<0?"loss":"be"),px,usd,at:Date.now()}:null;
+   const o0=T.tc||{be:true,step:1};let re=false;if(T.stop!=null&&((T.mg||"fixed")!==mg||(mg==="trail"&&(o0.be!==tc.be||o0.step!==tc.step)))){T.mg=mg;T.tc=tc;T.a=jrA0(T.limit,T.start);re=true}
+   jrSave();close();toast(re?"Gespeichert – wird ab Einstieg neu ausgewertet":"Gespeichert");jrAfter();if(re)jrKick({banner:false});return}
   if(jrTaken(x.id)){close();return}
-  const now=Date.now();const T2=jrSnap(x,"trade",now,{actE,lots,note});
+  const now=Date.now();const T2=jrSnap(x,"trade",now,{actE,lots,note,mg,tc});
   if(x.stop==null){const sF=pf($("j-s").value),tF=pf($("j-t").value);if(sF!=null){T2.stop=sF/T2.fx;T2.tgt=tF!=null?tF/T2.fx:null}}
-  J.trades.push(T2);jrSave();jrEvalOne(T2,now);jrSave();close();toast(`Trade gespeichert: ${T2.name} ${T2.tf} ${T2.dir>0?"LONG":"SHORT"}`,()=>{J.trades=J.trades.filter(t=>t.id!==T2.id);jrSave();jrAfter()});jrAfter()}}
+  J.trades.push(T2);jrSave();jrEvalOne(T2,now);jrSave();close();setTimeout(()=>jrKick(),50);toast(`Trade gespeichert: ${T2.name} ${T2.tf} ${T2.dir>0?"LONG":"SHORT"}`,()=>{J.trades=J.trades.filter(t=>t.id!==T2.id);jrSave();jrAfter()});jrAfter()}}
 document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-tk]");if(!b)return;e.stopPropagation();e.preventDefault();const x=jrFind(b.dataset.tk);if(x)jrSheet(x);else{const T=jrTaken(b.dataset.tk);if(T)jrSheet(null,T)}},true);
 // --- Export / Import ---
 function dl(name,txt,type){const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([txt],{type}));a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1000)}
 const stamp=()=>{const p=bParts(Date.now());return`${p.y}-${String(p.m+1).padStart(2,"0")}-${String(p.d).padStart(2,"0")}`};
-function jrCSV(){const H=["id","genommen_berlin","symbol","ftmo_symbol","richtung","tf","strategie","staerke","status","einstieg_ftmo","stop_ftmo","ziel_ftmo","einstieg_real","lots","ergebnis","quelle","R","usd","usd_geschaetzt","ausstieg_ftmo","ausstieg_berlin","zeit_ausstieg","notiz","faktor","testdaten"];
+function jrCSV(){const H=["id","genommen_berlin","symbol","ftmo_symbol","richtung","tf","strategie","staerke","status","einstieg_ftmo","stop_ftmo","ziel_ftmo","einstieg_real","lots","ergebnis","quelle","R","usd","usd_geschaetzt","ausstieg_ftmo","ausstieg_berlin","zeit_ausstieg","notiz","faktor","testdaten","management","be","schritt_R","mfe_R","stop_zuletzt_R","zuletzt_geprueft_berlin","datenluecken"];
  const q=v=>{v=v==null?"":String(v);return/[;"\n]/.test(v)?`"${v.replace(/"/g,'""')}"`:v};const n=(v,d)=>v==null?"":(+v).toFixed(d).replace(".",",");
  const rows=J.trades.slice().sort((a,b)=>a.takenAt-b.takenAt).map(T=>{const r=jrRes(T);const F=FTMO[T.key],d=F?F.dg:4;
-  return[T.id,fBd.format(T.takenAt),T.key,F?F.sym:"",T.dir>0?"LONG":"SHORT",T.tf,T.lbl,T.str,STR[T.status]?STR[T.status].txt:"",n(r.eF!=null&&T.actE==null?r.eF:jF(T,T.entry),d),n(r.sF,d),n(jF(T,T.tgt),d),n(T.actE,d),n(T.lots,2),r.chip,r.src,n(r.R,3),n(r.usd,2),r.usdEst?"ja":"",n(r.exF,d),r.exitT?fBd.format(r.exitT):"",T.tEndSrc,T.note,n(T.fx,5),T.test?"ja":""].map(q).join(";")});
+  return[T.id,fBd.format(T.takenAt),T.key,F?F.sym:"",T.dir>0?"LONG":"SHORT",T.tf,T.lbl,T.str,STR[T.status]?STR[T.status].txt:"",n(r.eF!=null&&T.actE==null?r.eF:jF(T,T.entry),d),n(r.sF,d),n(jF(T,T.tgt),d),n(T.actE,d),n(T.lots,2),r.chip,r.src,n(r.R,3),n(r.usd,2),r.usdEst?"ja":"",n(r.exF,d),r.exitT?fBd.format(r.exitT):"",T.tEndSrc,T.note,n(T.fx,5),T.test?"ja":"",T.mg==="trail"?"trailing":"festes_ziel",T.mg==="trail"?(T.tc&&T.tc.be===false?"nein":"ja"):"",T.mg==="trail"?n(T.tc&&T.tc.step||1,1):"",n(T.a.mfe,2),T.mg==="trail"?n(T.a.sRx!=null?T.a.sRx:T.a.sR,1):"",T.a.cur?fBd.format(T.a.cur):"",(T.a.gaps||[]).length].map(q).join(";")});
  return"\ufeff"+H.join(";")+"\n"+rows.join("\n")}
 function jrImport(file){const rd=new FileReader();rd.onload=()=>{let d;try{d=JSON.parse(rd.result)}catch(e){toast("Import fehlgeschlagen: keine gültige JSON-Datei");return}
   if(!d||!Array.isArray(d.trades)){toast("Import fehlgeschlagen: keine Signalgeber-Journal-Datei");return}
@@ -1392,9 +1546,33 @@ function jrInit(){document.querySelectorAll("#jrseg button").forEach(b=>b.onclic
  $("jrprev").onclick=()=>{jrOff--;renderJournal()};$("jrnext").onclick=()=>{if(jrOff<0)jrOff++;renderJournal()};
  $("jrxj").onclick=()=>dl(`signalgeber-journal-${stamp()}.json`,JSON.stringify({app:"Signalgeber",type:"journal",v:1,exported:new Date().toISOString(),trades:J.trades,tops:J.tops,seen:J.seen,recSince:J.recSince},jrRep,1),"application/json");
  $("jrxc").onclick=()=>dl(`signalgeber-trades-${stamp()}.csv`,jrCSV(),"text/csv;charset=utf-8");
- $("jrim").onclick=()=>$("jrfile").click();$("jrfile").onchange=e=>{const f=e.target.files[0];if(f)jrImport(f);e.target.value=""}}
+ $("jrim").onclick=()=>$("jrfile").click();$("jrfile").onchange=e=>{const f=e.target.files[0];if(f)jrImport(f);e.target.value=""};jcInit()}
+// --- Einstellungen Trade-Management ---
+function jcSync(){const q=(id,on)=>{const b=$(id);if(b)b.classList.toggle("on",on)};
+ document.querySelectorAll("#jc-mg button").forEach(b=>b.classList.toggle("on",b.dataset.v===JC.mg));
+ document.querySelectorAll("#jc-step button").forEach(b=>b.classList.toggle("on",+b.dataset.v===JC.step));
+ q("jc-be",JC.be);$("jc-be").textContent=JC.be?"Break-even ab +1R: an":"Break-even ab +1R: aus";
+ q("jc-sa",JC.stepAlert);$("jc-sa").textContent=JC.stepAlert?"Hinweis bei jeder Stop-Stufe: an":"Hinweis bei jeder Stop-Stufe: aus";
+ q("jc-snd",JC.snd);$("jc-snd").textContent=JC.snd?"🔔 Ton + Vibration bei Alarm: an":"🔕 Ton + Vibration bei Alarm: aus";
+ const NA=!("Notification"in window),perm=NA?"n/a":Notification.permission;q("jc-ntf",JC.ntf&&perm==="granted");
+ $("jc-ntf").textContent=NA?"📣 Benachrichtigung: hier nicht verfügbar":perm==="denied"?"📣 Benachrichtigung: im Browser blockiert":JC.ntf&&perm==="granted"?"📣 Benachrichtigung: an":"📣 Benachrichtigung erlauben";
+ $("jc-ntfi").textContent=NA?"Dieser Browser bietet keine Web-Benachrichtigungen. iPhone: nur wenn die App über „Zum Home-Bildschirm“ installiert ist (iOS 16.4+, https). Banner + Ton kommen trotzdem, solange die App offen ist.":
+  location.protocol!=="https:"&&location.hostname!=="localhost"?"Benachrichtigungen brauchen https (z. B. GitHub-Pages-Adresse). Als Datei geöffnet gehen nur Banner + Ton.":"Die Erlaubnis wird nur nach Tipp auf den Knopf abgefragt. iPhone: nur als Home-Bildschirm-App (iOS 16.4+); Vibration gibt es auf dem iPhone nicht."}
+function jcInit(){if(!$("jc-mg"))return;
+ document.querySelectorAll("#jc-mg button").forEach(b=>b.onclick=()=>{JC.mg=b.dataset.v;jcSave();jcSync()});
+ document.querySelectorAll("#jc-step button").forEach(b=>b.onclick=()=>{JC.step=+b.dataset.v;jcSave();jcSync()});
+ $("jc-be").onclick=()=>{JC.be=!JC.be;jcSave();jcSync()};$("jc-sa").onclick=()=>{JC.stepAlert=!JC.stepAlert;jcSave();jcSync()};
+ $("jc-snd").onclick=()=>{JC.snd=!JC.snd;jcSave();jcSync();if(JC.snd){beep();try{navigator.vibrate&&navigator.vibrate(200)}catch(e){}}};
+ $("jc-ntf").onclick=async()=>{if(!("Notification"in window))return;if(JC.ntf&&Notification.permission==="granted"){JC.ntf=false}else{try{const p=await Notification.requestPermission();JC.ntf=p==="granted"}catch(e){JC.ntf=false}}jcSave();jcSync()};
+ $("jc-test").onclick=()=>jrAlert("info","Test-Alarm: So sieht ein Schließ-Alarm aus. "+MT5,false);
+ jcSync()}
+// Wieder geöffnet / sichtbar → sofort ab "zuletzt geprüft" nachholen, dann 10-s-Takt
+document.addEventListener("visibilitychange",()=>{if(document.hidden){clearTimeout(LV.tmr);LV.tmr=null;jrLiveUI()}else jrKick()});
+window.addEventListener("pageshow",()=>jrKick());window.addEventListener("pagehide",()=>jrSave());
+setInterval(()=>{if(!document.hidden&&jrOpen().length&&!LV.busy&&!LV.tmr)jrKick();jrLiveUI()},15000);
 jrInit();
-window.__sg.jr={core:jrCore,res:jrRes,J:()=>J,evalAll:jrEvalAll,snap:jrSnap,save:jrSave,render:renderJournal,reload:()=>{J=Object.assign({v:1,trades:[],tops:[],seen:{},recSince:Date.now()},LS("jr")||{});jrAfter()},period:jrPeriod};
+jrKick();
+window.__sg.jr={tick:jrTick,catchUp:jrCatchUp,live:jrLive,kick:jrKick,LV,JC:()=>JC,open:jrOpen,ts:jrTS,alert:jrAlert,core:jrCore,res:jrRes,J:()=>J,evalAll:jrEvalAll,snap:jrSnap,save:jrSave,render:renderJournal,reload:()=>{J=Object.assign({v:1,trades:[],tops:[],seen:{},recSince:Date.now()},LS("jr")||{});jrAfter()},period:jrPeriod};
 
 syncBtns();chips();refresh();
 </script>
