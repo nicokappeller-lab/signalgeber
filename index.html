@@ -142,6 +142,14 @@ nav button{font-size:10.5px}
 #jralert{position:fixed;left:8px;right:8px;top:calc(8px + env(safe-area-inset-top));z-index:40;display:none;gap:10px;align-items:center;padding:12px 14px;border-radius:12px;font-size:14px;font-weight:700;line-height:1.35;box-shadow:0 10px 30px rgba(0,0,0,.6);border:2px solid #f59e0b;background:#2a1a05;color:#fde68a}
 #jralert.on{display:flex;flex-direction:column;align-items:stretch}#jralert button{align-self:flex-end}#jralert summary{font-size:12px;margin-top:6px;cursor:pointer}#jralert.win{border-color:#22c55e;background:#06270f;color:#bbf7d0}#jralert.loss{border-color:#ef4444;background:#2a0808;color:#fecaca}#jralert.step{border-color:#38bdf8;background:#062033;color:#bae6fd}
 #jralert div{flex:1;max-height:42vh;overflow:auto}#jralert p{margin:0}#jralert p.old{margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,.2);font-size:12px;font-weight:600;opacity:.85}#jralert button{background:#fff;color:#111;border:0;border-radius:8px;padding:8px 10px;font-weight:800;cursor:pointer}
+.lvc{border:1px solid #1e3a5f;background:linear-gradient(180deg,#0b1a2e,#0f172a)}.lvt{border:1px solid #1e293b;border-left:4px solid #3b82f6;border-radius:12px;padding:10px 12px;margin:8px 0;background:#0b1220;cursor:pointer}.lvt.pos{border-left-color:#22c55e}.lvt.neg{border-left-color:#ef4444}
+.lv1{display:flex;gap:6px;align-items:center;flex-wrap:wrap}.lvmg{margin-left:auto;font-size:11px;color:#93c5fd}
+.lv2{display:flex;align-items:center;gap:12px;margin:6px 0}.lvR{font-size:30px;font-weight:900;font-variant-numeric:tabular-nums;min-width:120px;color:#cbd5e1}.lvR.big{font-size:42px}.lvR.pos{color:#4ade80}.lvR.neg{color:#f87171}
+.lvpx{display:flex;flex-direction:column}.lvpx b{font-size:20px;font-variant-numeric:tabular-nums}.lvpx small{font-size:11px;color:#94a3b8}
+.lvg{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin:4px 0}.lvg div{background:#111a2b;border-radius:8px;padding:5px 7px}.lvg small{display:block;font-size:10.5px;color:#94a3b8}.lvg b{font-size:13.5px;font-variant-numeric:tabular-nums}
+.lv4{font-size:12px;color:#cbd5e1;margin:4px 0}.lv5{margin:2px 0}.lvage{font-size:11.5px;color:#86efac}.lvage.stale{color:#fbbf24;font-weight:700}.lvage.old{color:#f87171;font-weight:800}
+.btn.lvx{border-color:#ef4444;color:#fecaca;background:rgba(239,68,68,.12);font-weight:800}.lvd{margin:8px 0}.lvdone{padding:10px;border-radius:10px;background:#111a2b;font-size:14px}
+.btn:disabled{opacity:.45}
 </style>
 </head>
 <body>
@@ -1378,7 +1386,8 @@ function jrLiveUI(){const L=jrOpen(),el=$("jrlive");const w=LV.w.filter(x=>x.t>D
  if(el){el.className=L.length?"on":"";el.innerHTML=L.length?`<span class="dot${LV.err?" err":""}"></span>Live-Check alle 10 s · zuletzt ${LV.last?fBs.format(LV.last):"–"} · ${L.length} offen${LV.err?` · ⚠ ${esc(LV.err)}`:""}${document.hidden?" · pausiert":""}`:"Keine offenen Trades – Live-Check ruht (0 Abrufe)."}
  for(const T of L){const R=jrLR(T),c=R==null?"":R>0.005?"pos":R<-0.005?"neg":"";
   document.querySelectorAll(`[data-lr="${T.id}"],[data-tkr="${CSS.escape(T.sid)}"]`).forEach(s=>{s.className="lr "+c;s.textContent=T.a.ph==="wait"?"wartet":R==null?"":sgn(R,2)+"R"});
-  document.querySelectorAll(`[data-lst="${T.id}"]`).forEach(s=>s.innerHTML=jrStopTxt(T))}}
+  document.querySelectorAll(`[data-lst="${T.id}"]`).forEach(s=>s.innerHTML=jrStopTxt(T))}
+ try{lvRefresh()}catch(e){}}
 function jrStopTxt(T){const a=T.a;if(a.ph==="wait")return"wartet auf Limit";const rk=Math.abs(T.entry-T.stop);
  const st=T.mg==="trail"?(a.sR>-1?`Trailing-Stop <b>${sgn(a.sR,a.sR%1?1:0)}R</b> (${jfmt(T,jF(T,T.entry+T.dir*a.sR*rk))})`:`Stop <b>−1R</b> (${jfmt(T,jF(T,T.stop))}) · Trailing ${T.tc&&T.tc.be===false?"ab +2R":"BE ab +1R"}`):`Stop ${jfmt(T,jF(T,T.stop))} · Ziel ${jfmt(T,jF(T,T.tgt))}`;
  return`${st} · MFE ${sgn(a.mfe||0,2)}R · geprüft bis ${fBs.format(a.cur)}`}
@@ -1389,7 +1398,7 @@ function jrEvalOne(T,now){const a=T.a;if(a.ph==="done")return false;
  if(!ser){a.info="keine Kursdaten – Symbol steht nicht in der Watchlist";return false}
  const b0=JSON.stringify(a);delete a.info;jrCore(T,ser,now);return JSON.stringify(a)!==b0}
 // Top-Setups (hypothetisch) weiter über den Kerzen-Cache; genommene Trades über Live-Check + Nachprüfung
-function jrEvalAll(now){let ch=false;for(const T of J.tops)if(jrEvalOne(T,now))ch=true;for(const T of J.trades)if(T.a.ph!=="done"&&T.stop==null&&!T.limit&&jrEvalOne(T,now))ch=true;if(ch)jrSave();jrKick();return ch}
+function jrEvalAll(now){let ch=false;for(const T of J.tops)if(jrEvalOne(T,now))ch=true;for(const T of J.trades)if(T.a.ph!=="done"&&!T.man&&T.stop==null&&!T.limit&&jrEvalOne(T,now))ch=true;if(ch)jrSave();jrKick();return ch}
 function jrRecord(T,valid,now){let ch=false;
  for(const x of valid){if(x.strat==="TA")continue;if(!J.seen[x.id]){J.seen[x.id]={k:x.key,s:x.strat,t:now};ch=true}}
  for(const t of T){if(!J.tops.some(p=>p.sid===t.x.id)){J.tops.push(jrSnap(t.x,"top",now));ch=true}}
@@ -1403,7 +1412,9 @@ function jrRes(T){const eF=T.actE!=null?T.actE:jF(T,T.entry),sF=jF(T,T.stop),ris
  let cls,exF=null,R=null,src="auto",chip,usd=null;
  if(m&&m.res){src="manuell";cls=m.res;exF=m.px!=null?m.px:null;
   if(exF!=null&&risk)R=(exF-eF)*T.dir/risk;else if(m.usd!=null&&T.lots&&risk)R=m.usd/(T.lots*(F?F.cs:1)*risk);else if(m.res==="be")R=0;
-  chip={win:"✍️ Gewinn",loss:"✍️ Verlust",be:"✍️ Break-even"}[m.res]+" (manuell)"}
+  chip={win:"✍️ Gewinn",loss:"✍️ Verlust",be:"✍️ Break-even"}[m.res]+" (manuell)";
+  if(m.kind==="close"){cls=R==null?m.res:R>0.005?"win":R<-0.005?"loss":"be";chip="✋ Manuell geschlossen"+(m.src==="mt5"?" (MT5-Kurs)":"")}
+  else if(m.kind==="cancel"){cls="nofill";R=null;chip="✋ Limit manuell gestrichen"}}
  else{const r=a.res;
   if(a.ph!=="done"){cls="open";chip=a.ph==="wait"?"⏳ wartet auf Limit":T.mg==="trail"?"● offen · 🏃 Trailing":"● offen · 🎯 festes Ziel"}
   else if(r==="nofill"){cls="nofill";chip="↷ Einstieg nicht ausgelöst"}
@@ -1450,17 +1461,19 @@ function trHTML(T){const r=T._r||jrRes(T),lg=T.dir>0,arm=jrDelArm===T.id;
   <div class="small">${esc(T.lbl)} · Stärke ${T.str} · ${STR[T.status]?STR[T.status].txt:""} · genommen ${fBd.format(T.takenAt)}</div>
   <div class="jlv">E <b>${jfmt(T,r.eF)}</b>${T.actE!=null?" (real)":""}${T.limit?" Limit":""} · S <b>${jfmt(T,r.sF)}</b> · Z <b>${jfmt(T,jF(T,T.tgt))}</b>${T.lots?` · ${nf(T.lots,2)} Lot`:""}</div>
   <div class="jres">${r.cls==="open"||r.cls==="nofill"?`<span class="small">${T.a.info?esc(T.a.info)+" · ":""}${r.cls==="open"&&T.tEnd?"Zeit-Ausstieg spätestens "+atS(T.tEnd):""}</span>`:
-   `<b class="${rcol(r.R)}">${r.R==null?"– R":sgn(r.R,2)+" R"}</b>${r.usd!=null?` · <b class="${rcol(r.usd)}">${sgn(r.usd,2)} $</b>${r.usdEst?' <span class="small">(geschätzt)</span>':""}`:""}${r.exF!=null?` · Ausstieg ${jfmt(T,r.exF)}`:""}${r.exitT?` · ${fBd.format(r.exitT)}`:""} <span class="small">· ${r.src==="manuell"?"manuell eingetragen":"automatisch"}</span>`}</div>
+   `<b class="${rcol(r.R)}">${r.R==null?"– R":sgn(r.R,2)+" R"}</b>${r.usd!=null?` · <b class="${rcol(r.usd)}">${sgn(r.usd,2)} $</b>${r.usdEst?' <span class="small">(geschätzt)</span>':""}`:""}${r.exF!=null?` · Ausstieg ${jfmt(T,r.exF)}`:""}${r.exitT?` · ${fBd.format(r.exitT)}`:""} <span class="small">· ${T.man&&T.man.kind?"im Journal geschlossen":r.src==="manuell"?"manuell eingetragen":"automatisch"}</span>`}</div>
   ${T.stop!=null&&T.a.ph!=="done"&&!(T.man&&T.man.res)?`<div class="jlive">Live <span class="lr" data-lr="${T.id}"></span> · <span data-lst="${T.id}">${jrStopTxt(T)}</span></div>`:""}
   ${T.a.ph==="done"&&(T.a.mfe||0)>0?`<div class="small">${MGN[T.mg||"fixed"]} · bester Stand (MFE) ${sgn(T.a.mfe,2)}R</div>`:""}
   ${(T.a.gaps||[]).length?`<div class="small warn">⚠ Datenlücke: ${T.a.gaps.map(g=>hm(g.f)+"–"+hm(g.t)).join(", ")} – dort nicht geprüft</div>`:""}
   <div class="small">Zeit-Ausstieg: ${esc(T.tEndSrc||"–")}</div>${T.note?`<div class="jn">📝 ${esc(T.note)}</div>`:""}
-  <div class="jbt"><button class="btn sm" data-jed="${T.id}">✎ Bearbeiten / Ergebnis</button><button class="btn sm del${arm?" arm":""}" data-jdel="${T.id}">${arm?"Wirklich löschen?":"🗑 Löschen"}</button></div></div>`}
+  ${T.man&&T.man.kind==="close"?`<div class="small">✋ Im Journal geschlossen ${fBd.format(T.man.at)} zu ${jfmt(T,T.man.px)} (${T.man.src==="mt5"?"dein MT5-Kurs":"Live-Kurs"}${T.man.src==="mt5"&&T.man.livePx!=null?", Live-Kurs war "+jfmt(T,T.man.livePx):""})</div>`:""}
+  <div class="jbt">${jrLive0(T)?`<button class="btn sm" data-lvopen="${T.id}">📡 Live</button><button class="btn sm lvx" data-lvclose="${T.id}">${T.a.ph==="wait"?"✋ Limit streichen":"✋ Schließen"}</button>`:""}${T.man&&T.man.kind?`<button class="btn sm" data-lvreopen="${T.id}">↺ Wieder öffnen</button>`:""}<button class="btn sm" data-jed="${T.id}">✎ Bearbeiten / Ergebnis</button><button class="btn sm del${arm?" arm":""}" data-jdel="${T.id}">${arm?"Wirklich löschen?":"🗑 Löschen"}</button></div></div>`}
 function renderJournal(){const el=$("jrbody");if(!el)return;const now=Date.now();const P=jrPeriod(jrMode,jrOff);
  document.querySelectorAll("#jrseg button").forEach(b=>b.classList.toggle("on",b.dataset.m===jrMode));
  $("jrlbl").textContent=P.lbl;$("jrprev").disabled=jrMode==="all";$("jrnext").disabled=jrMode==="all"||jrOff>=0;
  const inP=t=>t>=P.a&&t<P.b;const L=J.trades.filter(T=>inP(T.takenAt)).sort((a,b)=>b.takenAt-a.takenAt);const s=jrStats(L);
- let h="";
+ let h="";const OL=J.trades.filter(jrLive0).sort((a,b)=>b.takenAt-a.takenAt);
+ if(OL.length)h+=`<div class="card lvc"><h3>📡 Live – offene Trades (${OL.length})</h3>${OL.map(T=>`<div data-lvt="${T.id}">${lvTile(T)}</div>`).join("")}<div class="small warn">„Schließen“ schließt nur den Journal-Eintrag – die Position in MT5 schließt du selbst.</div></div>`;
  if(!J.trades.length)h+=`<div class="empty">📒 Noch keine Trades im Journal<div class="small" style="margin-top:6px;font-weight:400">Tippe bei einem Signal in der Rangliste, bei den Top-Setups oder in der Symbolkarte auf <b>„＋ Trade genommen“</b>. Die App verfolgt dann den Kurs und trägt automatisch ein, ob Ziel, Stop oder Zeit-Ausstieg kam.</div></div>`;
  h+=`<div class="kps">${kpi("Trades genommen",s.n,"",s.nofill?`${s.nofill} nicht ausgelöst`:"")}${kpi("Gewonnen",s.win,"pos")}${kpi("Verloren",s.loss,"neg",s.be?`${s.be} Break-even`:"")}${kpi("Offen",s.open,"")}
   ${kpi("Trefferquote",s.hit==null?"–":nf(s.hit*100,0)+" %","",s.closed?`aus ${s.closed} abgeschlossenen`:"")}${kpi("Summe R",sgn(s.sumR,2),rcol(s.sumR))}${kpi("Ø R je Trade",s.avgR==null?"–":sgn(s.avgR,2),rcol(s.avgR))}
@@ -1485,7 +1498,7 @@ function jrAfter(){renderJournal();try{rerender()}catch(e){}}
 let toastT=null;function toast(msg,undo){const el=$("toast");el.innerHTML=`<span>${esc(msg)}</span>${undo?'<button id="tUndo">Rückgängig</button>':""}`;el.classList.add("on");if(undo)$("tUndo").onclick=()=>{el.classList.remove("on");undo()};clearTimeout(toastT);toastT=setTimeout(()=>el.classList.remove("on"),6000)}
 // --- Sheet: Trade aufnehmen / bearbeiten ---
 function jrFind(id){return lastRank.find(y=>y.id===id)||(lastTop.find(t=>t.x.id===id)||{}).x||Object.values(lastOuts).flatMap(S=>S.sigs).find(y=>y.id===id)}
-function jrSheet(x,T){const edit=!!T;if(!T){const ex=jrTaken(x.id);if(ex)return jrSheet(null,ex)}
+function jrSheet(x,T){const edit=!!T;if(!T){const ex=jrTaken(x.id);if(ex)return jrLive0(ex)?jrDetail(ex):jrSheet(null,ex)}
  const k=edit?T.key:x.key,F=FTMO[k],dg=F?F.dg:2;const V=edit?T:{name:x.name||k,dir:x.dir,tf:x.tf,lbl:label(x),str:x.str,status:x.status,t:x.t,entry:x.entry,stop:x.stop,tgt:x.tgt,limit:x.limit,fx:fxOf(k).f,key:k};
  const fv=v=>v==null?"–":nf(Math.round(v*V.fx/(F?F.tick:0.01))*(F?F.tick:0.01),dg);const r=edit?jrRes(T):null;
  let sug="";if(!edit&&V.stop!=null){const acc=Vv("c-acc"),rp=Vv("c-risk");const dist=Math.abs(V.entry-V.stop)*V.fx;if(F&&acc>0&&rp>0&&dist>0){const cost=F.spread*F.cs+V.entry*V.fx*F.cs*F.comm/100;const l=Math.floor(acc*rp/100/(dist*F.cs+cost)*100+1e-9)/100;if(l>=0.01)sug=nf(l,2)}}
@@ -1519,21 +1532,95 @@ function jrSheet(x,T){const edit=!!T;if(!T){const ex=jrTaken(x.id);if(ex)return 
  if(edit){document.querySelectorAll("#j-res button").forEach(b=>b.onclick=()=>{mres=b.dataset.r;document.querySelectorAll("#j-res button").forEach(y=>y.classList.toggle("on",y===b))});
   $("j-del").onclick=()=>{close();jrDelete(T.id)}}
  $("j-ok").onclick=()=>{const actE=pf($("j-e").value),lots=pf($("j-l").value),note=$("j-n").value.trim().slice(0,300);
-  if(edit){T.actE=actE;T.lots=lots;T.note=note;const px=pf($("j-x").value),usd=pf($("j-u").value);T.man=mres||px!=null||usd!=null?{res:mres||(px!=null?((px-(actE!=null?actE:jF(T,T.entry)))*T.dir>0?"win":"loss"):usd>0?"win":usd<0?"loss":"be"),px,usd,at:Date.now()}:null;
-   const o0=T.tc||{be:true,step:1};let re=false;if(T.stop!=null&&((T.mg||"fixed")!==mg||(mg==="trail"&&(o0.be!==tc.be||o0.step!==tc.step)))){T.mg=mg;T.tc=tc;T.a=jrA0(T.limit,T.start);re=true}
+  if(edit){const mOld=T.man;T.actE=actE;T.lots=lots;T.note=note;const px=pf($("j-x").value),usd=pf($("j-u").value);T.man=mres||px!=null||usd!=null?{res:mres||(px!=null?((px-(actE!=null?actE:jF(T,T.entry)))*T.dir>0?"win":"loss"):usd>0?"win":usd<0?"loss":"be"),px,usd,at:Date.now()}:null;
+   if(mOld&&mOld.kind)T.man=T.man?Object.assign({},mOld,{res:T.man.res,px:T.man.px!=null?T.man.px:mOld.px,usd:T.man.usd}):mOld;
+   const o0=T.tc||{be:true,step:1};let re=false;if(T.stop!=null&&!(T.man&&T.man.kind)&&((T.mg||"fixed")!==mg||(mg==="trail"&&(o0.be!==tc.be||o0.step!==tc.step)))){T.mg=mg;T.tc=tc;T.a=jrA0(T.limit,T.start);re=true}
    jrSave();close();toast(re?"Gespeichert – wird ab Einstieg neu ausgewertet":"Gespeichert");jrAfter();if(re)jrKick({banner:false});return}
   if(jrTaken(x.id)){close();return}
   const now=Date.now();const T2=jrSnap(x,"trade",now,{actE,lots,note,mg,tc});
   if(x.stop==null){const sF=pf($("j-s").value),tF=pf($("j-t").value);if(sF!=null){T2.stop=sF/T2.fx;T2.tgt=tF!=null?tF/T2.fx:null}}
   J.trades.push(T2);jrSave();jrEvalOne(T2,now);jrSave();close();setTimeout(()=>jrKick(),50);toast(`Trade gespeichert: ${T2.name} ${T2.tf} ${T2.dir>0?"LONG":"SHORT"}`,()=>{J.trades=J.trades.filter(t=>t.id!==T2.id);jrSave();jrAfter()});jrAfter()}}
-document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-tk]");if(!b)return;e.stopPropagation();e.preventDefault();const x=jrFind(b.dataset.tk);if(x)jrSheet(x);else{const T=jrTaken(b.dataset.tk);if(T)jrSheet(null,T)}},true);
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-tk]");if(!b)return;e.stopPropagation();e.preventDefault();const x=jrFind(b.dataset.tk);if(x)jrSheet(x);else{const T=jrTaken(b.dataset.tk);if(T)jrLive0(T)?jrDetail(T):jrSheet(null,T)}},true);
+// =====================================================================================
+// ---------- v5: Live-Ansicht offener Trades + manuell schließen (nur Journal, nie MT5) ----------
+const MT5C="Das schließt nur den Journal-Eintrag. Die App kann deine FTMO-Position nicht schließen – schließe sie selbst in MT5.";
+const ageTxt=ms=>ms<6e4?Math.max(0,Math.round(ms/1000))+" s":ms<36e5?Math.floor(ms/6e4)+" min "+String(Math.round(ms%6e4/1000)).padStart(2,"0")+" s":dur(ms);
+function ageHTML(ts){if(!ts)return`<span class="lvage old" data-age="0">kein Kurs</span>`;const ag=Date.now()-ts;
+ return`<span class="lvage${ag>12e4?" old":ag>3e4?" stale":""}" data-age="${ts}">${ag>3e4?"⚠ veraltet · ":""}Kurs von ${fBs.format(ts)} (vor ${ageTxt(ag)})</span>`}
+function lvData(T){const a=T.a,r=jrRes(T),rk=Math.abs(T.entry-T.stop),risk=r.sF!=null&&r.eF!=null?Math.abs(r.eF-r.sF):null;
+ const pF=a.lastPx!=null?jF(T,a.lastPx):null,R=pF!=null&&risk?(pF-r.eF)*T.dir/risk:null;
+ const tr=T.mg==="trail",slF=tr&&a.sR>-1?jF(T,T.entry+T.dir*a.sR*rk):r.sF,slR=risk&&slF!=null?(slF-r.eF)*T.dir/risk:null;
+ const tgF=!tr&&T.tgt!=null?jF(T,T.tgt):null,tgR=tgF!=null&&risk?(tgF-r.eF)*T.dir/risk:null;
+ return{r,a,pF,R,risk,slF,slR,tgF,tgR,dSL:pF!=null&&slF!=null?(pF-slF)*T.dir:null,dTP:pF!=null&&tgF!=null?(tgF-pF)*T.dir:null,
+  since:Date.now()-(a.fillT||T.start),tr,mfe:a.mfe||0,wait:a.ph==="wait"}}
+const rc=v=>v==null?"":v>0.005?"pos":v<-0.005?"neg":"";
+function lvCore(T,D,big){const r=D.r,lg=T.dir>0;
+ const slLbl=D.tr?(D.a.sR>-1?`SL · Trailing ${sgn(D.a.sR,D.a.sR%1?1:0)}R`:"SL · Anfangs-Stop"):"SL";
+ return`<div class="lv2"><div class="lvR ${rc(D.R)}${big?" big":""}">${D.wait?"⏳":D.R==null?"– R":sgn(D.R,2)+" R"}</div>
+  <div class="lvpx"><small>Kurs (FTMO-Skala)</small><b>${jfmt(T,D.pF)}</b><small>${D.wait?"Limit noch nicht ausgelöst":`max. erreicht ${sgn(D.mfe,2)} R`}</small></div></div>
+  <div class="lvg"><div><small>Einstieg${T.actE!=null?" (real)":""}</small><b>${jfmt(T,r.eF)}</b></div><div><small>${slLbl}</small><b>${jfmt(T,D.slF)}</b></div><div><small>Ziel</small><b>${D.tgF!=null?jfmt(T,D.tgF):D.tr?"– (Runner)":"–"}</b></div></div>
+  <div class="lv4">${D.wait?`Wartet auf Limit · Abstand zum Einstieg ${D.pF!=null?jfmt(T,Math.abs(D.pF-r.eF)):"–"}`:
+   `Abstand SL <b>${D.dSL!=null?jfmt(T,D.dSL):"–"}</b>${D.R!=null&&D.slR!=null?` (${nf(D.R-D.slR,2)} R)`:""} · Ziel ${D.dTP!=null?`<b>${jfmt(T,D.dTP)}</b>${D.tgR!=null&&D.R!=null?` (${nf(D.tgR-D.R,2)} R)`:""}`:"–"}`}
+   · ${D.wait?"wartet seit":"seit Einstieg"} <b>${dur(Math.max(0,D.since))}</b></div>
+  <div class="lv5">${ageHTML(D.a.lastPx!=null?D.a.cur:0)}</div>`}
+function lvTile(T){const D=lvData(T),lg=T.dir>0;
+ return`<div class="lvt ${rc(D.R)}" data-lvopen="${T.id}"><div class="lv1"><b>${esc(T.name)}</b><span class="tfm">${T.tf}</span><span class="dr ${lg?"long":"short"}">${lg?"LONG":"SHORT"}</span><span class="lvmg">${D.tr?"🏃 Trailing":"🎯 Ziel"}</span>${T.test?'<span class="bdg bg-weak">TESTDATEN</span>':""}</div>
+  ${lvCore(T,D,false)}<div class="jbt"><button class="btn sm" data-lvopen="${T.id}">📡 Details</button><button class="btn sm lvx" data-lvclose="${T.id}">${D.wait?"✋ Limit streichen":"✋ Trade schließen"}</button></div></div>`}
+function lvBody(T){if(!jrLive0(T)){const r=jrRes(T);return`<div class="lvdone"><b>${esc(r.chip)}</b>${r.R!=null?` · <b class="${rcol(r.R)}">${sgn(r.R,2)} R</b>`:""}${r.exF!=null?` · Ausstieg ${jfmt(T,r.exF)}`:""}${r.exitT?` · ${fBd.format(r.exitT)}`:""}</div>`}
+ const D=lvData(T);return lvCore(T,D,true)+`<div class="small" style="margin-top:6px">${jrStopTxt(T)}</div>`+((T.a.ev||[]).length?`<div class="small">Stop-Stufen: ${T.a.ev.slice(-6).map(e=>`${sgn(e.sR,e.sR%1?1:0)}R ${fBm.format(e.t)}`).join(" → ")}</div>`:"")+
+  ((T.a.gaps||[]).length?`<div class="small warn">⚠ Datenlücke: ${T.a.gaps.map(g=>hm(g.f)+"–"+hm(g.t)).join(", ")}</div>`:"")}
+function jrDetail(T){const live=jrLive0(T);
+ $("spanel").innerHTML=`<div class="sgrab"></div><h3>📡 Live: ${esc(T.name)} ${T.tf} <span class="dr ${T.dir>0?"long":"short"}">${T.dir>0?"LONG":"SHORT"}</span></h3>
+  <div class="small">${esc(T.lbl)} · ${MGN[T.mg||"fixed"]} · genommen ${fBd.format(T.takenAt)}</div>
+  <div class="lvd" data-lvd="${T.id}">${lvBody(T)}</div>
+  <div class="sbtn"><button class="btn" id="lv-back">Zurück</button><button class="btn" id="lv-ed">✎ Bearbeiten</button>${live?`<button class="btn lvx" data-lvclose="${T.id}">${T.a.ph==="wait"?"✋ Limit streichen":"✋ Trade schließen"}</button>`:""}</div>
+  <div class="small warn" style="margin-top:6px">${MT5C}</div><div class="small">Aktualisiert sich mit dem Live-Check alle 10 s (nur bei offener App).</div>`;
+ $("sheet").classList.add("on");const close=()=>$("sheet").classList.remove("on");$("lv-back").onclick=close;$("sheetbg").onclick=close;$("lv-ed").onclick=()=>jrSheet(null,T);
+ if(live&&(T.a.lastPx==null||Date.now()-T.a.cur>12000))jrKick({banner:true})}
+// Bestätigungsdialog
+function lvCloseCalc(T,pxIn){const D=lvData(T),r=D.r;const exF=pxIn!=null?pxIn:D.pF;const R=exF!=null&&D.risk?(exF-r.eF)*T.dir/D.risk:null;
+ let usd=null;const F=FTMO[T.key];if(T.lots&&exF!=null){const cs=F?F.cs:1,cost=F?T.lots*(F.spread*cs+r.eF*cs*F.comm/100):0;usd=T.lots*cs*(exF-r.eF)*T.dir-cost}return{D,exF,R,usd}}
+function lvCloseInfo(T){const inp=$("lv-px"),pxIn=inp?pf(inp.value):null;const c=lvCloseCalc(T,pxIn);const ag=c.D.a.lastPx!=null?Date.now()-c.D.a.cur:Infinity;
+ return`<div class="lv2"><div class="lvR big ${rc(c.R)}">${c.R==null?"– R":sgn(c.R,2)+" R"}</div><div class="lvpx"><small>${pxIn!=null?"dein MT5-Schlusskurs":"Live-Kurs (FTMO-Skala)"}</small><b>${jfmt(T,c.exF)}</b>${c.usd!=null?`<small class="${rcol(c.usd)}">${sgn(c.usd,2)} $ (geschätzt)</small>`:""}</div></div>
+  <div class="lv5">${pxIn!=null?`Live-Kurs zum Vergleich ${jfmt(T,c.D.pF)} · `:""}${ageHTML(c.D.a.lastPx!=null?c.D.a.cur:0)}</div>
+  ${pxIn==null&&ag>3e4?`<div class="small warn">⚠ Der Kurs ist nicht frisch – trag besser deinen MT5-Schlusskurs ein.</div>`:""}`}
+function jrCloseDlg(T){if(!jrLive0(T))return jrDetail(T);const wait=T.a.ph==="wait";const F=FTMO[T.key];
+ if(wait){$("spanel").innerHTML=`<div class="sgrab"></div><h3>Limit streichen?</h3><div class="shd"><b>${esc(T.name)}</b> ${T.tf} · ${T.dir>0?"LONG":"SHORT"} · Limit ${jfmt(T,jF(T,T.entry))}</div>
+   <div class="small">Der Eintrag wird als „Limit manuell gestrichen“ abgeschlossen (zählt nicht als Gewinn/Verlust).</div><div class="small warn">Lösche die Limit-Order selbst in MT5 – die App kann das nicht.</div>
+   <div class="sbtn"><button class="btn" id="lv-no">Abbrechen</button><button class="btn pri" id="lv-yes">✓ Limit streichen</button></div>`}
+ else $("spanel").innerHTML=`<div class="sgrab"></div><h3>✋ Trade schließen?</h3><div class="shd"><b>${esc(T.name)}</b> ${T.tf} · <span class="dr ${T.dir>0?"long":"short"}">${T.dir>0?"LONG":"SHORT"}</span> · Einstieg ${jfmt(T,jRes0(T).eF)}</div>
+  <div class="lvd" data-lvc="${T.id}">${lvCloseInfo(T)}</div>
+  <div class="f" style="margin-top:8px"><div style="grid-column:1/3"><label>Tatsächlicher MT5-Schlusskurs (optional – sonst gilt der Live-Kurs im Moment des Bestätigens)</label><input id="lv-px" inputmode="decimal" placeholder="${jfmt(T,lvData(T).pF)}"></div></div>
+  <div class="small warn" style="margin-top:6px"><b>${MT5C}</b></div>
+  <div class="sbtn"><button class="btn" id="lv-no">Abbrechen</button><button class="btn pri" id="lv-yes">✓ Im Journal schließen</button></div>`;
+ $("sheet").classList.add("on");$("lv-no").onclick=()=>jrDetail(T);$("sheetbg").onclick=()=>$("sheet").classList.remove("on");
+ const inp=$("lv-px");if(inp)inp.oninput=()=>{const el=document.querySelector(`[data-lvc="${T.id}"]`);if(el)el.innerHTML=lvCloseInfo(T);$("lv-yes").disabled=lvCloseCalc(T,pf(inp.value)).exF==null};
+ if(!wait&&lvData(T).pF==null)$("lv-yes").disabled=true;
+ $("lv-yes").onclick=()=>{if(!jrLive0(T)){toast("Trade wurde inzwischen automatisch geschlossen");return jrDetail(T)}
+  const pxIn=inp?pf(inp.value):null;jrManClose(T,wait?"cancel":"close",pxIn);$("sheet").classList.remove("on")};
+ if(T.a.lastPx==null||Date.now()-T.a.cur>12000)jrKick({banner:true})}
+const jRes0=T=>jrRes(Object.assign({},T,{man:null}));
+function jrManClose(T,kind,pxIn,now){now=now||Date.now();const a0=JSON.parse(JSON.stringify(T.a)),m0=T.man||null;let m;
+ if(kind==="cancel")m={kind,res:"nofill",px:null,usd:null,at:now,a0,m0};
+ else{const c=lvCloseCalc(T,pxIn);if(c.exF==null)return null;m={kind,res:c.R==null?"be":c.R>0.005?"win":c.R<-0.005?"loss":"be",px:c.exF,usd:null,at:now,src:pxIn!=null?"mt5":"live",pxTs:T.a.cur,livePx:c.D.pF,a0,m0}}
+ T.man=m;T.a.ph="done";T.a.res="manual";T.a.t=now;T.a.px=m.px!=null?m.px/T.fx:null;jrSave();
+ const r=jrRes(T);toast(kind==="cancel"?`Limit gestrichen: ${T.name} – lösche die Order in MT5`:`Im Journal geschlossen: ${T.name} ${r.R!=null?sgn(r.R,2)+" R":""} – schließe die Position in MT5`,()=>jrReopen(T.id));jrAfter();return r}
+function jrReopen(id){const T=J.trades.find(t=>t.id===id);if(!T||!T.man||!T.man.kind)return false;T.a=T.man.a0;T.man=T.man.m0||null;jrSave();toast(`Wieder geöffnet: ${T.name} – wird ab ${fBs.format(T.a.cur)} nachgeprüft`);jrAfter();jrKick({banner:true});return true}
+function lvRefresh(){document.querySelectorAll("[data-lvt]").forEach(el=>{const T=J.trades.find(t=>t.id===el.dataset.lvt);if(T&&jrLive0(T))el.innerHTML=lvTile(T)});
+ document.querySelectorAll("[data-lvd]").forEach(el=>{const T=J.trades.find(t=>t.id===el.dataset.lvd);if(T)el.innerHTML=lvBody(T)});
+ document.querySelectorAll("[data-lvc]").forEach(el=>{const T=J.trades.find(t=>t.id===el.dataset.lvc);if(T)el.innerHTML=lvCloseInfo(T)})}
+document.addEventListener("click",e=>{const t=e.target.closest&&e.target;if(!t)return;const c=t.closest("[data-lvclose]"),o=t.closest("[data-lvopen]"),ro=t.closest("[data-lvreopen]");
+ if(c){e.preventDefault();e.stopPropagation();const T=J.trades.find(x=>x.id===c.dataset.lvclose);if(T)jrCloseDlg(T);return}
+ if(ro){e.preventDefault();const id=ro.dataset.lvreopen;if(jrDelArm!=="ro"+id){jrDelArm="ro"+id;ro.textContent="Wirklich wieder öffnen?";setTimeout(()=>{if(jrDelArm==="ro"+id){jrDelArm=null;renderJournal()}},4000);return}jrDelArm=null;jrReopen(id);return}
+ if(o){e.preventDefault();const T=J.trades.find(x=>x.id===o.dataset.lvopen);if(T)jrDetail(T)}});
+setInterval(()=>{if(document.hidden)return;document.querySelectorAll("[data-age]").forEach(el=>{const ts=+el.dataset.age;if(!ts)return;const ag=Date.now()-ts;el.className="lvage"+(ag>12e4?" old":ag>3e4?" stale":"");el.textContent=(ag>3e4?"⚠ veraltet · ":"")+"Kurs von "+fBs.format(ts)+" (vor "+ageTxt(ag)+")"})},1000);
 // --- Export / Import ---
 function dl(name,txt,type){const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([txt],{type}));a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1000)}
 const stamp=()=>{const p=bParts(Date.now());return`${p.y}-${String(p.m+1).padStart(2,"0")}-${String(p.d).padStart(2,"0")}`};
-function jrCSV(){const H=["id","genommen_berlin","symbol","ftmo_symbol","richtung","tf","strategie","staerke","status","einstieg_ftmo","stop_ftmo","ziel_ftmo","einstieg_real","lots","ergebnis","quelle","R","usd","usd_geschaetzt","ausstieg_ftmo","ausstieg_berlin","zeit_ausstieg","notiz","faktor","testdaten","management","be","schritt_R","mfe_R","stop_zuletzt_R","zuletzt_geprueft_berlin","datenluecken"];
+function jrCSV(){const H=["id","genommen_berlin","symbol","ftmo_symbol","richtung","tf","strategie","staerke","status","einstieg_ftmo","stop_ftmo","ziel_ftmo","einstieg_real","lots","ergebnis","quelle","R","usd","usd_geschaetzt","ausstieg_ftmo","ausstieg_berlin","zeit_ausstieg","notiz","faktor","testdaten","management","be","schritt_R","mfe_R","stop_zuletzt_R","zuletzt_geprueft_berlin","datenluecken","manuell_geschlossen","schlusskurs_quelle"];
  const q=v=>{v=v==null?"":String(v);return/[;"\n]/.test(v)?`"${v.replace(/"/g,'""')}"`:v};const n=(v,d)=>v==null?"":(+v).toFixed(d).replace(".",",");
  const rows=J.trades.slice().sort((a,b)=>a.takenAt-b.takenAt).map(T=>{const r=jrRes(T);const F=FTMO[T.key],d=F?F.dg:4;
-  return[T.id,fBd.format(T.takenAt),T.key,F?F.sym:"",T.dir>0?"LONG":"SHORT",T.tf,T.lbl,T.str,STR[T.status]?STR[T.status].txt:"",n(r.eF!=null&&T.actE==null?r.eF:jF(T,T.entry),d),n(r.sF,d),n(jF(T,T.tgt),d),n(T.actE,d),n(T.lots,2),r.chip,r.src,n(r.R,3),n(r.usd,2),r.usdEst?"ja":"",n(r.exF,d),r.exitT?fBd.format(r.exitT):"",T.tEndSrc,T.note,n(T.fx,5),T.test?"ja":"",T.mg==="trail"?"trailing":"festes_ziel",T.mg==="trail"?(T.tc&&T.tc.be===false?"nein":"ja"):"",T.mg==="trail"?n(T.tc&&T.tc.step||1,1):"",n(T.a.mfe,2),T.mg==="trail"?n(T.a.sRx!=null?T.a.sRx:T.a.sR,1):"",T.a.cur?fBd.format(T.a.cur):"",(T.a.gaps||[]).length].map(q).join(";")});
+  return[T.id,fBd.format(T.takenAt),T.key,F?F.sym:"",T.dir>0?"LONG":"SHORT",T.tf,T.lbl,T.str,STR[T.status]?STR[T.status].txt:"",n(r.eF!=null&&T.actE==null?r.eF:jF(T,T.entry),d),n(r.sF,d),n(jF(T,T.tgt),d),n(T.actE,d),n(T.lots,2),r.chip,r.src,n(r.R,3),n(r.usd,2),r.usdEst?"ja":"",n(r.exF,d),r.exitT?fBd.format(r.exitT):"",T.tEndSrc,T.note,n(T.fx,5),T.test?"ja":"",T.mg==="trail"?"trailing":"festes_ziel",T.mg==="trail"?(T.tc&&T.tc.be===false?"nein":"ja"):"",T.mg==="trail"?n(T.tc&&T.tc.step||1,1):"",n(T.a.mfe,2),T.mg==="trail"?n(T.a.sRx!=null?T.a.sRx:T.a.sR,1):"",T.a.cur?fBd.format(T.a.cur):"",(T.a.gaps||[]).length,T.man&&T.man.kind==="close"?"ja":T.man&&T.man.kind==="cancel"?"limit_gestrichen":"",T.man&&T.man.src?(T.man.src==="mt5"?"mt5_eingabe":"live_kurs"):""].map(q).join(";")});
  return"\ufeff"+H.join(";")+"\n"+rows.join("\n")}
 function jrImport(file){const rd=new FileReader();rd.onload=()=>{let d;try{d=JSON.parse(rd.result)}catch(e){toast("Import fehlgeschlagen: keine gültige JSON-Datei");return}
   if(!d||!Array.isArray(d.trades)){toast("Import fehlgeschlagen: keine Signalgeber-Journal-Datei");return}
@@ -1572,7 +1659,7 @@ window.addEventListener("pageshow",()=>jrKick());window.addEventListener("pagehi
 setInterval(()=>{if(!document.hidden&&jrOpen().length&&!LV.busy&&!LV.tmr)jrKick();jrLiveUI()},15000);
 jrInit();
 jrKick();
-window.__sg.jr={tick:jrTick,catchUp:jrCatchUp,live:jrLive,kick:jrKick,LV,JC:()=>JC,open:jrOpen,ts:jrTS,alert:jrAlert,core:jrCore,res:jrRes,J:()=>J,evalAll:jrEvalAll,snap:jrSnap,save:jrSave,render:renderJournal,reload:()=>{J=Object.assign({v:1,trades:[],tops:[],seen:{},recSince:Date.now()},LS("jr")||{});jrAfter()},period:jrPeriod};
+window.__sg.jr={manClose:jrManClose,reopen:jrReopen,detail:jrDetail,closeDlg:jrCloseDlg,lvData,tick:jrTick,catchUp:jrCatchUp,live:jrLive,kick:jrKick,LV,JC:()=>JC,open:jrOpen,ts:jrTS,alert:jrAlert,core:jrCore,res:jrRes,J:()=>J,evalAll:jrEvalAll,snap:jrSnap,save:jrSave,render:renderJournal,reload:()=>{J=Object.assign({v:1,trades:[],tops:[],seen:{},recSince:Date.now()},LS("jr")||{});jrAfter()},period:jrPeriod};
 
 syncBtns();chips();refresh();
 </script>
