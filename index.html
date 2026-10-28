@@ -111,6 +111,31 @@ nav button{position:relative}.cnt{position:absolute;top:4px;left:calc(50% + 6px)
 .lsrc{font-size:10.5px;color:var(--mut,#8a93a6);margin-top:1px;line-height:1.3}.fxl{font-size:10.5px;color:var(--mut,#8a93a6);margin-top:2px}
 .ri.exp{opacity:.55}.fxr{border-top:1px solid rgba(128,128,128,.25);padding:8px 0}.fxin{display:flex;gap:6px;margin-top:5px}.fxin input{flex:1;min-width:0}
 .btn.sm{font-size:11px;padding:4px 8px;margin-left:6px}.btn.sm.on{outline:1px solid var(--buy)}
+.tkw{grid-column:2/4;margin-top:4px}.tk{background:rgba(250,204,21,.08);border:1px solid rgba(250,204,21,.45);color:var(--acc);border-radius:9px;padding:5px 10px;font-size:12px;font-weight:700;cursor:pointer}
+.tk.on{background:rgba(34,197,94,.14);border-color:rgba(34,197,94,.55);color:var(--buy)}.tc .tkw,.rs .tkw{margin-top:8px}
+nav button{font-size:10.5px}
+.jhead{padding:10px 12px}.jtop{display:flex;justify-content:space-between;align-items:center;gap:8px}.jtop h3{margin:0}.jtop .seg button{padding:6px 8px;font-size:12px}
+.jnav{display:flex;align-items:center;justify-content:space-between;margin-top:10px}.jnav b{font-size:13.5px}.jnav .btn{font-size:18px;line-height:1;padding:4px 14px}.jnav .btn:disabled{opacity:.3}
+.kps{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.kp{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 12px}.kp small{display:block;color:var(--mut);font-size:11px}.kp b{font-size:22px;font-variant-numeric:tabular-nums}.kp span{display:block;font-size:10.5px;color:var(--mut);margin-top:1px}
+.kp.pos b,.pos{color:var(--buy)}.kp.neg b,.neg{color:var(--sell)}
+.evn{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:6px}.evn div{background:var(--card2);border-radius:10px;padding:7px 4px;text-align:center}.evn b{font-size:18px;display:block}.evn small{font-size:10px;color:var(--mut);line-height:1.15;display:block}
+.eq{width:100%;height:130px;display:block;margin:4px 0}.eq .z{stroke:#334155;stroke-dasharray:3 3}.eq .ln{fill:none;stroke-width:2.2}.eq .ln.p{stroke:var(--buy)}.eq .ln.n{stroke:var(--sell)}.eq .fa{stroke:none;opacity:.12}.eq .fa.p{fill:var(--buy)}.eq .fa.n{fill:var(--sell)}.eq circle.p{fill:var(--buy)}.eq circle.n{fill:var(--sell)}
+.gr{display:grid;grid-template-columns:1fr 70px 62px;gap:8px;align-items:center;padding:6px 0;border-top:1px dashed #1f2a3d}.gr:first-child{border-top:0}.gn{font-size:12.5px;font-weight:600;min-width:0}.gn span{display:block;font-size:10.5px;color:var(--mut);font-weight:400}
+.gb{position:relative;height:8px;background:#0f172a;border-radius:4px;overflow:hidden}.gb i{position:absolute;top:0;bottom:0}.gb i.p{background:var(--buy)}.gb i.n{background:var(--sell)}.gv{text-align:right;font-weight:700;font-size:12.5px;font-variant-numeric:tabular-nums}
+.jt{background:var(--card2);border-radius:12px;padding:9px 10px;margin:8px 0;border-left:3px solid var(--neu)}.jt.win{border-left-color:var(--buy)}.jt.loss{border-left-color:var(--sell)}.jt.open{border-left-color:var(--blue)}.jt.be{border-left-color:var(--acc)}
+.jt1{display:flex;flex-wrap:wrap;align-items:center;gap:6px}.jt1 b{font-size:14px}.tfm{color:var(--mut);font-weight:700;font-size:12px}.jlv{font-size:12px;margin:3px 0;font-variant-numeric:tabular-nums}.jres{font-size:13px;margin:3px 0}.jn{font-size:12px;color:#cbd5e1;margin-top:3px}
+.jc{font-size:10.5px;font-weight:700;padding:2px 7px;border-radius:99px;background:#1e293b;color:#cbd5e1;margin-left:auto}.jc.win{background:#14532d;color:#86efac}.jc.loss{background:#4c1414;color:#fca5a5}.jc.open{background:#1e3a5f;color:#93c5fd}.jc.be{background:#3b2a12;color:#fbbf24}
+.jbt{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}.jbt .btn.sm{margin-left:0}.btn.del{color:#fca5a5}.btn.del.arm{background:#7f1d1d;color:#fff}.btn.pri{background:var(--acc);color:#111;border-color:var(--acc);font-weight:800}
+.sheet{position:fixed;inset:0;z-index:30;display:none}.sheet.on{display:block}.sbg{position:absolute;inset:0;background:rgba(0,0,0,.55)}
+.spanel{position:absolute;left:0;right:0;bottom:0;max-height:88vh;overflow:auto;background:var(--card);border-top:1px solid var(--line);border-radius:18px 18px 0 0;padding:8px 14px calc(14px + env(safe-area-inset-bottom));animation:sup .18s ease-out}
+@keyframes sup{from{transform:translateY(30px);opacity:.4}to{transform:none;opacity:1}}
+.sgrab{width:40px;height:4px;background:#334155;border-radius:4px;margin:2px auto 8px}.spanel h3{margin:0 0 6px;font-size:16px}.shd{font-size:14px;margin-bottom:2px}.shd .dr{display:inline-block}
+.sgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px}.sgrid div{background:var(--card2);border-radius:10px;padding:6px 8px}.sgrid small{display:block;font-size:10.5px;color:var(--mut)}.sgrid b{font-size:14px;font-variant-numeric:tabular-nums}
+.mres{margin-top:10px;border-top:1px solid var(--line);padding-top:8px}.mres h4{margin:0 0 4px}.mres .seg{margin-top:6px}.mres .seg button{flex:1}
+.sbtn{display:flex;gap:8px;margin-top:12px}.sbtn .btn{flex:1;padding:10px;font-size:14px}.f a{color:var(--acc)}
+.toast{position:fixed;left:12px;right:12px;bottom:calc(70px + env(safe-area-inset-bottom));z-index:25;background:#1e293b;border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:none;align-items:center;justify-content:space-between;gap:10px;font-size:13px;box-shadow:0 6px 20px rgba(0,0,0,.4)}
+.toast.on{display:flex}.toast button{background:none;border:0;color:var(--acc);font-weight:800;font-size:13px;cursor:pointer}
 </style>
 </head>
 <body>
@@ -243,12 +268,25 @@ nav button{position:relative}.cnt{position:absolute;top:4px;left:calc(50% + 6px)
   <p class="small">ORB-Paket: Range 9:30–9:45 NY, Einstieg bei der ersten geschlossenen 5-min-Kerze über dem OR-Hoch zwischen 9:45 und 15:30 NY. Stop = OR-Mitte, Ziel 2R, flat um 15:55 NY, nur Long.</p>
  </div>
 </section>
+<section class="view" id="v-jr">
+ <div class="card jhead"><div class="jtop"><h3>📒 Journal</h3><div class="seg" id="jrseg"><button data-m="day">Heute</button><button data-m="week">Woche</button><button data-m="month">Monat</button><button data-m="all">Alle</button></div></div>
+  <div class="jnav"><button class="btn" id="jrprev" aria-label="früher">‹</button><b id="jrlbl">–</b><button class="btn" id="jrnext" aria-label="später">›</button></div></div>
+ <div id="jrbody"></div>
+ <div class="card"><h3>💾 Daten sichern</h3>
+  <p class="small">Das Journal liegt nur in diesem Browser auf diesem Gerät (localStorage). Wird die Startbildschirm-App entfernt, der Browserverlauf/Websitedaten gelöscht oder ein anderes Gerät benutzt, ist es weg. Deshalb regelmäßig exportieren. JSON kann wieder importiert werden (Doppelte werden übersprungen), CSV ist für Excel/Numbers.</p>
+  <div class="jbt"><button class="btn" id="jrxj">⬇︎ Export JSON</button><button class="btn" id="jrxc">⬇︎ Export CSV</button><button class="btn" id="jrim">⬆︎ Import JSON</button><input type="file" id="jrfile" accept="application/json,.json" style="display:none"></div>
+  <p class="small">Auswertung: Die App verfolgt nach dem Eintragen den Kurs der Ersatzdaten (Binance-Perpetual, auf FTMO-Skala umgerechnet) und prüft je Kerze Stop, Ziel und den Zeit-Ausstieg der Strategie. Liegen Stop und Ziel in derselben Kerze, zählt konservativ der Stop („unklar“). Dein echter FTMO-Fill kann abweichen – unter „Bearbeiten“ kannst du das echte Ergebnis eintragen, das hat dann Vorrang. P&amp;L in $ ist eine Schätzung (Kontraktgröße, Spread-Annahme und Kommission wie im Rechner, ohne Swap).</p>
+ </div>
+</section>
 </main>
+<div id="sheet" class="sheet"><div class="sbg" id="sheetbg"></div><div class="spanel" id="spanel"></div></div>
+<div id="toast" class="toast"></div>
 
 <nav>
  <button class="act" data-v="v-sig"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg>Signale</button>
  <button data-v="v-top"><span class="cnt" id="topcnt"></span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>Top-Setups</button>
  <button data-v="v-calc"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 6h8M8 11h2M14 11h2M8 15h2M14 15h2M8 19h2M14 19h2"/></svg>Rechner</button>
+ <button data-v="v-jr"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v17H6.5A2.5 2.5 0 0 0 4 21.5z"/><path d="M4 21.5A2.5 2.5 0 0 1 6.5 19H20v3H6.5"/><path d="M9 7h7M9 11h5"/></svg>Journal</button>
  <button data-v="v-set"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>Watchlist</button>
 </nav>
 
@@ -1023,7 +1061,7 @@ function renderSymbol(S,now){const el=$("s-"+S.key);const def=S.def,d=S.d,ta=S.t
    <div class="since">${a.dir==="neu"?"Stand":"seit"} ${fB.format(a.dir==="neu"?a.t:a.since)} · Kerze ${fB.format(a.t)}</div></div>`});
  h+=`</div><div class="rules"><h4>Regel-Strategien</h4>`;
  S.sigs.forEach(x=>{x.key=S.key;x.life=lifeOf(x,now)});const act=S.sigs.filter(x=>x.life.state==="gültig"),gone=S.sigs.filter(x=>x.life.state!=="gültig"&&now-x.t<864e5);
- if(act.length)h+=act.sort(rankCmp).map(x=>`<div class="rs ${x.dir>0?"long":"short"}" data-id="${x.id}"><div><b>${label(x)}</b> · ${x.tf} · <span style="color:${x.dir>0?"var(--buy)":"var(--sell)"}">${x.dir>0?"LONG":"SHORT"}</span> ${x.str} ${badge(x)}${x.prelim?' <span class="bdg bg-pre">vorläufig</span>':""}</div><div class="small">${lvl(x,S.key,d)} · ${ago(x.t,now)} (${fB.format(x.t)})</div>${lifeHTML(x)}<div class="small">${x.why}</div></div>`).join("");
+ if(act.length)h+=act.sort(rankCmp).map(x=>`<div class="rs ${x.dir>0?"long":"short"}" data-id="${x.id}"><div><b>${label(x)}</b> · ${x.tf} · <span style="color:${x.dir>0?"var(--buy)":"var(--sell)"}">${x.dir>0?"LONG":"SHORT"}</span> ${x.str} ${badge(x)}${x.prelim?' <span class="bdg bg-pre">vorläufig</span>':""}</div><div class="small">${lvl(x,S.key,d)} · ${ago(x.t,now)} (${fB.format(x.t)})</div>${lifeHTML(x)}<div class="small">${x.why}</div><div class="tkw">${tkBtn(x)}</div></div>`).join("");
  if(gone.length)h+=`<div class="rl"><b>Heute abgelaufen/erledigt:</b> ${gone.sort((a,b)=>b.t-a.t).map(x=>`${label(x)} ${x.tf} ${x.dir>0?"LONG":"SHORT"} (${fB.format(x.t)}) → ${x.life.state}${x.life.why?" ("+x.life.why+")":""}`).join(" · ")}</div>`;
  h+=S.info.map(i=>`<div class="rl ${i.lv}">${i.txt}</div>`).join("");
  h+=`</div>`;
@@ -1041,11 +1079,11 @@ function renderNoSrc(key){const def=PRESET[key];$("s-"+key).innerHTML=`<div clas
 function toCalc(k,e,st,t,d){const F=FTMO[k],dd=F?F.dg:d,cv=v=>(+FXP(k,v)).toFixed(dd);$("c-entry").value=cv(e);$("c-stop").value=st!=null?cv(st):"";$("c-tgt").value=t!=null?cv(t):"";
  $("c-inst").value=F?k:($("c-inst").value in FTMO?"1":$("c-inst").value);$("c-from").textContent=F?`Übernommen aus ${k}, Preise ${fxLabel(k)}.`:`Übernommen aus ${k} (Ersatzkurs, keine FTMO-Umrechnung).`;show("v-calc");calc()}
 function rowHTML(x,i,top){const lg=x.dir>0,col=lg?"var(--buy)":"var(--sell)";const now=Date.now();
- return`<div class="ri${top&&i===0?" top":""}${x.life&&x.life.state!=="gültig"?" exp":""}" data-id="${x.id}"><div class="no" style="grid-row:1/6">#${i+1}</div>
+ return`<div class="ri${top&&i===0?" top":""}${x.life&&x.life.state!=="gültig"?" exp":""}" data-id="${x.id}"><div class="no" style="grid-row:1/7">#${i+1}</div>
  <div class="nm">${x.name}<span>${x.tf}</span></div><div class="dr ${lg?"long":"short"}">${lg?"LONG":"SHORT"} ${x.str}</div>
  <div class="st">${label(x)} ${badge(x)}${x.prelim?' <span class="bdg bg-pre">vorläufig</span>':""}</div>
  <div class="sb"><i style="width:${x.str}%;background:${col}"></i></div>
- <div class="det">${lvl(x,x.key,x.d)}${FTMO[x.key]&&FTMO[x.key].f0>2?" (≈ FTMO "+FTMO[x.key].sym+")":""} · ${x.strat==="TA"?"seit":""} ${ago(x.t,now)}</div><div class="det">${lifeHTML(x)}</div></div>`}
+ <div class="det">${lvl(x,x.key,x.d)}${FTMO[x.key]&&FTMO[x.key].f0>2?" (≈ FTMO "+FTMO[x.key].sym+")":""} · ${x.strat==="TA"?"seit":""} ${ago(x.t,now)}</div><div class="det">${lifeHTML(x)}</div><div class="tkw">${tkBtn(x)}</div></div>`}
 function renderRank(){document.querySelectorAll("#rf button").forEach(x=>x.classList.toggle("on",x.dataset.f===rfilter));
  document.querySelectorAll("#sf button[data-k]").forEach(b=>b.classList.toggle("on",sfilter.has(b.dataset.k)));
  const all=sfilter.size===SKEYS.length;$("sfAll").classList.toggle("on",all);$("sfVera").classList.toggle("on",sfilter.size===1&&sfilter.has("VERA"));$("sfNoVera").classList.toggle("on",sfilter.size===SKEYS.length-1&&!sfilter.has("VERA"));
@@ -1061,7 +1099,7 @@ function renderTop(){const el=$("toplist"),now=Date.now();
  if(!lastTop.length)el.innerHTML=`<div class="empty">⏳ Gerade kein Top-Setup – abwarten.<div class="small">Alle sechs Kriterien müssen gleichzeitig erfüllt sein. Das ist bewusst selten.</div></div>`;
  else el.innerHTML=lastTop.map((t,i)=>{const x=t.x,lg=x.dir>0;return`<div class="tc ${lg?"long":"short"}" data-id="${x.id}"><div class="tch"><div><div class="sname">#${i+1} ${x.name} · ${x.tf}</div><div class="small">${label(x)} ${badge(x)}${x.prelim?' <span class="bdg bg-pre">vorläufig</span>':""}</div></div><div class="dr ${lg?"long":"short"}" style="font-size:14px">${lg?"LONG":"SHORT"} ${x.str}</div></div>
   <div class="lvbig">${lvl(x,x.key,x.d)}</div>${FTMO[x.key]?`<div class="fxl">${fxLabel(x.key)}</div>`:""}${lifeHTML(x)}<div class="small">${x.exitTxt&&x.exitTxt!=="–"?x.exitTxt+" · ":""}Signal ${ago(x.t,now)} (${fB.format(x.t)} ${tzName(now)})</div>
-  <div class="why2"><b>passt, weil:</b><ul>${t.c.map(k=>`<li>✓ ${k.txt}</li>`).join("")}</ul><div class="small">${x.why}</div></div></div>`}).join("");
+  <div class="why2"><b>passt, weil:</b><ul>${t.c.map(k=>`<li>✓ ${k.txt}</li>`).join("")}</ul><div class="small">${x.why}</div></div><div class="tkw">${tkBtn(x)}</div></div>`}).join("");
  el.querySelectorAll(".tc").forEach(r=>r.onclick=()=>{const t=lastTop.find(y=>y.x.id===r.dataset.id);if(t)toCalc(t.x.key,t.x.entry,t.x.stop,t.x.tgt,t.x.d)});
  $("nearlist").innerHTML=lastNear.length?lastNear.map(t=>`<div class="rl"><b>${t.x.name} ${t.x.tf} ${t.x.dir>0?"LONG":"SHORT"}</b> · ${label(t.x)} (${t.n}/6) – fehlt: ${t.c.filter(k=>!k.ok).map(k=>k.txt).join("; ")}</div>`).join(""):`<div class="small">Keine Kandidaten mit 4 oder 5 von 6 Kriterien.</div>`}
 // ---------- Refresh-Steuerung ----------
@@ -1083,6 +1121,7 @@ async function refresh(){if(busy){pendingRun=true;return}busy=true;const t0=Date
   const val=x=>x.life.state==="gültig";R.sort((a,b)=>(val(b)-val(a))||(val(a)?rankCmp(a,b):b.t-a.t));lastRank=R;lastOuts=outs;renderRank();
   const T=[],N=[];R.filter(val).forEach(x=>{const S=outs[x.key];const c=evalTop(x,S,R,now);const n=c.filter(k=>k.ok).length;if(n===6)T.push({x,c});else if(n>=4&&x.strat!=="TA")N.push({x,c,n})});
   T.sort((a,b)=>rankCmp(a.x,b.x));N.sort((a,b)=>b.n-a.n||rankCmp(a.x,b.x));lastTop=T;lastNear=N.slice(0,6);renderTop();
+  try{jrRecord(T,R.filter(val),now);jrEvalAll(now);if($("v-jr").classList.contains("act"))renderJournal()}catch(e){dbg.errors.push("journal: "+e.message)}
   $("topcnt").textContent=T.length?T.length:"";
   const fresh=T.filter(t=>!seenTop[t.x.id]);T.forEach(t=>seenTop[t.x.id]=now);for(const k in seenTop)if(now-seenTop[k]>864e5)delete seenTop[k];SS("seenTop",seenTop);
   if(!firstEval&&fresh.length)notify(fresh.map(t=>`${t.x.name} ${t.x.tf} ${t.x.dir>0?"LONG":"SHORT"} (${label(t.x)})`).join(" · "));firstEval=false;
@@ -1099,7 +1138,7 @@ function tickClock(){const n=Date.now();const o=nyseOpen(n);
 setInterval(()=>{tickClock();tickLife()},1000);
 document.addEventListener("visibilitychange",()=>{if(document.hidden){if(tmr){clearTimeout(tmr);tmr=null}nextAt=0;const st=$("status");if(!busy&&st.dataset.base)st.textContent=st.dataset.base+(+cfg.int>0?" · pausiert":" · Auto aus")}else if(Date.now()-lastRun>5000)refresh();else scheduleNext(Math.max(1000,cfg.int*1000-(Date.now()-lastRun)))});
 // ---------- Navigation ----------
-function show(v){document.querySelectorAll(".view").forEach(x=>x.classList.toggle("act",x.id===v));document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("act",b.dataset.v===v));window.scrollTo(0,0)}
+function show(v){document.querySelectorAll(".view").forEach(x=>x.classList.toggle("act",x.id===v));document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("act",b.dataset.v===v));window.scrollTo(0,0);if(v==="v-jr")renderJournal()}
 document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>show(b.dataset.v));
 $("refBtn").onclick=()=>refresh();
 document.querySelectorAll("#rf button").forEach(b=>b.onclick=()=>{rfilter=b.dataset.f;SS("rfilter",rfilter);renderRank()});
@@ -1155,6 +1194,208 @@ sint.onchange=()=>{cfg.int=+sint.value;SS("cfg",cfg);scheduleNext(cfg.int*1000);
 sthr.onchange=()=>{cfg.thr=+sthr.value;SS("cfg",cfg);refresh()};
 ssnd.onclick=()=>{cfg.snd=!cfg.snd;SS("cfg",cfg);syncBtns();if(cfg.snd)beep()};
 sntf.onclick=async()=>{if(!cfg.ntf&&"Notification"in window){try{const p=await Notification.requestPermission();cfg.ntf=p==="granted"}catch(e){cfg.ntf=false}}else cfg.ntf=false;SS("cfg",cfg);syncBtns()};
+// =====================================================================================
+// ---------- Trade-Journal ("Trade genommen", automatische Auswertung, Statistik) ----------
+// Speicher: localStorage "sg_jr" (nur dieses Gerät/dieser Browser). Preise intern auf den Ersatzdaten (Binance-Perp),
+// Anzeige auf FTMO-Skala mit dem Faktor zum Zeitpunkt der Aufnahme (T.fx). Keine Orders, nur Aufzeichnung.
+let J=Object.assign({v:1,trades:[],tops:[],seen:{},recSince:null},LS("jr")||{});
+if(!J.recSince){J.recSince=Date.now();SS("jr",J)}
+const jrRep=(k,v)=>k==="_r"?undefined:v;const jrSave=()=>{try{localStorage.setItem("sg_jr",JSON.stringify(J,jrRep))}catch(e){toast("Speichern fehlgeschlagen (Speicher voll?) – bitte exportieren")}};
+let jrMode=LS("jrMode")||"week",jrOff=0,jrUndo=null,jrDelArm=null;
+const pf=s=>{s=String(s==null?"":s).trim().replace(/\s/g,"");if(!s)return null;if(/,/.test(s))s=s.replace(/\./g,"").replace(",",".");const v=parseFloat(s);return isFinite(v)?v:null};
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[c]);
+const jrTaken=sid=>J.trades.find(t=>t.sid===sid);
+function tkBtn(x){const on=!!jrTaken(x.id);return`<button class="tk${on?" on":""}" data-tk="${esc(x.id)}">${on?"✓ genommen":"＋ Trade genommen"}</button>`}
+// --- Handelstage / Zeit-Ausstieg je Strategie ---
+function dayClose(key){const y=Math.floor(key/1e4),m=Math.floor(key/100)%100,d=key%100;const U=Date.UTC(y,m-1,d);const off=STRAT.nyOff(U+12*36e5)+420;return U-off*6e4+(STRAT.US_EARLY.has(key)?20:23)*36e5}
+function tdAfter(key,n){let k=key;for(let i=0;i<n;i++)k=STRAT.nextTD(k);return k}
+function jrTEnd(x,start){const L=x.life||lifeOf(x,Date.now());const ek=STRAT.S(x.t).key;
+ switch(x.strat){
+  case"CONNORS":return{tEnd:dayClose(tdAfter(ek,10)),src:"Regel: Schluss > SMA5 (Server-Tageskerzen), spätestens nach 10 Handelstagen (EA InpMaxHoldDays)",rule:"SMA5"};
+  case"E4":if(x.sub==="TOM"){let k=ek,n=0,h=0;const m0=Math.floor(ek/100);while(h<6){k=STRAT.nextTD(k);h++;if(Math.floor(k/100)!==m0)n++;if(n>=3)break}return{tEnd:dayClose(k),src:"Regel: Schluss des 3. Handelstags im neuen Monat, max. 6 Tage (EA)"}}
+   return{tEnd:dayClose(STRAT.nextTD(ek)),src:"Regel: Schluss nach 1 Handelstag (EA)"};
+  case"KELT":return{tEnd:start+30*6e4,src:"Standard: 30 min (Regel hat nur das Gegensignal als Ausstieg)"};
+  case"TA":case"CIPHER":return{tEnd:start+50*x.barSec*1000,src:`Standard: 50 Kerzen (${x.tf}) – Regel hat keinen Zeit-Ausstieg`};
+  default:return L.tEnd?{tEnd:L.tEnd,src:L.tSrc}:{tEnd:start+50*x.barSec*1000,src:`Standard: 50 Kerzen (${x.tf})`}}}
+function jrSnap(x,kind,start,extra){const L=x.life||lifeOf(x,start);const te=jrTEnd(x,start);const fx=fxOf(x.key);
+ const R1=x.limit&&x.stop!=null?x.entry+x.dir*Math.abs(x.entry-x.stop):null;
+ return Object.assign({id:(kind==="top"?"p":"t")+start.toString(36)+Math.random().toString(36).slice(2,7),sid:x.id,kind,key:x.key,name:x.name||(symDef(x.key).short||x.key),dir:x.dir,tf:x.tf,barSec:x.barSec,
+  strat:x.strat,sub:x.sub||"",lbl:label(x),str:x.str,status:x.status,entry:x.entry,stop:x.stop,tgt:x.tgt,limit:!!x.limit,R1,exp:x.limit?L.exp:null,t:x.t,takenAt:start,start,
+  tEnd:te.tEnd,tEndSrc:te.src,rule:te.rule||null,fx:fx.f,fxSrc:fx.src,actE:null,lots:null,note:"",a:{ph:x.limit?"wait":"open",cur:Math.floor(start/6e4)*6e4},man:null,test:false},extra||{})}
+// --- Auswertung: reine Funktion auf Kerzen (für Tests exportiert) ---
+function jrFin(a,res,px,t,unc){a.ph="done";a.res=res;a.px=px;a.t=t;a.unc=!!unc}
+function jrCore(T,ser,now){const a=T.a,d=T.dir,ms=ser.ms;if(a.ph==="done")return a;
+ for(const b of ser.bars){if(b.t+ms<=a.cur)continue;if(b.t+ms>now)break;
+  if(a.ph==="wait"){if(T.exp&&b.t>=T.exp){jrFin(a,"nofill",null,T.exp);break}
+   const fill=d>0?b.l<=T.entry:b.h>=T.entry;
+   if(!fill){if(T.R1!=null&&(d>0?b.h>=T.R1:b.l<=T.R1)){jrFin(a,"nofill",null,b.t+ms);break}a.cur=b.t+ms;continue}
+   a.ph="open";a.fillT=b.t;
+   const hs=T.stop!=null&&(d>0?b.l<=T.stop:b.h>=T.stop),ht=T.tgt!=null&&(d>0?b.h>=T.tgt:b.l<=T.tgt);
+   if(hs){jrFin(a,"loss",T.stop,b.t+ms,ht);break}if(ht){jrFin(a,"win",T.tgt,b.t+ms,true);break}a.cur=b.t+ms;a.lc=b.c;continue}
+  if(T.tEnd&&b.t>=T.tEnd){jrFin(a,"time",T.exitFix!=null?T.exitFix:(a.lc!=null?a.lc:b.o),T.tEnd);break}
+  const hs=T.stop!=null&&(d>0?b.l<=T.stop:b.h>=T.stop),ht=T.tgt!=null&&(d>0?b.h>=T.tgt:b.l<=T.tgt);
+  if(hs){jrFin(a,"loss",T.stop,b.t+ms,ht);break}
+  if(ht){jrFin(a,"win",T.tgt,b.t+ms);break}
+  a.cur=b.t+ms;a.lc=b.c;
+  if(T.tEnd&&b.t+ms>=T.tEnd){jrFin(a,"time",T.exitFix!=null?T.exitFix:b.c,T.tEnd);break}}
+ return a}
+function jrSeries(key,from){const st=ST[key];if(!st||!st.src)return null;const [src,sym]=st.src;
+ for(const iv of["1m","5m","15m","1h"]){const c=cache.get(src+"|"+sym+"|"+iv);if(c&&c.bars.length&&c.bars[0].t<=from)return{bars:c.bars,ms:IVMS[iv],iv}}
+ const c=cache.get(src+"|"+sym+"|1h");return c&&c.bars.length?{bars:c.bars,ms:IVMS["1h"],iv:"1h",gap:true}:null}
+function jrConnorsRule(T,now){const st=ST[T.key];if(!st||!st.src)return;const c=cache.get(st.src.join("|")+"|1h");if(!c)return;
+ const D=STRAT.serverDays(c.bars,16,23,true);const ek=STRAT.S(T.t).key;
+ for(let i=4;i<D.length;i++){const d=D[i];if(d.key<=ek||d.lastHr<22)continue;const ct=dayClose(d.key);if(ct>now||ct>T.tEnd)break;
+  const s5=(D[i].c+D[i-1].c+D[i-2].c+D[i-3].c+D[i-4].c)/5;if(d.c>s5){T.tEnd=ct;T.exitFix=d.c;T.tEndSrc="Regel: Schluss > SMA5 am "+STRAT.fmtKey(d.key);return}}}
+function jrEvalOne(T,now){const a=T.a;if(a.ph==="done")return false;
+ if(T.stop==null&&!T.limit){a.ph="done";a.res="noauto";a.t=T.start;return true}
+ if(T.rule==="SMA5")jrConnorsRule(T,now);
+ const ser=jrSeries(T.key,a.cur);if(!ser){a.info="keine Kursdaten – Symbol steht nicht in der Watchlist";return false}
+ const b0=JSON.stringify(a);if(ser.gap)a.info="Datenlücke: nur H1-Kerzen verfügbar";else delete a.info;jrCore(T,ser,now);return JSON.stringify(a)!==b0}
+function jrEvalAll(now){let ch=false;for(const T of J.trades.concat(J.tops))if(jrEvalOne(T,now))ch=true;if(ch)jrSave();return ch}
+function jrRecord(T,valid,now){let ch=false;
+ for(const x of valid){if(x.strat==="TA")continue;if(!J.seen[x.id]){J.seen[x.id]={k:x.key,s:x.strat,t:now};ch=true}}
+ for(const t of T){if(!J.tops.some(p=>p.sid===t.x.id)){J.tops.push(jrSnap(t.x,"top",now));ch=true}}
+ const cut=now-62*864e5;for(const k in J.seen)if(J.seen[k].t<cut){delete J.seen[k];ch=true}
+ if(J.tops.length>400){J.tops=J.tops.slice(-400);ch=true}
+ if(ch)jrSave()}
+// --- Ergebnis / R / P&L ---
+const jF=(T,v)=>{if(v==null)return null;const F=FTMO[T.key];const x=v*T.fx;return F?Math.round(x/F.tick)*F.tick:x};
+const jfmt=(T,v)=>v==null?"–":nf(v,FTMO[T.key]?FTMO[T.key].dg:dec(v));
+function jrRes(T){const eF=T.actE!=null?T.actE:jF(T,T.entry),sF=jF(T,T.stop),risk=sF!=null?Math.abs(eF-sF):null,a=T.a,m=T.man;const F=FTMO[T.key];
+ let cls,exF=null,R=null,src="auto",chip,usd=null;
+ if(m&&m.res){src="manuell";cls=m.res;exF=m.px!=null?m.px:null;
+  if(exF!=null&&risk)R=(exF-eF)*T.dir/risk;else if(m.usd!=null&&T.lots&&risk)R=m.usd/(T.lots*(F?F.cs:1)*risk);else if(m.res==="be")R=0;
+  chip={win:"✍️ Gewinn",loss:"✍️ Verlust",be:"✍️ Break-even"}[m.res]+" (manuell)"}
+ else{const r=a.res;
+  if(a.ph!=="done"){cls="open";chip=a.ph==="wait"?"⏳ wartet auf Limit":"● offen"}
+  else if(r==="nofill"){cls="nofill";chip="↷ Einstieg nicht ausgelöst"}
+  else if(r==="noauto"){cls="open";chip="✍️ manuell auswerten (kein Stop)"}
+  else{exF=jF(T,a.px);if(risk&&exF!=null)R=(exF-eF)*T.dir/risk;
+   if(r==="win"){cls="win";chip="🎯 Ziel erreicht"}else if(r==="loss"){cls="loss";chip="⛔ Stop erreicht"}
+   else{cls=R==null?"be":R>0.005?"win":R<-0.005?"loss":"be";chip="⏱ Zeit-Ausstieg"}
+   if(a.unc)chip+=" · unklar (gleiche Kerze)"}}
+ if(m&&m.usd!=null)usd=m.usd;
+ else if(T.lots&&exF!=null){const cs=F?F.cs:1,cost=F?T.lots*(F.spread*cs+eF*cs*F.comm/100):0;usd=T.lots*cs*(exF-eF)*T.dir-cost}
+ return{cls,R,exF,eF,sF,src,chip,usd,usdEst:!(m&&m.usd!=null)&&usd!=null,exitT:m&&m.res?(m.at||T.takenAt):a.t}}
+// --- Zeiträume (Berlin, Woche Mo–So) ---
+const bOff=ms=>{const p={};new Intl.DateTimeFormat("en-US",{timeZone:"Europe/Berlin",year:"numeric",month:"numeric",day:"numeric",hour:"numeric",minute:"numeric",hourCycle:"h23"}).formatToParts(new Date(ms)).forEach(x=>p[x.type]=x.value);return Math.round((Date.UTC(+p.year,+p.month-1,+p.day,+p.hour%24,+p.minute)-Math.floor(ms/6e4)*6e4)/6e4)};
+const bParts=ms=>{const d=new Date(ms+bOff(ms)*6e4);return{y:d.getUTCFullYear(),m:d.getUTCMonth(),d:d.getUTCDate(),dow:(d.getUTCDay()+6)%7}};
+const bMid=(y,m,d)=>{const U=Date.UTC(y,m,d);return U-bOff(U+12*36e5)*6e4};
+const MON=["Januar","Februar","März","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember"];
+function jrPeriod(mode,off){const p=bParts(Date.now());const dd=ms=>fBdd.format(ms);
+ if(mode==="day"){const a=bMid(p.y,p.m,p.d+off),b=bMid(p.y,p.m,p.d+off+1);return{a,b,lbl:off===0?"Heute":off===-1?"Gestern":fmt("Europe/Berlin",{weekday:"short",day:"2-digit",month:"2-digit"}).format(a)}}
+ if(mode==="week"){const s=p.d-p.dow+7*off;const a=bMid(p.y,p.m,s),b=bMid(p.y,p.m,s+7);const th=new Date(Date.UTC(p.y,p.m,s+3));const y0=Date.UTC(th.getUTCFullYear(),0,1);const kw=Math.floor((th-y0)/864e5/7)+1;
+  return{a,b,lbl:`${off===0?"Diese Woche":off===-1?"Letzte Woche":"KW "+kw} · ${dd(a)}–${dd(b-1)}`}}
+ if(mode==="month"){const a=bMid(p.y,p.m+off,1),b=bMid(p.y,p.m+off+1,1);const q=bParts(a+864e5);return{a,b,lbl:`${MON[q.m]} ${q.y}`}}
+ return{a:0,b:Infinity,lbl:"Alle Trades"}}
+// --- Statistik ---
+function jrStats(list){const s={n:list.length,win:0,loss:0,be:0,open:0,nofill:0,sumR:0,nR:0,usd:0,nUsd:0,est:false};
+ for(const T of list){const r=jrRes(T);T._r=r;s[r.cls]++;if(r.cls!=="open"&&r.cls!=="nofill"&&r.R!=null){s.sumR+=r.R;s.nR++}if(r.cls!=="open"&&r.cls!=="nofill"&&r.usd!=null){s.usd+=r.usd;s.nUsd++;if(r.usdEst)s.est=true}}
+ s.closed=s.win+s.loss+s.be;s.hit=s.closed?s.win/s.closed:null;s.avgR=s.nR?s.sumR/s.nR:null;return s}
+const sgn=(v,d)=>v==null?"–":(v>0?"+":v<0?"−":"")+nf(Math.abs(v),d);
+const rcol=v=>v==null?"":v>0?"pos":v<0?"neg":"";
+function kpi(lbl,val,cls,sub){return`<div class="kp ${cls||""}"><small>${lbl}</small><b>${val}</b>${sub?`<span>${sub}</span>`:""}</div>`}
+function groupTbl(list,keyf,namef){const g={};list.forEach(T=>{const k=keyf(T);(g[k]=g[k]||[]).push(T)});const rows=Object.keys(g).map(k=>({k,nm:namef(g[k][0]),s:jrStats(g[k])})).sort((a,b)=>b.s.n-a.s.n||b.s.sumR-a.s.sumR);
+ const mx=Math.max(0.5,...rows.map(r=>Math.abs(r.s.sumR)));
+ return`<div class="gt">${rows.map(r=>`<div class="gr"><div class="gn">${esc(r.nm)}<span>${r.s.n} Trade${r.s.n===1?"":"s"} · ${r.s.win} G / ${r.s.loss} V${r.s.open?" / "+r.s.open+" offen":""}</span></div>
+  <div class="gb"><i class="${r.s.sumR>=0?"p":"n"}" style="width:${Math.abs(r.s.sumR)/mx*50}%;${r.s.sumR>=0?"left:50%":"right:50%"}"></i></div><div class="gv ${rcol(r.s.sumR)}">${sgn(r.s.sumR,2)} R</div></div>`).join("")}</div>`}
+function eqSVG(list){const pts=list.map(T=>({t:T._r.exitT||T.takenAt,R:T._r.R})).filter(p=>p.R!=null&&p.t).sort((a,b)=>a.t-b.t);
+ if(pts.length<2)return`<div class="small">Die Kurve erscheint ab 2 abgeschlossenen Trades mit Ergebnis in R.</div>`;
+ let c=0;const ys=[0].concat(pts.map(p=>c+=p.R));const mn=Math.min(0,...ys),mx=Math.max(0,...ys),W=340,H=120,P=6;const sx=i=>P+i*(W-2*P)/(ys.length-1),sy=v=>H-P-(v-mn)/((mx-mn)||1)*(H-2*P);
+ const d=ys.map((v,i)=>`${i?"L":"M"}${sx(i).toFixed(1)},${sy(v).toFixed(1)}`).join(" ");const last=ys[ys.length-1];
+ return`<svg viewBox="0 0 ${W} ${H}" class="eq" preserveAspectRatio="none"><line x1="0" x2="${W}" y1="${sy(0)}" y2="${sy(0)}" class="z"/><path d="${d} L${sx(ys.length-1)},${sy(0)} L${sx(0)},${sy(0)} Z" class="fa ${last>=0?"p":"n"}"/><path d="${d}" class="ln ${last>=0?"p":"n"}"/>${ys.map((v,i)=>i?`<circle cx="${sx(i)}" cy="${sy(v)}" r="2.6" class="${pts[i-1].R>=0?"p":"n"}"/>`:"").join("")}</svg>
+  <div class="small">Kumuliert ${sgn(last,2)} R über ${pts.length} Trades (Reihenfolge nach Ausstiegszeit). Max ${sgn(mx,2)} R · Min ${sgn(mn,2)} R.</div>`}
+function trHTML(T){const r=T._r||jrRes(T),lg=T.dir>0,arm=jrDelArm===T.id;
+ return`<div class="jt ${r.cls}" data-jid="${T.id}"><div class="jt1"><b>${esc(T.name)}</b><span class="tfm">${T.tf}</span><span class="dr ${lg?"long":"short"}">${lg?"LONG":"SHORT"}</span>${T.test?'<span class="bdg bg-weak">TESTDATEN</span>':""}<span class="jc ${r.cls}">${r.chip}</span></div>
+  <div class="small">${esc(T.lbl)} · Stärke ${T.str} · ${STR[T.status]?STR[T.status].txt:""} · genommen ${fBd.format(T.takenAt)}</div>
+  <div class="jlv">E <b>${jfmt(T,r.eF)}</b>${T.actE!=null?" (real)":""}${T.limit?" Limit":""} · S <b>${jfmt(T,r.sF)}</b> · Z <b>${jfmt(T,jF(T,T.tgt))}</b>${T.lots?` · ${nf(T.lots,2)} Lot`:""}</div>
+  <div class="jres">${r.cls==="open"||r.cls==="nofill"?`<span class="small">${T.a.info?esc(T.a.info)+" · ":""}${r.cls==="open"&&T.tEnd?"Zeit-Ausstieg spätestens "+atS(T.tEnd):""}</span>`:
+   `<b class="${rcol(r.R)}">${r.R==null?"– R":sgn(r.R,2)+" R"}</b>${r.usd!=null?` · <b class="${rcol(r.usd)}">${sgn(r.usd,2)} $</b>${r.usdEst?' <span class="small">(geschätzt)</span>':""}`:""}${r.exF!=null?` · Ausstieg ${jfmt(T,r.exF)}`:""}${r.exitT?` · ${fBd.format(r.exitT)}`:""} <span class="small">· ${r.src==="manuell"?"manuell eingetragen":"automatisch"}</span>`}</div>
+  <div class="small">Zeit-Ausstieg: ${esc(T.tEndSrc||"–")}</div>${T.note?`<div class="jn">📝 ${esc(T.note)}</div>`:""}
+  <div class="jbt"><button class="btn sm" data-jed="${T.id}">✎ Bearbeiten / Ergebnis</button><button class="btn sm del${arm?" arm":""}" data-jdel="${T.id}">${arm?"Wirklich löschen?":"🗑 Löschen"}</button></div></div>`}
+function renderJournal(){const el=$("jrbody");if(!el)return;const now=Date.now();const P=jrPeriod(jrMode,jrOff);
+ document.querySelectorAll("#jrseg button").forEach(b=>b.classList.toggle("on",b.dataset.m===jrMode));
+ $("jrlbl").textContent=P.lbl;$("jrprev").disabled=jrMode==="all";$("jrnext").disabled=jrMode==="all"||jrOff>=0;
+ const inP=t=>t>=P.a&&t<P.b;const L=J.trades.filter(T=>inP(T.takenAt)).sort((a,b)=>b.takenAt-a.takenAt);const s=jrStats(L);
+ let h="";
+ if(!J.trades.length)h+=`<div class="empty">📒 Noch keine Trades im Journal<div class="small" style="margin-top:6px;font-weight:400">Tippe bei einem Signal in der Rangliste, bei den Top-Setups oder in der Symbolkarte auf <b>„＋ Trade genommen“</b>. Die App verfolgt dann den Kurs und trägt automatisch ein, ob Ziel, Stop oder Zeit-Ausstieg kam.</div></div>`;
+ h+=`<div class="kps">${kpi("Trades genommen",s.n,"",s.nofill?`${s.nofill} nicht ausgelöst`:"")}${kpi("Gewonnen",s.win,"pos")}${kpi("Verloren",s.loss,"neg",s.be?`${s.be} Break-even`:"")}${kpi("Offen",s.open,"")}
+  ${kpi("Trefferquote",s.hit==null?"–":nf(s.hit*100,0)+" %","",s.closed?`aus ${s.closed} abgeschlossenen`:"")}${kpi("Summe R",sgn(s.sumR,2),rcol(s.sumR))}${kpi("Ø R je Trade",s.avgR==null?"–":sgn(s.avgR,2),rcol(s.avgR))}
+  ${kpi("P&L",s.nUsd?sgn(s.usd,2)+" $":"–",rcol(s.nUsd?s.usd:null),s.nUsd?(s.est?"geschätzt (Spread/Kommission lt. Rechner, ohne Swap)":"manuell eingetragen"):"Lots eintragen für $")}</div>`;
+ // Empfohlen vs. genommen
+ const tops=J.tops.filter(p=>inP(p.start)),seen=Object.entries(J.seen).filter(([,v])=>inP(v.t));const tk=new Set(J.trades.map(T=>T.sid));
+ const topT=tops.filter(p=>tk.has(p.sid)),topN=tops.filter(p=>!tk.has(p.sid)),seenT=seen.filter(([k])=>tk.has(k)).length;const sN=jrStats(topN);
+ h+=`<div class="card"><h3>⭐ Empfohlen vs. genommen</h3><div class="evn">
+  <div><b>${tops.length}</b><small>Top-Setups gezeigt</small></div><div><b>${topT.length}</b><small>davon genommen</small></div><div><b>${seen.length}</b><small>Regel-Signale gezeigt</small></div><div><b>${seenT}</b><small>davon genommen</small></div></div>
+  ${topN.length?`<div class="rl"><b>Nicht genommene Top-Setups (hypothetisch, automatisch ausgewertet):</b> ${sN.win} Ziel · ${sN.loss} Stop · ${sN.be} ±0 · ${sN.open} offen${sN.nofill?" · "+sN.nofill+" nicht ausgelöst":""} · Summe <b class="${rcol(sN.sumR)}">${sgn(sN.sumR,2)} R</b></div>
+   ${topN.sort((a,b)=>b.start-a.start).slice(0,8).map(p=>{const r=p._r;return`<div class="rl">${fBd.format(p.start)} · <b>${esc(p.name)} ${p.tf} ${p.dir>0?"LONG":"SHORT"}</b> · ${esc(p.lbl)}${p.test?' <span class="bdg bg-weak">TESTDATEN</span>':""} → ${r.chip}${r.R!=null&&r.cls!=="open"?` (${sgn(r.R,2)} R)`:""}</div>`}).join("")}`:""}
+  <div class="small">Aufzeichnung der gezeigten Top-Setups und Regel-Signale (ohne TA-Kacheln) läuft erst seit ${fBd.format(J.recSince)} und nur, solange die App offen ist – frühere Empfehlungen sind nicht erfasst. Hypothetische Ergebnisse: Einstieg zum ersten Anzeigezeitpunkt, ohne Kosten.</div></div>`;
+ if(L.length){h+=`<div class="card"><h3>📈 Verlauf in R</h3>${eqSVG(L)}</div>`;
+  h+=`<div class="card"><h3>Nach Strategie</h3>${groupTbl(L,T=>T.strat+"|"+T.sub,T=>T.lbl)}<h3 style="margin-top:12px">Nach Symbol</h3>${groupTbl(L,T=>T.key,T=>T.name)}</div>`;
+  h+=`<div class="card"><h3>Trades (${L.length})</h3>${L.map(trHTML).join("")}</div>`}
+ else if(J.trades.length)h+=`<div class="empty" style="font-size:14px">Keine Trades in diesem Zeitraum.<div class="small" style="font-weight:400">Mit ‹ › blättern oder „Alle“ wählen.</div></div>`;
+ el.innerHTML=h;
+ el.querySelectorAll("[data-jed]").forEach(b=>b.onclick=()=>{const T=J.trades.find(t=>t.id===b.dataset.jed);if(T)jrSheet(null,T)});
+ el.querySelectorAll("[data-jdel]").forEach(b=>b.onclick=()=>{const id=b.dataset.jdel;if(jrDelArm!==id){jrDelArm=id;renderJournal();setTimeout(()=>{if(jrDelArm===id){jrDelArm=null;renderJournal()}},4000);return}jrDelArm=null;jrDelete(id)})}
+function jrDelete(id){const i=J.trades.findIndex(t=>t.id===id);if(i<0)return;const [T]=J.trades.splice(i,1);jrSave();jrUndo=T;toast(`Trade gelöscht (${T.name} ${T.tf})`,()=>{if(jrUndo&&!J.trades.some(t=>t.id===jrUndo.id)){J.trades.push(jrUndo);jrSave();jrUndo=null;jrAfter()}});jrAfter()}
+function jrAfter(){renderJournal();try{rerender()}catch(e){}}
+let toastT=null;function toast(msg,undo){const el=$("toast");el.innerHTML=`<span>${esc(msg)}</span>${undo?'<button id="tUndo">Rückgängig</button>':""}`;el.classList.add("on");if(undo)$("tUndo").onclick=()=>{el.classList.remove("on");undo()};clearTimeout(toastT);toastT=setTimeout(()=>el.classList.remove("on"),6000)}
+// --- Sheet: Trade aufnehmen / bearbeiten ---
+function jrFind(id){return lastRank.find(y=>y.id===id)||(lastTop.find(t=>t.x.id===id)||{}).x||Object.values(lastOuts).flatMap(S=>S.sigs).find(y=>y.id===id)}
+function jrSheet(x,T){const edit=!!T;if(!T){const ex=jrTaken(x.id);if(ex)return jrSheet(null,ex)}
+ const k=edit?T.key:x.key,F=FTMO[k],dg=F?F.dg:2;const V=edit?T:{name:x.name||k,dir:x.dir,tf:x.tf,lbl:label(x),str:x.str,status:x.status,t:x.t,entry:x.entry,stop:x.stop,tgt:x.tgt,limit:x.limit,fx:fxOf(k).f,key:k};
+ const fv=v=>v==null?"–":nf(Math.round(v*V.fx/(F?F.tick:0.01))*(F?F.tick:0.01),dg);const r=edit?jrRes(T):null;
+ let sug="";if(!edit&&V.stop!=null){const acc=Vv("c-acc"),rp=Vv("c-risk");const dist=Math.abs(V.entry-V.stop)*V.fx;if(F&&acc>0&&rp>0&&dist>0){const cost=F.spread*F.cs+V.entry*V.fx*F.cs*F.comm/100;const l=Math.floor(acc*rp/100/(dist*F.cs+cost)*100+1e-9)/100;if(l>=0.01)sug=nf(l,2)}}
+ const m=edit&&T.man||{};
+ $("spanel").innerHTML=`<div class="sgrab"></div><h3>${edit?"Trade bearbeiten":"Trade genommen?"}</h3>
+  <div class="shd"><b>${esc(V.name)}</b> · ${V.tf} · <span class="dr ${V.dir>0?"long":"short"}">${V.dir>0?"LONG":"SHORT"} ${V.str}</span></div>
+  <div class="small">${esc(V.lbl)} <span class="bdg ${STR[V.status]?STR[V.status].cls:""}">${STR[V.status]?STR[V.status].txt:""}</span> · Signal ${fBd.format(V.t)} ${tzName(V.t)}</div>
+  <div class="sgrid"><div><small>Einstieg${V.limit?" (Limit)":""}</small><b>${fv(V.entry)}</b></div><div><small>Stop</small><b>${fv(V.stop)}</b></div><div><small>Ziel</small><b>${fv(V.tgt)}</b></div></div>
+  ${F?`<div class="small">≈ FTMO ${F.sym}, umgerechnet ×${nf(V.fx,V.fx>5?3:4)}</div>`:""}
+  <div class="f" style="margin-top:8px"><div><label>Tatsächlicher Einstieg (optional)</label><input id="j-e" inputmode="decimal" placeholder="${fv(V.entry)}" value="${edit&&T.actE!=null?nf(T.actE,dg).replace(/\./g,""):""}"></div>
+   <div><label>Lots (optional)${sug?` · Rechner: <a href="#" id="j-sug">${sug}</a>`:""}</label><input id="j-l" inputmode="decimal" placeholder="z. B. 0,5" value="${edit&&T.lots!=null?nf(T.lots,2):""}"></div>
+   ${!edit&&V.stop==null?`<div><label>Stop (FTMO-Kurs) – sonst keine Auto-Auswertung</label><input id="j-s" inputmode="decimal"></div><div><label>Ziel (optional)</label><input id="j-t" inputmode="decimal"></div>`:""}
+   <div style="grid-column:1/3"><label>Notiz (optional)</label><input id="j-n" maxlength="300" placeholder="z. B. Grund, Gefühl, Abweichung" value="${edit?esc(T.note):""}"></div></div>
+  ${edit?`<div class="mres"><h4>Ergebnis</h4><div class="small">Automatisch: <b>${esc(jrRes(Object.assign({},T,{man:null})).chip)}</b>. Weicht dein FTMO-Ergebnis ab, hier eintragen – das hat Vorrang.</div>
+   <div class="seg" id="j-res">${[["","Automatisch"],["win","Gewinn"],["loss","Verlust"],["be","Break-even"]].map(([v,l])=>`<button data-r="${v}" class="${(m.res||"")===v?"on":""}">${l}</button>`).join("")}</div>
+   <div class="f" style="margin-top:8px"><div><label>Ausstiegskurs (FTMO)</label><input id="j-x" inputmode="decimal" value="${m.px!=null?nf(m.px,dg).replace(/\./g,""):""}"></div><div><label>Ergebnis in $ (inkl. Kosten)</label><input id="j-u" inputmode="decimal" value="${m.usd!=null?nf(m.usd,2).replace(/\./g,""):""}"></div></div></div>`:""}
+  <div class="sbtn"><button class="btn" id="j-cancel">Abbrechen</button>${edit?`<button class="btn del" id="j-del">🗑 Löschen</button>`:""}<button class="btn pri" id="j-ok">${edit?"Speichern":"✓ Trade speichern"}</button></div>
+  <div class="small" style="margin-top:6px">${edit?"":"Gespeichert wird nur auf diesem Gerät. Es wird keine Order platziert. "}Auswertung auf Ersatzkursen (Binance-Perp, FTMO-umgerechnet) – deine echte Ausführung kann abweichen.</div>`;
+ $("sheet").classList.add("on");let mres=m.res||"";
+ const close=()=>$("sheet").classList.remove("on");$("j-cancel").onclick=close;$("sheetbg").onclick=close;
+ if($("j-sug"))$("j-sug").onclick=e=>{e.preventDefault();$("j-l").value=sug};
+ if(edit){document.querySelectorAll("#j-res button").forEach(b=>b.onclick=()=>{mres=b.dataset.r;document.querySelectorAll("#j-res button").forEach(y=>y.classList.toggle("on",y===b))});
+  $("j-del").onclick=()=>{close();jrDelete(T.id)}}
+ $("j-ok").onclick=()=>{const actE=pf($("j-e").value),lots=pf($("j-l").value),note=$("j-n").value.trim().slice(0,300);
+  if(edit){T.actE=actE;T.lots=lots;T.note=note;const px=pf($("j-x").value),usd=pf($("j-u").value);T.man=mres||px!=null||usd!=null?{res:mres||(px!=null?((px-(actE!=null?actE:jF(T,T.entry)))*T.dir>0?"win":"loss"):usd>0?"win":usd<0?"loss":"be"),px,usd,at:Date.now()}:null;jrSave();close();toast("Gespeichert");jrAfter();return}
+  if(jrTaken(x.id)){close();return}
+  const now=Date.now();const T2=jrSnap(x,"trade",now,{actE,lots,note});
+  if(x.stop==null){const sF=pf($("j-s").value),tF=pf($("j-t").value);if(sF!=null){T2.stop=sF/T2.fx;T2.tgt=tF!=null?tF/T2.fx:null}}
+  J.trades.push(T2);jrSave();jrEvalOne(T2,now);jrSave();close();toast(`Trade gespeichert: ${T2.name} ${T2.tf} ${T2.dir>0?"LONG":"SHORT"}`,()=>{J.trades=J.trades.filter(t=>t.id!==T2.id);jrSave();jrAfter()});jrAfter()}}
+document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-tk]");if(!b)return;e.stopPropagation();e.preventDefault();const x=jrFind(b.dataset.tk);if(x)jrSheet(x);else{const T=jrTaken(b.dataset.tk);if(T)jrSheet(null,T)}},true);
+// --- Export / Import ---
+function dl(name,txt,type){const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([txt],{type}));a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1000)}
+const stamp=()=>{const p=bParts(Date.now());return`${p.y}-${String(p.m+1).padStart(2,"0")}-${String(p.d).padStart(2,"0")}`};
+function jrCSV(){const H=["id","genommen_berlin","symbol","ftmo_symbol","richtung","tf","strategie","staerke","status","einstieg_ftmo","stop_ftmo","ziel_ftmo","einstieg_real","lots","ergebnis","quelle","R","usd","usd_geschaetzt","ausstieg_ftmo","ausstieg_berlin","zeit_ausstieg","notiz","faktor","testdaten"];
+ const q=v=>{v=v==null?"":String(v);return/[;"\n]/.test(v)?`"${v.replace(/"/g,'""')}"`:v};const n=(v,d)=>v==null?"":(+v).toFixed(d).replace(".",",");
+ const rows=J.trades.slice().sort((a,b)=>a.takenAt-b.takenAt).map(T=>{const r=jrRes(T);const F=FTMO[T.key],d=F?F.dg:4;
+  return[T.id,fBd.format(T.takenAt),T.key,F?F.sym:"",T.dir>0?"LONG":"SHORT",T.tf,T.lbl,T.str,STR[T.status]?STR[T.status].txt:"",n(r.eF!=null&&T.actE==null?r.eF:jF(T,T.entry),d),n(r.sF,d),n(jF(T,T.tgt),d),n(T.actE,d),n(T.lots,2),r.chip,r.src,n(r.R,3),n(r.usd,2),r.usdEst?"ja":"",n(r.exF,d),r.exitT?fBd.format(r.exitT):"",T.tEndSrc,T.note,n(T.fx,5),T.test?"ja":""].map(q).join(";")});
+ return"\ufeff"+H.join(";")+"\n"+rows.join("\n")}
+function jrImport(file){const rd=new FileReader();rd.onload=()=>{let d;try{d=JSON.parse(rd.result)}catch(e){toast("Import fehlgeschlagen: keine gültige JSON-Datei");return}
+  if(!d||!Array.isArray(d.trades)){toast("Import fehlgeschlagen: keine Signalgeber-Journal-Datei");return}
+  let nT=0,nP=0;const ok=T=>T&&T.id&&T.sid&&T.key&&T.a&&isFinite(T.takenAt)&&(T.dir===1||T.dir===-1);
+  d.trades.forEach(T=>{if(ok(T)&&!J.trades.some(t=>t.id===T.id||t.sid===T.sid)){J.trades.push(T);nT++}});
+  (d.tops||[]).forEach(T=>{if(ok(T)&&!J.tops.some(t=>t.sid===T.sid)){J.tops.push(T);nP++}});
+  Object.entries(d.seen||{}).forEach(([k,v])=>{if(!J.seen[k]&&v&&isFinite(v.t))J.seen[k]=v});
+  if(d.recSince&&d.recSince<J.recSince)J.recSince=d.recSince;jrSave();toast(`Importiert: ${nT} Trades, ${nP} Top-Setups (Doppelte übersprungen)`);jrAfter()};rd.readAsText(file)}
+function jrInit(){document.querySelectorAll("#jrseg button").forEach(b=>b.onclick=()=>{jrMode=b.dataset.m;jrOff=0;SS("jrMode",jrMode);renderJournal()});
+ $("jrprev").onclick=()=>{jrOff--;renderJournal()};$("jrnext").onclick=()=>{if(jrOff<0)jrOff++;renderJournal()};
+ $("jrxj").onclick=()=>dl(`signalgeber-journal-${stamp()}.json`,JSON.stringify({app:"Signalgeber",type:"journal",v:1,exported:new Date().toISOString(),trades:J.trades,tops:J.tops,seen:J.seen,recSince:J.recSince},jrRep,1),"application/json");
+ $("jrxc").onclick=()=>dl(`signalgeber-trades-${stamp()}.csv`,jrCSV(),"text/csv;charset=utf-8");
+ $("jrim").onclick=()=>$("jrfile").click();$("jrfile").onchange=e=>{const f=e.target.files[0];if(f)jrImport(f);e.target.value=""}}
+jrInit();
+window.__sg.jr={core:jrCore,res:jrRes,J:()=>J,evalAll:jrEvalAll,snap:jrSnap,save:jrSave,render:renderJournal,reload:()=>{J=Object.assign({v:1,trades:[],tops:[],seen:{},recSince:Date.now()},LS("jr")||{});jrAfter()},period:jrPeriod};
+
 syncBtns();chips();refresh();
 </script>
 </body>
