@@ -194,7 +194,7 @@ input,select,textarea{font-size:16px!important}
 <section class="view" id="v-top">
  <details class="note" open><summary><b>Top-Setups:</b> nur Signale, die ALLE sechs Kriterien erfüllen. <u>Kriterien</u></summary>
  <ol style="margin:6px 0 0;padding-left:18px">
- <li><b>Qualität:</b> Strategie „geprüft robust“ oder „schwacher Vorteil“, ODER mindestens 2 verschiedene Regeln zeigen auf dem Symbol dieselbe Richtung, ODER TA-Kacheln auf mindestens 3 Timeframes.</li>
+ <li><b>Qualität:</b> Strategie „geprüft robust“ oder „schwacher Vorteil“, ODER mindestens 2 verschiedene Regeln zeigen auf dem Symbol dieselbe Richtung. (Seit v8 zählen TA-Kacheln nicht mehr – 16-Jahre-Test nach Kosten negativ; TA-Kacheln selbst sind nie Top-Setup.)</li>
  <li><b>Trend:</b> H1 und H4 schließen auf der Trade-Seite der EMA50 (Tagesregeln prüfen selbst die SMA200).</li>
  <li><b>Volatilität:</b> ATR(14) auf M15 über dem Median der letzten 20 Tage, oder bei Gold das Bollinger-Bandbreite-Perzentil ≥ 50 % (bei Tagesregeln nicht verlangt).</li>
  <li><b>Zeitfenster:</b> das Einstiegsfenster der Regel (z. B. A++ 5 min, Connors/E4 rund um den Kassaschluss), sonst US-Kassasitzung, Gold 10–22 Uhr Server; Krypto immer.</li>
@@ -296,14 +296,14 @@ Aber: Vera Gold M15 (21 Trades) bringt der weite Stop nichts (Summe ≈ −9 R i
   <p class="small">Gleiche Auswertungs-Engine wie die App, ohne Kosten, unabhängig in Python gegengeprüft (0 Abweichungen). Werte: Festes Ziel / Trailing mit BE / Trailing ohne BE.<br>
   <b>Vera, alle Datensätze</b> (184 Trades): Ø −0,25 / −0,26 / −0,22 R · Summe −45,6 / −47,4 / −40,3 R · Trefferquote 25 / 18 / 25 % · max. DD 50,6 / 48,4 / 41,6 R · ≥5R erreicht 0 / 3 / 7.<br>
   <b>Vera Gold M15</b> (21 Trades): Summe −9,0 / −8,1 / −6,3 R.<br>
-  <b>TA-Kacheln</b> (1.711 Signale, stark überlappend, 3–53 Tage je Markt): Ø +0,07 / +0,26 / +0,29 R · Summe +126 / +452 / +490 R · max. DD 52 / 58 / 60 R. Der Vorsprung kommt fast nur aus Gold 5m und SPY 1m (nur 3 Tage Daten); Gold 15m, QQQ 5m, BTC 15m: praktisch gleich, ETH 15m mit BE schlechter.<br>
+  <b>TA-Kacheln</b> <span class="warn">(kurze Stichprobe ohne Kosten – kein Beleg; 16 Jahre mit FTMO-Kosten: negativ)</span> (1.711 Signale, stark überlappend, 3–53 Tage je Markt): Ø +0,07 / +0,26 / +0,29 R · Summe +126 / +452 / +490 R · max. DD 52 / 58 / 60 R. Der Vorsprung kommt fast nur aus Gold 5m und SPY 1m (nur 3 Tage Daten); Gold 15m, QQQ 5m, BTC 15m: praktisch gleich, ETH 15m mit BE schlechter.<br>
   Connors RSI2 und ORB: nicht testbar (zu kurze Historie). <b>Fazit:</b> Für Vera kein belastbarer Vorteil durch Trailing; bei den TA-Kacheln half es in trendigen Abschnitten, die Stichprobe ist aber kurz. Keine Anlageberatung.</p></details>
  </div>
  <div class="card">
   <h3>Alle Regeln: wo sie laufen und wie gut sie sind</h3>
-  <table>
+  <table style="table-layout:fixed;width:100%;word-break:break-word;overflow-wrap:anywhere">
    <tr><th>Strategie (EA)</th><th>Symbol · TF</th><th>Status</th></tr>
-   <tr><td>Connors RSI2 (FTMO_ConnorsRSI2_EA)</td><td>US500, US100 · D1 (US30/JP225: keine Quelle)</td><td><span class="bdg bg-ok">geprüft robust</span> 2019–26 +2,7 % p. a., Familien-p 0,001. <b>Hier: Historie zu kurz</b>, die Perpetuals gibt es erst seit 06.04.2026 (EA braucht 202 Tageskerzen).</td></tr>
+   <tr><td>Connors RSI2 (FTMO_ConnorsRSI2_EA)</td><td>US500, US100 · D1 (US30/JP225: keine Quelle)</td><td><span class="bdg bg-ok">geprüft robust</span> 492 Trades 2012–26: Ø +0,075 R (×1,5-Kosten +0,058). <b>v8:</b> SMA200 vom Kassaindex über TradingView (SP:SPX / NASDAQ:NDX), RSI2/SMA5/ATR aus ≥ 30 Perp-Tageskerzen (Äquivalenz zur vollen Historie: 0 Abweichungen bei 244 Signalen). Ohne TradingView kein Signal. <span class="bdg bg-weak">VIX &gt; 20 „stark“: vielleicht</span> Ø +0,154 R (n 138, p 0,008, nach Bonferroni nicht signifikant).</td></tr>
    <tr><td>E4 Monatswechsel/Vor-Feiertag (v1c)</td><td>US500, US100 · D1 (US30/GER40: keine Quelle)</td><td><span class="bdg bg-weak">schwacher Vorteil</span> nicht signifikant (Monats-t 1,4–1,9). Hier ebenfalls Historie zu kurz, Termine werden angezeigt.</td></tr>
    <tr><td>A++ ORB5 (APlusDaily_EA)</td><td>US100, US500 · M5 9:30 NY</td><td><span class="bdg bg-weak">schwacher Vorteil</span> Trefferquote 26–36 %, Drawdown 22–57 R, besteht die Mehrfachtest-Korrektur nicht. Kosten hier nur auf den Proxy skaliert.</td></tr>
    <tr><td>Vera v2b „Verbessert“</td><td>Gold · M15</td><td><span class="bdg bg-weak">schwacher Vorteil/Test</span> OOS n = 89, +0,239 R/Trade, nicht signifikant (White p 0,94).</td></tr>
@@ -315,12 +315,14 @@ Aber: Vera Gold M15 (21 Trades) bringt der weite Stop nichts (Summe ≈ −9 R i
    <tr><td>Keltner 1s / Combo BTC</td><td>Gold, BTC · 1-s-Kerzen aus Trades</td><td><span class="bdg bg-no">nicht robust</span> Scalping schlägt die Kosten nicht. Im Browser nur 5–30 min Vorlauf statt 60 min.</td></tr>
    <tr><td>ORB-Paket (DayTraderPlan)</td><td>US100, US500 · M5</td><td><span class="bdg bg-no">nicht robust</span> nach FTMO-Kosten negativ.</td></tr>
    <tr><td>Bollinger-Radar, Cipher B</td><td>Gold · M5</td><td><span class="bdg bg-no">nur Info</span> kein signifikanter Mehrwert, im EA standardmäßig AUS.</td></tr>
-   <tr><td>TA-Kacheln</td><td>alle · M1–H1</td><td><span class="bdg bg-no">ungeprüft</span> einfache Regeln (siehe unten).</td></tr>
+   <tr><td>TA-Kacheln</td><td>alle · M1–H1</td><td><span class="bdg bg-no">nicht robust – nur Info</span> 16 Jahre mit FTMO-Kosten: alle 18 Varianten negativ (M5 −0,17 bis −0,36 R, M15 −0,08 bis −0,19, H1 −0,01 bis −0,10). Nie Top-Setup, nie „Jetzt“-Empfehlung, kein Alarm.</td></tr>
+   <tr><td>Neu getestet (Forschung 29.10.)</td><td>Orderblock-Pullback, Volume Profile POC/VAH/VAL, MACD/RSI allein und als Filter, Gap-Fade, NR4/Inside-Bar, BB-Squeeze, neue Exits</td><td><span class="bdg bg-no">durchgefallen</span> 150 Tests, keiner robust – deshalb nicht eingebaut.</td></tr>
   </table>
   <p class="small"><b>Nicht übertragbar:</b> US30, GER40, JP225 (keine Browser-Datenquelle) · AUDCAD-MeanReversion und CrossGrid (keine Forex-Quelle ohne Key) · GoldTickActivity (braucht Broker-Ticks) · Connors M5 (war nicht robust, kein EA) · Kombi-Setup EMA-M1 (nur im Modus Aggressiv).</p>
  </div>
  <div class="card">
   <h3>So entsteht ein TA-Kachel-Signal (je Timeframe)</h3>
+  <p class="small warn"><b>Nur Info, nicht robust:</b> 16-Jahre-Test (HistData 2010–2026) mit FTMO-Kosten – alle 18 Varianten negativ.</p>
   <table>
    <tr><th>Baustein</th><th>+1 (Kauf)</th><th>−1 (Verkauf)</th></tr>
    <tr><td>Trend</td><td>EMA20 &gt; EMA50</td><td>EMA20 &lt; EMA50</td></tr>
@@ -586,31 +588,46 @@ const STATUS={robust:{r:0,txt:"geprüft robust",cls:"bg-ok"},schwach:{r:1,txt:"s
 function mk(o){o.crv=o.crv!==undefined?o.crv:(o.tgt!=null&&o.stop!=null?Math.abs(o.tgt-o.entry)/Math.abs(o.entry-o.stop):null);o.id=[o.strat,o.sym,o.tf,o.sub||"",o.dir,o.t].join("|");return o}
 // =====================================================================================
 // Connors RSI(2) D1 – FTMO_ConnorsRSI2_EA (US500/US100/US30, JP225 ohne Quelle)
-function connors(sym,h1,now){const info=[],sigs=[];
+// v8: Connors RSI(2) D1 mit externer SMA200 vom Kassaindex (TradingView SP:SPX / NASDAQ:NDX), RSI2/SMA5/ATR14 aus ≥ 30 Perp-Tageskerzen.
+// connorsCore ist 1:1 die Referenz sg_research/ref/connors_ref.js connorsSignal (Tests: test/connors_v8_test.js, 0 Abweichungen).
+function connorsCore(D,ext,opt){opt=Object.assign({rsiMax:10,vixStrong:20,minBars:30},opt||{});
+ if(!D||D.length<opt.minBars)return{ok:false,reason:"zu wenig Tageskerzen ("+(D?D.length:0)+" < "+opt.minBars+")"};
+ if(!ext||!(ext.sma200>0)||!(ext.idxClose>0))return{ok:false,reason:"SMA200 vom Index nicht verfügbar"};
+ const C=D.map(x=>x.c),H=D.map(x=>x.h),L=D.map(x=>x.l);let up=0,dn=0;
+ for(let i=1;i<C.length;i++){const q=C[i]-C[i-1],u=Math.max(q,0),w=Math.max(-q,0);if(i===1){up=u;dn=w}else{up=.5*u+.5*up;dn=.5*w+.5*dn}}
+ const r=dn<=0?100:100-100/(1+up/dn),s5=mean(C.slice(-5)),n=C.length;let a=0;for(let i=n-14;i<n;i++)a+=Math.max(H[i]-L[i],Math.abs(H[i]-C[i-1]),Math.abs(L[i]-C[i-1]));a/=14;const c=C[n-1];
+ const trend=ext.idxClose>ext.sma200,sig=trend&&r<opt.rsiMax,strong=sig&&typeof ext.vix==="number"&&ext.vix>opt.vixStrong;
+ return{ok:true,signal:sig,rsi2:r,sma5:s5,atr:a,close:c,trend,entry:sig?c:null,stop:sig?c-3*a:null,label:sig?(strong?"stark (VIX>"+opt.vixStrong+")":"normal"):null}}
+function connors(sym,h1,now,ext){const info=[],sigs=[];
  const all=serverDays(h1,0,23,true);const today=S(now);
  const D=all.filter(d=>d.lastHr>=20);              // EA: Tageskerze nur gueltig mit letzter H1 >= 20
  const part=all.length&&all[all.length-1].key===today.key&&all[all.length-1].lastHr<20?all[all.length-1]:null;
- const m=D.length;if(m<202){info.push({lv:"na",txt:`Connors D1: Historie zu kurz – ${m} Tageskerzen, der EA braucht 202 (SMA200). Daten des Perpetuals reichen dafür noch nicht.`});return{sigs,info,m}}
- function ind(C,H,L){const n=C.length;let up=0,dn=0;for(let i=1;i<n;i++){const d=C[i]-C[i-1],u=Math.max(d,0),w=Math.max(-d,0);if(i===1){up=u;dn=w}else{up=.5*u+.5*up;dn=.5*w+.5*dn}}
-  const rsi=dn<=0?100:100-100/(1+up/dn);const sma=mean(C.slice(n-200)),s5=mean(C.slice(n-5));let a=0;for(let i=n-14;i<n;i++)a+=Math.max(H[i]-L[i],Math.abs(H[i]-C[i-1]),Math.abs(L[i]-C[i-1]));return{rsi,sma,s5,atr:a/14,c:C[n-1]}}
- const C=D.map(d=>d.c),H=D.map(d=>d.h),L=D.map(d=>d.l);
- // Positions-Simulation fuer die Info (letzte 40 Tage): Einstieg zum Schluss, Ausstieg Schluss>SMA5 / 10 Tage / SL 3xATR
- let pos=null;for(let k=Math.max(202,m-60);k<=m;k++){const x=ind(C.slice(0,k),H.slice(0,k),L.slice(0,k));const d=D[k-1];
-  if(pos){if(d.l<=pos.sl){pos.res="Stop";pos.end=d.key;pos=pos.keep?null:null;continue}const held=k-1-pos.k;if(x.c>x.s5||held>=10){pos=null;continue}}
-  else if(x.c>x.sma&&x.rsi<10&&d.key!==today.key)pos={k:k-1,key:d.key,e:x.c,sl:x.c-3*x.atr}}
+ const m=D.length,ix=v=>(+v).toLocaleString("de-DE",{minimumFractionDigits:2,maximumFractionDigits:2}),tv=(ext&&ext.tv)||"Index";
+ if(m<30){info.push({lv:"na",txt:`Connors D1: zu wenig Tageskerzen (${m} < 30).`});return{sigs,info,m}}
+ if(!ext||!(ext.sma200>0)||!(ext.idxClose>0)){info.push({lv:"na",txt:`Connors D1: <b>SMA200 nicht verfügbar</b> – TradingView (${tv}) antwortet nicht${ext&&ext.err?" ("+ext.err+")":""}. Ohne Trendfilter gibt es kein Signal.`});return{sigs,info,m}}
+ const trend=ext.idxClose>ext.sma200,dist=ext.idxClose/ext.sma200-1,edge=Math.abs(dist)<0.003;
+ const vixOK=typeof ext.vix==="number"&&isFinite(ext.vix);
+ const core=(k,extra)=>{const W=D.slice(0,k).map(d=>({c:d.c,h:d.h,l:d.l}));if(extra)W.push({c:extra.c,h:extra.h,l:extra.l});return connorsCore(W,ext)};
+ // Positions-Info (letzte 60 Tage): angenähert, Trend = heutiger Index-Trend (keine Index-Historie im Browser)
+ let pos=null;for(let k=Math.max(30,m-60);k<=m;k++){const x=core(k);const d=D[k-1];if(!x.ok)continue;
+  if(pos){if(d.l<=pos.sl){pos=null;continue}const held=k-1-pos.k;if(x.close>x.sma5||held>=10){pos=null;continue}}
+  else if(x.signal&&d.key!==today.key)pos={k:k-1,key:d.key,e:x.close,sl:x.stop}}
  const last=D[m-1],fin=last.key===today.key&&last.lastHr>=22;
- let x=ind(C,H,L),prev=false;
- if(!fin&&part&&isTD(today.key)){x=ind(C.concat([part.c]),H.concat([part.h]),L.concat([part.l]));prev=true}
+ let x=core(m),prev=false;
+ if(!fin&&part&&isTD(today.key)){x=core(m,part);prev=true}
  const decT=today.day0+23*HOUR;
- const head=`RSI2 ${x.rsi.toFixed(1)} · Schluss ${px(sym,x.c)} ${x.c>x.sma?">":"<"} SMA200 ${px(sym,x.sma)} · ATR ${px(sym,x.atr)}`;
- if(pos)info.push({lv:"ok",txt:`Connors: Regel-Position seit ${fmtKey(pos.key)} (Einstieg ${px(sym,pos.e)}, SL ${px(sym,pos.sl)}). Ausstieg, sobald Schluss > SMA5 (${px(sym,x.s5)}) oder nach 10 Handelstagen.`});
+ const vixT=vixOK?` · VIX ${ext.vix.toFixed(1)}${ext.vix>20?" (> 20)":""}`:" · VIX nicht verfügbar";
+ const head=`RSI2 ${x.rsi2.toFixed(1)} · ${tv} ${ix(ext.idxClose)} ${trend?">":"<"} SMA200 ${ix(ext.sma200)} (${dist>=0?"+":""}${(dist*100).toFixed(2).replace(".",",")} %, TradingView${ext.stale?", Stand "+ext.stale:""}) · ATR ${px(sym,x.atr)}${vixT}`;
+ if(edge)info.push({lv:"warn",txt:`Connors: <b>Grenzfall</b> – ${tv} liegt nur ${(Math.abs(dist)*100).toFixed(2).replace(".",",")} % ${trend?"über":"unter"} der SMA200. Trend kommt vom Kassaindex, RSI2/Einstieg vom Perpetual – hier kann das kippen.`});
+ if(pos)info.push({lv:"ok",txt:`Connors: Regel-Position seit ${fmtKey(pos.key)} (angenähert; Einstieg ${px(sym,pos.e)}, SL ${px(sym,pos.sl)}). Ausstieg, sobald Schluss > SMA5 (${px(sym,x.sma5)}) oder nach 10 Handelstagen.`});
  if(!isTD(today.key)){info.push({lv:"",txt:`Connors D1: heute kein US-Handelstag. Letzter Stand: ${head}.`});return{sigs,info,m}}
- if((fin||prev)&&x.c>x.sma&&x.rsi<10&&!pos){
-  sigs.push(mk({strat:"CONNORS",sym,tf:"D1",sub:"RSI2",dir:1,str:Math.round(50+50*(10-x.rsi)/10),entry:x.c,stop:x.c-3*x.atr,tgt:null,crv:null,
-   exitTxt:`Ausstieg lt. Regel: Schluss > SMA5 (${px(sym,x.s5)}) oder nach 10 Tagen`,t:fin?decT:now,barSec:86400,status:"robust",prelim:!fin,
-   why:`${prev?"VORLÄUFIG mit laufender Tageskerze – ":""}RSI2 ${x.rsi.toFixed(1)} < 10 und Schluss über SMA200 (${px(sym,x.sma)}). Kauf zum Kassaschluss 16:00 NY.`,
+ if((fin||prev)&&x.signal&&!pos){const strong=x.label&&x.label.startsWith("stark");
+  sigs.push(mk({strat:"CONNORS",sym,tf:"D1",sub:"RSI2",dir:1,str:Math.round(50+50*(10-x.rsi2)/10),entry:x.close,stop:x.stop,tgt:null,crv:null,
+   exitTxt:`Ausstieg lt. Regel: Schluss > SMA5 (${px(sym,x.sma5)}) oder nach 10 Tagen`,t:fin?decT:now,barSec:86400,status:"robust",prelim:!fin,
+   vix:vixOK?ext.vix:null,strong,risk:vixOK?(strong?1.5:0.75):null,edge,
+   why:`${prev?"VORLÄUFIG mit laufender Tageskerze – ":""}RSI2 ${x.rsi2.toFixed(1)} < 10 und ${tv} ${ix(ext.idxClose)} über SMA200 ${ix(ext.sma200)} (TradingView)${edge?" – Grenzfall ±0,3 %":""}. Kauf zum Kassaschluss 16:00 NY.${vixOK?` VIX ${ext.vix.toFixed(1)}.`:""}`,
    win:{from:decT-HOUR,to:decT+50*MIN}}))}
- info.push({lv:"",txt:`Connors D1 ${fin?"(heutige Kerze fertig)":prev?"(vorläufig, Kerze läuft)":""}: ${head} → ${x.c>x.sma&&x.rsi<10?(pos?"Bedingung erfüllt, aber Position läuft schon":"KAUF-Bedingung erfüllt"):"kein Signal"}. Entscheidung 16:00–16:50 NY.`});
+ info.push({lv:"",txt:`Connors D1 ${fin?"(heutige Kerze fertig)":prev?"(vorläufig, Kerze läuft)":""}: ${head} → ${x.signal?(pos?"Bedingung erfüllt, aber Position läuft schon":"KAUF-Bedingung erfüllt"):"kein Signal"}. Entscheidung 16:00–16:50 NY.`});
  return{sigs,info,m}}
 // =====================================================================================
 // E4 Monatswechsel + Vor-Feiertag – FTMO_Monatswechsel_EA_v1c (US-Teil)
@@ -774,7 +791,7 @@ function keltner(sym,trades,combo,tick,now){const info=[],sigs=[];const b=secBar
  if(last&&last.ok&&last.st==="Stop-Order aktiv"&&now-last.t<=120000)sigs.push(mk({strat:"KELT",sym,tf:"S1",sub:combo?"Combo":"Basis",dir:last.d,str:combo?70:40,entry:last.sp,stop:null,tgt:null,crv:null,t:last.t,barSec:1,status:"offen",
   why:`crossover(close, ${last.d>0?"oberes":"unteres"} Band) auf 1-s-Kerzen → ${last.d>0?"Buy":"Sell"}-Stop ${px(sym,last.sp)}${last.ftxt}. Immer im Markt, Gegensignal kehrt um.`,exitTxt:"Ausstieg lt. Regel: Gegensignal",fresh1s:true}));
  return{sigs,info}}
-return{setPx:f=>{PXF=f},S,NY,nyOff,US_HOL,US_EARLY,isTD,nextTD,lastTDofMonth,preHolEntry,fmtKey,addDays,serverDays,connors,e4,aplus,goldDay,radar,cipher,keltner,secBars,STATUS,mk,emaSeedFirst,pineEma,mean,lastIdxLE};
+return{setPx:f=>{PXF=f},S,NY,nyOff,US_HOL,US_EARLY,isTD,nextTD,lastTDofMonth,preHolEntry,fmtKey,addDays,serverDays,connors,connorsCore,e4,aplus,goldDay,radar,cipher,keltner,secBars,STATUS,mk,emaSeedFirst,pineEma,mean,lastIdxLE};
 })();
 if(typeof module!=="undefined")module.exports=STRAT;
 </script>
@@ -987,7 +1004,7 @@ function computeSymbol(key,r,now){const def=r.def,st=ST[key];const C=iv=>(r.D[iv
  const safe=(f,tag)=>{try{add(f(),tag)}catch(e){info.push({tag,lv:"warn",txt:`${SNAME[tag]||tag}: Rechenfehler (${e.message})`})}};
  let extra={};
  if(def.idx!=null){
-  safe(()=>{const c=STRAT.connors(def.short,h1,now);return c},"CONNORS");
+  safe(()=>STRAT.connors(def.short,h1,now,connExtFor(key)),"CONNORS");
   safe(()=>{const n=STRAT.serverDays(h1,16,23,true).length;st.m30long=n>=202;return STRAT.e4(def.short,st.m30long&&r.D["30m"]&&r.D["30m"].length>5000?C("30m"):null,h1,now)},"E4");
   safe(()=>STRAT.aplus(def.short,def.idx,m5,h1,now),"APLUS");
   if(orbR&&orbR.trig&&orbR.day===STRAT.NY(now).key)sigs.push(STRAT.mk({strat:"ORBP",sym:key,tf:"M5",sub:"ORB",dir:1,str:50,out:orbR.outcome==="offen"?"läuft":orbR.outcome,entry:orbR.entry,stop:orbR.stop,tgt:orbR.t2,t:orbR.trig.t+3e5,barSec:300,status:"offen",why:`Erste 5-min-Kerze über dem OR-Hoch ${fp(key,orbR.H,d)} (9:30–9:45 NY), Stop OR-Mitte, Ziel 2R. Backtest nach FTMO-Kosten negativ.`,exitTxt:"Ziel 2R / flat 15:55 NY"}))}
@@ -1014,6 +1031,18 @@ function computeSymbol(key,r,now){const def=r.def,st=ST[key];const C=iv=>(r.D[iv
 // nach einem Fehler 10 min Pause. Indizes kommen dort verzögert (delayed_streaming_600/900 s) – der Vergleich nimmt deshalb die Ersatz-Kerze
 // zum gleichen Zeitpunkt (jetzt minus Verzögerung). Außerhalb der Handelszeit (current_session ≠ market) oder bei altem Kurs wird nichts übernommen.
 const TV_URL="https://scanner.tradingview.com/global/scan";
+// v8: SMA200 vom Kassaindex + VIX für Connors (gleicher inoffizieller Scanner, 1 gebündelte Abfrage höchstens alle 5 min, nach Fehler 2 min Pause).
+// Kein Wert → kein Connors-Signal („SMA200 nicht verfügbar“). Werte bis 30 min alt werden mit Zeitstempel weiterverwendet.
+const CXT={US500:"SP:SPX",US100:"NASDAQ:NDX"};let CX={at:0,data:null,err:null,tried:0,busy:null};
+async function connExt(){const now=Date.now();if(CX.data&&now-CX.at<300e3)return;if(CX.err&&now-CX.tried<120e3)return;if(CX.busy)return CX.busy;
+ CX.busy=(async()=>{CX.tried=Date.now();try{const ac=new AbortController();const to=setTimeout(()=>ac.abort(),8000);let r;
+  try{r=await fetch(TV_URL,{method:"POST",body:JSON.stringify({symbols:{tickers:["SP:SPX","NASDAQ:NDX","TVC:VIX"]},columns:["close","SMA200"]}),signal:ac.signal})}finally{clearTimeout(to)}
+  if(!r.ok)throw new Error("HTTP "+r.status);const j=await r.json();const g=t=>(j.data||[]).find(x=>x.s===t);const o={};
+  for(const k in CXT){const a=g(CXT[k]);if(a&&Array.isArray(a.d)&&a.d[0]>0&&a.d[1]>0)o[k]={idxClose:+a.d[0],sma200:+a.d[1]}}
+  const v=g("TVC:VIX");o.vix=v&&Array.isArray(v.d)&&v.d[0]>0?+v.d[0]:undefined;if(!o.US500&&!o.US100)throw new Error("keine Indexwerte");
+  CX.data=o;CX.at=Date.now();CX.err=null}catch(e){CX.err=e.name==="AbortError"?"Zeitüberschreitung":e.message}finally{CX.busy=null}})();return CX.busy}
+function connExtFor(k){const tv=CXT[k];if(window.__cxOff)return{tv,err:"Test: abgeschaltet"};const d=CX.data,age=Date.now()-CX.at;
+ if(!d||!d[k]||age>30*6e4)return{tv,err:CX.err||"keine Antwort"};return{tv,idxClose:d[k].idxClose,sma200:d[k].sma200,vix:d.vix,stale:age>330e3?fB.format(CX.at)+" Uhr":null}}
 let fxBusy=false,fxNext=0,fxLast={ok:null,msg:"noch nicht abgefragt",at:0};
 function median(a){const b=a.slice().sort((x,y)=>x-y),n=b.length;return n%2?b[(n-1)/2]:(b[n/2-1]+b[n/2])/2}
 async function fxUpdate(outs){const now=Date.now();if(fxBusy||now<fxNext||document.hidden)return false;
@@ -1110,7 +1139,10 @@ const STR=STRAT.STATUS;
 function label(x){switch(x.strat){case"TA":return"TA-Kachel";case"VERA":return"Vera: "+x.sub;case"CONNORS":return"Connors RSI2";case"E4":return x.sub==="TOM"?"E4 Monatswechsel":"E4 Vor-Feiertag";
  case"APLUS":return"A++ ORB5";case"KOMBI":return"GoldKombi "+x.sub;case"NYS":return"NY-Session "+x.sub;case"PULL":return"Gold-Pullback";case"STACK":return"Breakout-Staffel";
  case"KELT":return x.sub==="Combo"?"Keltner Combo BTC":"Keltner Gold";case"ORBP":return"ORB-Paket";case"CIPHER":return"Cipher B";default:return x.strat}}
-function badge(x){const s=STR[x.status];return`<span class="bdg ${s.cls}">${x.strat==="VERA"&&x.status==="schwach"?"v2b · ":""}${s.txt}</span>`}
+function badge(x){const s=STR[x.status];if(x.strat==="TA")return`<span class="bdg bg-no" title="16 Jahre mit FTMO-Kosten: alle 18 Varianten negativ">Nur Info, nicht robust (16-J.-Test nach Kosten negativ)</span>`;
+ return`<span class="bdg ${s.cls}">${x.strat==="VERA"&&x.status==="schwach"?"v2b · ":""}${s.txt}</span>${x.strat==="CONNORS"?vixBadge(x):""}`}
+// v8: VIX-Label bei Connors – „vielleicht“ (Permutation p 0,008, nach Bonferroni nicht signifikant)
+function vixBadge(x){if(x.vix==null)return` <span class="bdg bg-no">VIX n. v. – kein Label</span>`;return x.strong?` <span class="bdg bg-weak" title="vielleicht, statistisch nicht gesichert">💪 stark · VIX ${nf(x.vix,1)} &gt; 20 (vielleicht)</span>`:` <span class="bdg bg-no">normal · VIX ${nf(x.vix,1)}</span>`}
 const ageBars=(x,now)=>(now-x.t)/(x.barSec*1000);
 function actionable(x,now){if(x.out&&x.out!=="läuft"&&x.out!=="offen")return false;if(x.fresh1s)return true;if(x.barSec>=86400)return true;if(x.win&&now>x.win.to&&x.strat!=="STACK"&&x.strat!=="PULL")return false;return ageBars(x,now)<=3}
 function rankCmp(a,b){return b.str-a.str||STR[a.status].r-STR[b.status].r||TFI[b.tf]-TFI[a.tf]||b.t-a.t}
@@ -1120,7 +1152,7 @@ function evalTop(x,S,R,now){const c=[];const def=S.def,dl=x.dir>0?"Long":"Short"
  const others=new Set(R.filter(y=>y.key===x.key&&y.dir===x.dir&&!["TA","CIPHER","KELT"].includes(y.strat)).map(y=>y.strat));
  const taN=TFS.filter(([n])=>S.ta[n].dir===(x.dir>0?"buy":"sell")).length;
  if(x.status!=="offen")c.push(ok(`Qualität: Strategie mit Status „${STR[x.status].txt}“`));else if(others.size>=2)c.push(ok(`Qualität: ${others.size} verschiedene Regeln zeigen ${dl} (${[...others].map(k=>SNAME[k]).join(", ")})`));
- else if(taN>=3)c.push(ok(`Qualität: TA-Kacheln auf ${taN} Timeframes ${dl}`));else c.push(no(`Qualität: Status ungeprüft, nur ${others.size} Regel(n) und ${taN} TA-Timeframe(s) in Richtung ${dl}`));
+ else c.push(no(`Qualität: Status ungeprüft, nur ${others.size} Regel(n) in Richtung ${dl} (TA-Kacheln zählen nicht – 16 Jahre nach Kosten negativ; ${taN} TA-Timeframe(s) nur Info)`));
  // 2 Trend
  if(D1)c.push(ok("Trend: Tagesregel prüft selbst (Schluss > SMA200)"));else{const h=S.ctx.h1,h4=S.ctx.h4;if(!h||!h4)c.push(no("Trend: H1/H4-Daten fehlen"));else{const a=(h.c-h.e)*x.dir>0,b=(h4.c-h4.e)*x.dir>0;
   c.push(a&&b?ok(`Trend: H1 und H4 ${x.dir>0?"über":"unter"} EMA50`):no(`Trend: H1 ${a?"passt":"dagegen"}, H4 ${b?"passt":"dagegen"} (EMA50)`))}}
@@ -1156,7 +1188,7 @@ function renderSymbol(S,now){const el=$("s-"+S.key);const def=S.def,d=S.d,ta=S.t
  const ovd=S.ov>=0.35?"buy":S.ov<=-0.35?"sell":"neu";const buys=TFS.filter(([n])=>ta[n].dir==="buy").length,sells=TFS.filter(([n])=>ta[n].dir==="sell").length;
  let h=`<div class="shead"><div><div class="sname">${def.name}</div><div class="ssub">${def.sub}${S.src!=="bf"?" · Quelle: "+({bs:"Binance Spot",okx:"OKX"})[S.src]+" (verkürzt)":""}${S.miss&&S.miss.length?` · fehlt: ${S.miss.join(", ")}`:""}</div></div>
   <div><div class="price">${fp(S.key,S.live,d)}</div>${ftBadge(S.key,now)}${FTMO[S.key]?`<div class="fxl">${fxLabel(S.key)}</div>`:""}<div class="chg" style="color:${S.ch>=0?"var(--buy)":"var(--sell)"}">${S.ch>=0?"+":""}${nf(S.ch,2)} % (24 h)</div></div></div>
-  <div class="overall"><span class="big b-${ovd}">${LBL[ovd]}</span><div style="flex:1"><div class="small">TA über alle Timeframes: ${buys}× Kauf · ${sells}× Verkauf · Wert ${S.ov>=0?"+":""}${nf(S.ov*100,0)}</div>
+  <div class="overall"><span class="big b-${ovd}">${LBL[ovd]}</span><div style="flex:1"><div class="small">TA über alle Timeframes: ${buys}× Kauf · ${sells}× Verkauf · Wert ${S.ov>=0?"+":""}${nf(S.ov*100,0)} · <span class="warn">Nur Info, nicht robust (16-J.-Test nach Kosten negativ)</span></div>
   <div class="meter"><i style="left:calc(${(S.ov+1)/2*100}% - 2px)"></i></div></div></div><div class="grid">`;
  TFS.forEach(([n])=>{const a=ta[n];if(a.err){h+=`<div class="tile"><div class="tf">${n}</div><div class="err">${a.err}</div></div>`;return}
   const col=a.dir==="buy"?"var(--buy)":a.dir==="sell"?"var(--sell)":"var(--neu)";const sW=a.stop!=null?slW(a.entry,a.stop,a.dir==="sell"?-1:1,slF()):null;
@@ -1179,9 +1211,10 @@ function renderSymbol(S,now){const el=$("s-"+S.key);const def=S.def,d=S.d,ta=S.t
    h+=`<div class="small">Backtest nach FTMO-Kosten negativ.</div></div>`}}
  el.innerHTML=h;
  el.querySelectorAll(".tile[data-e]").forEach(t=>t.onclick=()=>toCalc(S.key,+t.dataset.e,t.dataset.s===""?null:+t.dataset.s,t.dataset.t===""?null:+t.dataset.t,d));
- el.querySelectorAll(".rs[data-id]").forEach(t=>t.onclick=()=>{const x=act.find(y=>y.id===t.dataset.id);if(x)toCalc(S.key,x.entry,x.stop,x.tgt,d)})}
+ el.querySelectorAll(".rs[data-id]").forEach(t=>t.onclick=()=>{const x=act.find(y=>y.id===t.dataset.id);if(x)toCalc(S.key,x.entry,x.stop,x.tgt,d,x)})}
 function renderNoSrc(key){const def=PRESET[key];$("s-"+key).innerHTML=`<div class="sname">${def.name}</div><div class="rl na"><b>Keine Browser-Datenquelle.</b> ${def.why} Damit entfallen hier: ${def.rules}. Es werden keine Signale erfunden.</div>`}
-function toCalc(k,e,st,t,d){const F=FTMO[k],dd=F?F.dg:d,cv=v=>(+FXP(k,v)).toFixed(dd).replace(".",",");$("c-entry").value=cv(e);$("c-stop").value=st!=null?cv(st):"";$("c-tgt").value=t!=null?cv(t):"";
+let calcHint=null;
+function toCalc(k,e,st,t,d,x){calcHint=x&&x.strat==="CONNORS"&&x.risk!=null?{risk:x.risk,vix:x.vix,strong:x.strong}:null;const F=FTMO[k],dd=F?F.dg:d,cv=v=>(+FXP(k,v)).toFixed(dd).replace(".",",");$("c-entry").value=cv(e);$("c-stop").value=st!=null?cv(st):"";$("c-tgt").value=t!=null?cv(t):"";
  $("c-inst").value=F?k:($("c-inst").value in FTMO?"1":$("c-inst").value);$("c-from").textContent=(F?`Übernommen aus ${k}, Preise ${fxLabel(k)}.`:`Übernommen aus ${k} (Ersatzkurs, keine FTMO-Umrechnung).`)+(st!=null&&slF()>1?` Stop ${slTxt(slF())} weiter als der Strategie-Stop → Lots entsprechend kleiner bei gleichem Risiko (1R = dieser Stop).`:"");show("v-calc");calc()}
 function rowHTML(x,i,top){const lg=x.dir>0,col=lg?"var(--buy)":"var(--sell)";const now=Date.now();
  return`<div class="ri${top&&i===0?" top":""}${x.life&&x.life.state!=="gültig"?" exp":""}" data-id="${x.id}"><div class="no" style="grid-row:1/7">#${i+1}</div>
@@ -1198,14 +1231,14 @@ function renderRank(){document.querySelectorAll("#rf button").forEach(x=>x.class
  if(!L.length){el.innerHTML=`<div class="small">Gerade kein gültiges Signal${nEx?` (${nEx} abgelaufen/erledigt – „abgelaufene zeigen“)`:""}.</div>`;return}
  const N=rshowAll?L.length:Math.min(L.length,12);
  el.innerHTML=L.slice(0,N).map((x,i)=>rowHTML(x,i,true)).join("")+(L.length>12?`<button class="btn rmore" id="rmore">${rshowAll?"Nur Top 12":"Alle "+L.length+" anzeigen"}</button>`:"");
- el.querySelectorAll(".ri").forEach(r=>r.onclick=()=>{const x=lastRank.find(y=>y.id===r.dataset.id);if(x)toCalc(x.key,x.entry,x.stop,x.tgt,x.d)});
+ el.querySelectorAll(".ri").forEach(r=>r.onclick=()=>{const x=lastRank.find(y=>y.id===r.dataset.id);if(x)toCalc(x.key,x.entry,x.stop,x.tgt,x.d,x)});
  const m=$("rmore");if(m)m.onclick=()=>{rshowAll=!rshowAll;renderRank()}}
 function renderTop(){const el=$("toplist"),now=Date.now();
  if(!lastTop.length)el.innerHTML=`<div class="empty">⏳ Gerade kein Top-Setup – abwarten.<div class="small">Alle sechs Kriterien müssen gleichzeitig erfüllt sein. Das ist bewusst selten.</div></div>`;
  else el.innerHTML=lastTop.map((t,i)=>{const x=t.x,lg=x.dir>0;return`<div class="tc ${lg?"long":"short"}" data-id="${x.id}"><div class="tch"><div><div class="sname">#${i+1} ${x.name} · ${x.tf}</div><div class="small">${label(x)} ${badge(x)}${ftBadge(x.key,now)}${x.prelim?' <span class="bdg bg-pre">vorläufig</span>':""}</div></div><div class="dr ${lg?"long":"short"}" style="font-size:14px">${lg?"LONG":"SHORT"} ${x.str}</div></div>
   <div class="lvbig">${lvl(x,x.key,x.d)}</div>${FTMO[x.key]?`<div class="fxl">${fxLabel(x.key)}</div>`:""}${lifeHTML(x)}<div class="small">${x.exitTxt&&x.exitTxt!=="–"?x.exitTxt+" · ":""}Signal ${ago(x.t,now)} (${fB.format(x.t)} ${tzName(now)})</div>
   <div class="why2"><b>passt, weil:</b><ul>${t.c.map(k=>`<li>✓ ${k.txt}</li>`).join("")}</ul><div class="small">${x.why}</div></div><div class="tkw">${tkBtn(x)}</div></div>`}).join("");
- el.querySelectorAll(".tc").forEach(r=>r.onclick=()=>{const t=lastTop.find(y=>y.x.id===r.dataset.id);if(t)toCalc(t.x.key,t.x.entry,t.x.stop,t.x.tgt,t.x.d)});
+ el.querySelectorAll(".tc").forEach(r=>r.onclick=()=>{const t=lastTop.find(y=>y.x.id===r.dataset.id);if(t)toCalc(t.x.key,t.x.entry,t.x.stop,t.x.tgt,t.x.d,t.x)});
  $("nearlist").innerHTML=lastNear.length?lastNear.map(t=>`<div class="rl"><b>${t.x.name} ${t.x.tf} ${t.x.dir>0?"LONG":"SHORT"}</b> · ${label(t.x)} (${t.n}/6) – fehlt: ${t.c.filter(k=>!k.ok).map(k=>k.txt).join("; ")}</div>`).join(""):`<div class="small">Keine Kandidaten mit 4 oder 5 von 6 Kriterien.</div>`}
 // ---------- v7: „Jetzt handelbar“ – eine klare Antwort auf „Was soll ich jetzt tun?“ ----------
 const tradable=(x,now)=>!FT_SESS[x.key]||ftOpen(x.key,now);
@@ -1226,7 +1259,7 @@ function renderNow(){const el=$("now");if(!el)return;const now=Date.now();const 
   <div class="small">${label(x)} ${badge(x)}${p.n>1?` · +${p.n-1} weitere`:""}</div><div class="lvbig">${lvl(x,x.key,x.d)}</div>${lots}${lifeHTML(x)}
   ${p.kind==="edge"?`<div class="small">Nicht alle 6 Top-Kriterien erfüllt – kleiner riskieren oder auslassen.</div>`:""}
   <div class="bar"><button class="btn" data-nowcalc="1">🧮 Rechner</button>${tkBtn(x)}</div>${opH}<div class="small">Keine Anlageberatung – Spread und Kurs im MT5 prüfen.</div>`;
- el.querySelector("[data-nowcalc]").onclick=e=>{e.stopPropagation();toCalc(x.key,x.entry,x.stop,x.tgt,x.d)};bindNow(el)}
+ el.querySelector("[data-nowcalc]").onclick=e=>{e.stopPropagation();toCalc(x.key,x.entry,x.stop,x.tgt,x.d,x)};bindNow(el)}
 function bindNow(el){el.querySelectorAll("[data-go]").forEach(a=>a.onclick=e=>{e.preventDefault();show(a.dataset.go)})}
 // ---------- Refresh-Steuerung ----------
 let tmr=null,nextAt=0,busy=false,pendingRun=false,lastRun=0,failStreak=0;const dbg={refreshes:0,scheduled:0,errors:[],lastMs:0,fx:[],fxCalls:0};
@@ -1237,7 +1270,7 @@ async function refresh(){if(typeof TAB!=="undefined"&&TAB.passive)return;if(busy
  try{const cards=$("cards");
   watch.forEach(k=>{if(!$("s-"+k)){const d=document.createElement("div");d.className="sym";d.id="s-"+k;d.innerHTML=`<div class="sname">${symDef(k).name}</div><div class="small">lädt …</div>`;cards.appendChild(d)}});
   [...cards.children].forEach(c=>{if(!watch.includes(c.id.slice(2)))c.remove()});
-  const outs={};
+  const outs={};if(watch.some(k=>CXT[k]))await connExt().catch(()=>{});
   await Promise.all(watch.map(async k=>{try{const r=await loadSymbol(k);if(r.nosrc){renderNoSrc(k);return}const now=Date.now();const S=computeSymbol(k,r,now);renderSymbol(S,now);outs[k]=S;okN++}
    catch(e){bad++;dbg.errors.push(k+": "+e.message);$("s-"+k).innerHTML=`<div class="sname">${symDef(k).name}</div><div class="err">Keine Daten: ${e.message}. ${e.status===400?"Diesen Ticker gibt es nicht als Binance-Perpetual (wird bis zum Neuladen der Seite nicht mehr abgefragt).":e.status===429||e.status===418?"Binance-Rate-Limit – App pausiert automatisch.":"Quelle nicht erreichbar (Netz weg oder Binance in diesem Netz/Land gesperrt)."}</div>`}}));
   const now=Date.now();const R=[];
@@ -1245,7 +1278,7 @@ async function refresh(){if(typeof TAB!=="undefined"&&TAB.passive)return;if(busy
    TFS.forEach(([n,,sec])=>{const a=S.ta[n];if(!a||a.err||a.dir==="neu")return;const y=STRAT.mk({strat:"TA",sym:S.key,key:S.key,name:nm,tf:n,dir:a.dir==="buy"?1:-1,str:a.str,entry:a.entry,stop:a.stop,tgt:a.tgt,t:a.since,barSec:sec,status:"offen",d:S.d,why:a.why.join(" · "),exitTxt:"Ziel 2R"});y.life=lifeOf(y,now);R.push(y)});
    S.sigs.filter(x=>now-x.t<864e5||(x.life&&x.life.state==="gültig")).forEach(x=>{x.key=S.key;x.name=nm;x.d=S.d;x.life=x.life||lifeOf(x,now);R.push(x)})});
   const val=x=>x.life.state==="gültig";R.sort((a,b)=>(val(b)-val(a))||(val(a)?rankCmp(a,b):b.t-a.t));lastRank=R;lastOuts=outs;renderRank();
-  const T=[],N=[];R.filter(val).forEach(x=>{const S=outs[x.key];const c=evalTop(x,S,R,now);const n=c.filter(k=>k.ok).length;if(n===6)T.push({x,c});else if(n>=4&&x.strat!=="TA")N.push({x,c,n})});
+  const T=[],N=[];R.filter(val).filter(x=>x.strat!=="TA").forEach(x=>{const S=outs[x.key];const c=evalTop(x,S,R,now);const n=c.filter(k=>k.ok).length;if(n===6)T.push({x,c});else if(n>=4&&x.strat!=="TA")N.push({x,c,n})});
   T.sort((a,b)=>rankCmp(a.x,b.x));N.sort((a,b)=>b.n-a.n||rankCmp(a.x,b.x));lastTop=T;lastNear=N.slice(0,6);renderTop();try{renderNow()}catch(e){dbg.errors.push("now: "+e.message)}
   try{jrRecord(T,R.filter(val),now);jrEvalAll(now);if($("v-jr").classList.contains("act"))renderJournal()}catch(e){dbg.errors.push("journal: "+e.message)}
   $("topcnt").textContent=T.length?T.length:"";
@@ -1305,7 +1338,8 @@ function calc(){const inst=$("c-inst").value,F=FTMO[inst];const acc=Vv("c-acc",5
   <div style="grid-column:1/3"><small>Positionswert (Hebel-Info)</small><b>${nf(units*mult*e,0)} $</b> <span class="small">= ${nf(units*mult*e/acc,1)}× Konto · ohne Spread/Kommission</span></div>`;
   if(dist/e*100<0.05)out+=`<div style="grid-column:1/3" class="warn">Stop näher als 0,05 % am Kurs. Spread frisst so einen Stop.</div>`}
  }else out=`<div style="grid-column:1/3" class="small">Einstieg und Stop eingeben (oder auf ein Signal tippen). Bei Signalen ohne Stop (z. B. Keltner, Cipher) bitte selbst einen Stop setzen.</div>`;
- $("c-res").innerHTML=out;
+ if(calcHint)out+=`<div style="grid-column:1/3" class="rl"><b>Connors-Risiko-Hinweis (optional):</b> VIX ${nf(calcHint.vix,1)} → ${nf(calcHint.risk,2)} % (Regel: 1,5 % bei VIX &gt; 20, sonst 0,75 %). <i>Vielleicht, statistisch nicht gesichert</i> – nachträglich gewählt, nicht vorab registriert. <button class="btn sm" id="c-hint">${nf(calcHint.risk,2)} % übernehmen</button></div>`;
+ $("c-res").innerHTML=out;const hb=$("c-hint");if(hb)hb.onclick=()=>{$("c-risk").value=String(calcHint.risk).replace(".",",");calc();toast("Risiko auf "+nf(calcHint.risk,2)+" % gesetzt")};
  const dl=acc*Vv("c-dl")/100,ml=acc*Vv("c-ml")/100,lost=Vv("c-lost",acc*0.02)||0,tot=Vv("c-tot",acc*0.02)||0;const rs=dayReset(Date.now());const remD=Math.max(0,dl-lost),remM=Math.max(0,ml-tot),rem=Math.min(remD,remM);
  $("f-res").innerHTML=`<div><small>Tageslimit</small><b>${nf(dl,0)} $</b></div><div><small>Max.-Verlust-Grenze</small><b>${nf(acc-ml,0)} $</b> <span class="small">Equity</span></div>
   <div><small>Heute noch Luft</small><b style="color:${remD<risk?"var(--sell)":"inherit"}">${nf(remD,0)} $</b></div><div><small>Gesamt noch Luft</small><b>${nf(remM,0)} $</b></div>
@@ -1815,6 +1849,7 @@ jrInit();
 jrKick();
 window.__sg.jr={manClose:jrManClose,reopen:jrReopen,detail:jrDetail,closeDlg:jrCloseDlg,lvData,tick:jrTick,catchUp:jrCatchUp,live:jrLive,kick:jrKick,LV,JC:()=>JC,open:jrOpen,ts:jrTS,alert:jrAlert,core:jrCore,res:jrRes,J:()=>J,evalAll:jrEvalAll,snap:jrSnap,save:jrSave,render:renderJournal,reload:()=>{J=Object.assign({v:1,trades:[],tops:[],seen:{},recSince:Date.now()},LS("jr")||{});jrAfter()},period:jrPeriod};
 window.__sg.v7={pNum,ftOpen,ftNext,ftOpenMin,ftState,jrStats,dayReset,nowPick,TAB:()=>TAB,BADLS,jrBackupDue};
+window.__sg.v8={toCalc,connExtFor,CX:()=>CX};
 
 // v7: Service Worker & Manifest nur auf https (GitHub Pages); file:// behält das eingebettete Manifest
 if(location.protocol==="https:"){const mf=$("mf");if(mf)mf.href="manifest.webmanifest";
