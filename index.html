@@ -185,7 +185,7 @@ input,select,textarea{font-size:16px!important}
 <section class="view act" id="v-sig">
  <div id="bkbar" class="gbar bk" style="display:none"></div>
  <div id="now" class="card nowc" aria-live="polite"></div>
- <details class="note"><summary><b>Hinweis:</b> Signale, keine Anlageberatung. Nur Connors RSI2 D1 ist „geprüft robust“; E4, A++ und Vera v2b (Gold M15) haben einen schwachen, nicht signifikanten Vorteil; alles andere ist nicht robust oder ungeprüft. <u>Mehr</u></summary>Alle Regeln sind 1:1 aus den EA-Quellen übernommen und laufen auf den Symbolen und Timeframes, für die sie gebaut wurden. Die Kurse kommen aber von Binance-Perpetuals (QQQ/SPY/XAU) statt von den Broker-CFDs. Kerzen, Spreads und Volumen weichen also ab, und Kosten sind nur geschätzt. Abzeichen: grün = geprüft robust, gelb = schwacher Vorteil/Test, grau = nicht robust/ungeprüft. Vor jedem Trade selbst prüfen.</details>
+ <details class="note"><summary><b>Hinweis:</b> Signale, keine Anlageberatung. Nur Connors RSI2 D1 (v9: gelockerte Regel C1) ist „geprüft robust“; E4, A++ und Vera v2b (Gold M15) haben einen schwachen, nicht signifikanten Vorteil; alles andere ist nicht robust oder ungeprüft. <u>Mehr</u></summary>Alle Regeln sind 1:1 aus den EA-Quellen übernommen und laufen auf den Symbolen und Timeframes, für die sie gebaut wurden. Die Kurse kommen aber von Binance-Perpetuals (QQQ/SPY/XAU) statt von den Broker-CFDs. Kerzen, Spreads und Volumen weichen also ab, und Kosten sind nur geschätzt. Abzeichen: grün = geprüft robust, gelb = schwacher Vorteil/Test, grau = nicht robust/ungeprüft. Vor jedem Trade selbst prüfen.</details>
  <div class="rank" id="rank"><div class="rhead"><h3>🏆 Rangliste</h3><div class="seg" id="rf"><button data-f="all">Alle</button><button data-f="long">Long</button><button data-f="short">Short</button></div></div><div class="sf" id="sf"></div><div style="text-align:right;margin:-2px 0 6px"><button class="btn sm" id="expTog">abgelaufene zeigen</button></div><div id="rlist" class="small">lädt …</div><div class="small" style="margin-top:6px">Sortierung: Stärke (0–100), bei Gleichstand zuerst die besser geprüfte Strategie, dann der höhere Timeframe. Antippen übernimmt E/S/Z in den Rechner.</div></div>
  <div id="cards"></div>
  <div class="small" style="margin:6px 2px 14px">Daten: Binance-Futures (öffentlich, ohne Key; Ersatz: Binance-Spot/OKX). US100/US500 = QQQ-/SPY-Perpetual, alle Preise auf FTMO-Skala umgerechnet (≈, Faktor im Rechner); Gold = XAU-Perpetual, BTC = BTC-Perpetual (Faktor ≈ 1, Abweichung zu FTMO-Spot meist 0,1–0,2 %). Nur geschlossene Kerzen. Zeiten in Berlin-Zeit (MEZ/MESZ), Server-Zeit der EAs = New York + 7 h.</div>
@@ -303,7 +303,7 @@ Aber: Vera Gold M15 (21 Trades) bringt der weite Stop nichts (Summe ≈ −9 R i
   <h3>Alle Regeln: wo sie laufen und wie gut sie sind</h3>
   <table style="table-layout:fixed;width:100%;word-break:break-word;overflow-wrap:anywhere">
    <tr><th>Strategie (EA)</th><th>Symbol · TF</th><th>Status</th></tr>
-   <tr><td>Connors RSI2 (FTMO_ConnorsRSI2_EA)</td><td>US500, US100 · D1 (US30/JP225: keine Quelle)</td><td><span class="bdg bg-ok">geprüft robust</span> 492 Trades 2012–26: Ø +0,075 R (×1,5-Kosten +0,058). <b>v8:</b> SMA200 vom Kassaindex über TradingView (SP:SPX / NASDAQ:NDX), RSI2/SMA5/ATR aus ≥ 30 Perp-Tageskerzen (Äquivalenz zur vollen Historie: 0 Abweichungen bei 244 Signalen). Ohne TradingView kein Signal. <span class="bdg bg-weak">VIX &gt; 20 „stark“: vielleicht</span> Ø +0,154 R (n 138, p 0,008, nach Bonferroni nicht signifikant).</td></tr>
+   <tr><td>Connors RSI2 C1 gelockert (Basis: FTMO_ConnorsRSI2_EA)</td><td>US500, US100 · D1 (US30/JP225: keine Quelle)</td><td><span class="bdg bg-ok">geprüft robust</span> <b>v9 C1:</b> RSI2 &lt; 15 und Index &gt; 0,98 × SMA200; Stop 3×ATR14, Ausstieg Schluss &gt; SMA5 oder 10 Tage. 2011–26 (US500+US100): 27,3 Trades/J (alt 17,7), Treffer 71 %, Ø +0,097 R netto (×1,5-Kosten +0,079), +2,64 R/J (alt +1,40), MaxDD 4,9 R (alt 7,3), IS/OOS/HO ×1,5 +0,082/+0,041/+0,117, t 3,91, gegen alte Regel gepaart t 2,98 (über der Schwelle für 18 Vergleiche, nicht über der globalen 3,43). 13 von 16 Jahren positiv. Labels: „klassisch“ (RSI2 &lt; 10 und über SMA200) bzw. „gelockert“. Die App-Regel weicht damit vom EA (RSI2 &lt; 10) ab. SMA200 vom Kassaindex über TradingView (SP:SPX / NASDAQ:NDX); ohne TradingView kein Signal. <span class="bdg bg-weak">VIX &gt; 20 „stark“: vielleicht</span> Ø +0,154 R (n 138, p 0,008, nach Bonferroni nicht signifikant).</td></tr>
    <tr><td>E4 Monatswechsel/Vor-Feiertag (v1c)</td><td>US500, US100 · D1 (US30/GER40: keine Quelle)</td><td><span class="bdg bg-weak">schwacher Vorteil</span> nicht signifikant (Monats-t 1,4–1,9). Hier ebenfalls Historie zu kurz, Termine werden angezeigt.</td></tr>
    <tr><td>A++ ORB5 (APlusDaily_EA)</td><td>US100, US500 · M5 9:30 NY</td><td><span class="bdg bg-weak">schwacher Vorteil</span> Trefferquote 26–36 %, Drawdown 22–57 R, besteht die Mehrfachtest-Korrektur nicht. Kosten hier nur auf den Proxy skaliert.</td></tr>
    <tr><td>Vera v2b „Verbessert“</td><td>Gold · M15</td><td><span class="bdg bg-weak">schwacher Vorteil/Test</span> OOS n = 89, +0,239 R/Trade, nicht signifikant (White p 0,94).</td></tr>
@@ -588,16 +588,19 @@ const STATUS={robust:{r:0,txt:"geprüft robust",cls:"bg-ok"},schwach:{r:1,txt:"s
 function mk(o){o.crv=o.crv!==undefined?o.crv:(o.tgt!=null&&o.stop!=null?Math.abs(o.tgt-o.entry)/Math.abs(o.entry-o.stop):null);o.id=[o.strat,o.sym,o.tf,o.sub||"",o.dir,o.t].join("|");return o}
 // =====================================================================================
 // Connors RSI(2) D1 – FTMO_ConnorsRSI2_EA (US500/US100/US30, JP225 ohne Quelle)
-// v8: Connors RSI(2) D1 mit externer SMA200 vom Kassaindex (TradingView SP:SPX / NASDAQ:NDX), RSI2/SMA5/ATR14 aus ≥ 30 Perp-Tageskerzen.
+// v9: C1 gelockert (RSI2<15, Index > 0,98×SMA200) – connorsCore = sg_research/locker/connors_locker_ref.js connorsLockerSignal 1:1. Basis v8: Connors RSI(2) D1 mit externer SMA200 vom Kassaindex (TradingView SP:SPX / NASDAQ:NDX), RSI2/SMA5/ATR14 aus ≥ 30 Perp-Tageskerzen.
 // connorsCore ist 1:1 die Referenz sg_research/ref/connors_ref.js connorsSignal (Tests: test/connors_v8_test.js, 0 Abweichungen).
-function connorsCore(D,ext,opt){opt=Object.assign({rsiMax:10,vixStrong:20,minBars:30},opt||{});
- if(!D||D.length<opt.minBars)return{ok:false,reason:"zu wenig Tageskerzen ("+(D?D.length:0)+" < "+opt.minBars+")"};
+function connorsCore(D,ext,opt){const o=Object.assign({rsiMax:15,smaTol:0.98,kSL:3,maxHold:10,vixStrong:20,minBars:30},opt||{});
+ if(!D||D.length<o.minBars)return{ok:false,reason:`zu wenig Tageskerzen (${D?D.length:0} < ${o.minBars})`};
  if(!ext||!(ext.sma200>0)||!(ext.idxClose>0))return{ok:false,reason:"SMA200 vom Index nicht verfügbar"};
- const C=D.map(x=>x.c),H=D.map(x=>x.h),L=D.map(x=>x.l);let up=0,dn=0;
+ const C=D.map(d=>d.c),H=D.map(d=>d.h),L=D.map(d=>d.l);let up=0,dn=0;
  for(let i=1;i<C.length;i++){const q=C[i]-C[i-1],u=Math.max(q,0),w=Math.max(-q,0);if(i===1){up=u;dn=w}else{up=.5*u+.5*up;dn=.5*w+.5*dn}}
- const r=dn<=0?100:100-100/(1+up/dn),s5=mean(C.slice(-5)),n=C.length;let a=0;for(let i=n-14;i<n;i++)a+=Math.max(H[i]-L[i],Math.abs(H[i]-C[i-1]),Math.abs(L[i]-C[i-1]));a/=14;const c=C[n-1];
- const trend=ext.idxClose>ext.sma200,sig=trend&&r<opt.rsiMax,strong=sig&&typeof ext.vix==="number"&&ext.vix>opt.vixStrong;
- return{ok:true,signal:sig,rsi2:r,sma5:s5,atr:a,close:c,trend,entry:sig?c:null,stop:sig?c-3*a:null,label:sig?(strong?"stark (VIX>"+opt.vixStrong+")":"normal"):null}}
+ const r=dn<=0?100:100-100/(1+up/dn),n=C.length;let a=0;for(let i=n-14;i<n;i++)a+=Math.max(H[i]-L[i],Math.abs(H[i]-C[i-1]),Math.abs(L[i]-C[i-1]));a/=14;const c=C[n-1];
+ const trend=ext.idxClose>o.smaTol*ext.sma200,sig=trend&&r<o.rsiMax;
+ const tier=!sig?null:(r<10&&ext.idxClose>ext.sma200?"klassisch":"gelockert");
+ const strong=sig&&typeof ext.vix==="number"&&ext.vix>o.vixStrong;
+ return{ok:true,signal:sig,tier,rsi2:r,sma5:mean(C.slice(-5)),atr:a,close:c,trend,entry:sig?c:null,stop:sig?c-o.kSL*a:null,
+  label:sig?(strong?`stark (VIX>${o.vixStrong})`:"normal"):null,exit:"Schluss > SMA5 oder nach 10 Handelstagen; SL 3×ATR14"}}
 function connors(sym,h1,now,ext){const info=[],sigs=[];
  const all=serverDays(h1,0,23,true);const today=S(now);
  const D=all.filter(d=>d.lastHr>=20);              // EA: Tageskerze nur gueltig mit letzter H1 >= 20
@@ -605,7 +608,7 @@ function connors(sym,h1,now,ext){const info=[],sigs=[];
  const m=D.length,ix=v=>(+v).toLocaleString("de-DE",{minimumFractionDigits:2,maximumFractionDigits:2}),tv=(ext&&ext.tv)||"Index";
  if(m<30){info.push({lv:"na",txt:`Connors D1: zu wenig Tageskerzen (${m} < 30).`});return{sigs,info,m}}
  if(!ext||!(ext.sma200>0)||!(ext.idxClose>0)){info.push({lv:"na",txt:`Connors D1: <b>SMA200 nicht verfügbar</b> – TradingView (${tv}) antwortet nicht${ext&&ext.err?" ("+ext.err+")":""}. Ohne Trendfilter gibt es kein Signal.`});return{sigs,info,m}}
- const trend=ext.idxClose>ext.sma200,dist=ext.idxClose/ext.sma200-1,edge=Math.abs(dist)<0.003;
+ const trend=ext.idxClose>0.98*ext.sma200,dist=ext.idxClose/ext.sma200-1,edge=Math.abs(ext.idxClose/(0.98*ext.sma200)-1)<0.003;
  const vixOK=typeof ext.vix==="number"&&isFinite(ext.vix);
  const core=(k,extra)=>{const W=D.slice(0,k).map(d=>({c:d.c,h:d.h,l:d.l}));if(extra)W.push({c:extra.c,h:extra.h,l:extra.l});return connorsCore(W,ext)};
  // Positions-Info (letzte 60 Tage): angenähert, Trend = heutiger Index-Trend (keine Index-Historie im Browser)
@@ -617,17 +620,17 @@ function connors(sym,h1,now,ext){const info=[],sigs=[];
  if(!fin&&part&&isTD(today.key)){x=core(m,part);prev=true}
  const decT=today.day0+23*HOUR;
  const vixT=vixOK?` · VIX ${ext.vix.toFixed(1)}${ext.vix>20?" (> 20)":""}`:" · VIX nicht verfügbar";
- const head=`RSI2 ${x.rsi2.toFixed(1)} · ${tv} ${ix(ext.idxClose)} ${trend?">":"<"} SMA200 ${ix(ext.sma200)} (${dist>=0?"+":""}${(dist*100).toFixed(2).replace(".",",")} %, TradingView${ext.stale?", Stand "+ext.stale:""}) · ATR ${px(sym,x.atr)}${vixT}`;
- if(edge)info.push({lv:"warn",txt:`Connors: <b>Grenzfall</b> – ${tv} liegt nur ${(Math.abs(dist)*100).toFixed(2).replace(".",",")} % ${trend?"über":"unter"} der SMA200. Trend kommt vom Kassaindex, RSI2/Einstieg vom Perpetual – hier kann das kippen.`});
+ const head=`RSI2 ${x.rsi2.toFixed(1)} · ${tv} ${ix(ext.idxClose)} ${ext.idxClose>ext.sma200?">":"<"} SMA200 ${ix(ext.sma200)} (${dist>=0?"+":""}${(dist*100).toFixed(2).replace(".",",")} %, TradingView${ext.stale?", Stand "+ext.stale:""}; Schwelle 0,98× = ${ix(0.98*ext.sma200)} ${trend?"erfüllt":"nicht erfüllt"}) · ATR ${px(sym,x.atr)}${vixT}`;
+ if(edge)info.push({lv:"warn",txt:`Connors: <b>Grenzfall</b> – ${tv} liegt nur ${(Math.abs(ext.idxClose/(0.98*ext.sma200)-1)*100).toFixed(2).replace(".",",")} % ${trend?"über":"unter"} der Schwelle 0,98 × SMA200. Trend kommt vom Kassaindex, RSI2/Einstieg vom Perpetual – hier kann das kippen.`});
  if(pos)info.push({lv:"ok",txt:`Connors: Regel-Position seit ${fmtKey(pos.key)} (angenähert; Einstieg ${px(sym,pos.e)}, SL ${px(sym,pos.sl)}). Ausstieg, sobald Schluss > SMA5 (${px(sym,x.sma5)}) oder nach 10 Handelstagen.`});
  if(!isTD(today.key)){info.push({lv:"",txt:`Connors D1: heute kein US-Handelstag. Letzter Stand: ${head}.`});return{sigs,info,m}}
  if((fin||prev)&&x.signal&&!pos){const strong=x.label&&x.label.startsWith("stark");
-  sigs.push(mk({strat:"CONNORS",sym,tf:"D1",sub:"RSI2",dir:1,str:Math.round(50+50*(10-x.rsi2)/10),entry:x.close,stop:x.stop,tgt:null,crv:null,
+  sigs.push(mk({strat:"CONNORS",sym,tf:"D1",sub:"RSI2",dir:1,str:Math.round(50+50*(15-x.rsi2)/15),entry:x.close,stop:x.stop,tgt:null,crv:null,
    exitTxt:`Ausstieg lt. Regel: Schluss > SMA5 (${px(sym,x.sma5)}) oder nach 10 Tagen`,t:fin?decT:now,barSec:86400,status:"robust",prelim:!fin,
-   vix:vixOK?ext.vix:null,strong,risk:vixOK?(strong?1.5:0.75):null,edge,
-   why:`${prev?"VORLÄUFIG mit laufender Tageskerze – ":""}RSI2 ${x.rsi2.toFixed(1)} < 10 und ${tv} ${ix(ext.idxClose)} über SMA200 ${ix(ext.sma200)} (TradingView)${edge?" – Grenzfall ±0,3 %":""}. Kauf zum Kassaschluss 16:00 NY.${vixOK?` VIX ${ext.vix.toFixed(1)}.`:""}`,
+   vix:vixOK?ext.vix:null,strong,tier:x.tier,risk:vixOK?(strong?1.5:0.75):null,edge,
+   why:`${prev?"VORLÄUFIG mit laufender Tageskerze – ":""}C1 ${x.tier}: RSI2 ${x.rsi2.toFixed(1)} < 15 und ${tv} ${ix(ext.idxClose)} > 0,98 × SMA200 ${ix(0.98*ext.sma200)} (TradingView)${edge?" – Grenzfall ±0,3 %":""}. Kauf zum Kassaschluss 16:00 NY.${vixOK?` VIX ${ext.vix.toFixed(1)}.`:""}`,
    win:{from:decT-HOUR,to:decT+50*MIN}}))}
- info.push({lv:"",txt:`Connors D1 ${fin?"(heutige Kerze fertig)":prev?"(vorläufig, Kerze läuft)":""}: ${head} → ${x.signal?(pos?"Bedingung erfüllt, aber Position läuft schon":"KAUF-Bedingung erfüllt"):"kein Signal"}. Entscheidung 16:00–16:50 NY.`});
+ info.push({lv:"",txt:`Connors D1 ${fin?"(heutige Kerze fertig)":prev?"(vorläufig, Kerze läuft)":""}: ${head} → ${x.signal?(pos?"Bedingung erfüllt, aber Position läuft schon":"KAUF-Bedingung C1 erfüllt ("+x.tier+")"):"kein Signal"}. Regel C1: RSI2 < 15 und Index > 0,98 × SMA200. Entscheidung 16:00–16:50 NY.`});
  return{sigs,info,m}}
 // =====================================================================================
 // E4 Monatswechsel + Vor-Feiertag – FTMO_Monatswechsel_EA_v1c (US-Teil)
@@ -1142,7 +1145,8 @@ function label(x){switch(x.strat){case"TA":return"TA-Kachel";case"VERA":return"V
 function badge(x){const s=STR[x.status];if(x.strat==="TA")return`<span class="bdg bg-no" title="16 Jahre mit FTMO-Kosten: alle 18 Varianten negativ">Nur Info, nicht robust (16-J.-Test nach Kosten negativ)</span>`;
  return`<span class="bdg ${s.cls}">${x.strat==="VERA"&&x.status==="schwach"?"v2b · ":""}${s.txt}</span>${x.strat==="CONNORS"?vixBadge(x):""}`}
 // v8: VIX-Label bei Connors – „vielleicht“ (Permutation p 0,008, nach Bonferroni nicht signifikant)
-function vixBadge(x){if(x.vix==null)return` <span class="bdg bg-no">VIX n. v. – kein Label</span>`;return x.strong?` <span class="bdg bg-weak" title="vielleicht, statistisch nicht gesichert">💪 stark · VIX ${nf(x.vix,1)} &gt; 20 (vielleicht)</span>`:` <span class="bdg bg-no">normal · VIX ${nf(x.vix,1)}</span>`}
+function vixBadge(x){const tb=x.tier?` <span class="bdg ${x.tier==="klassisch"?"bg-ok":"bg-weak"}" title="klassisch = RSI2<10 und Kurs > SMA200; gelockert = nur C1 erfüllt">${x.tier}</span>`:"";return tb+vixB(x)}
+function vixB(x){if(x.vix==null)return` <span class="bdg bg-no">VIX n. v. – kein Label</span>`;return x.strong?` <span class="bdg bg-weak" title="vielleicht, statistisch nicht gesichert">💪 stark · VIX ${nf(x.vix,1)} &gt; 20 (vielleicht)</span>`:` <span class="bdg bg-no">normal · VIX ${nf(x.vix,1)}</span>`}
 const ageBars=(x,now)=>(now-x.t)/(x.barSec*1000);
 function actionable(x,now){if(x.out&&x.out!=="läuft"&&x.out!=="offen")return false;if(x.fresh1s)return true;if(x.barSec>=86400)return true;if(x.win&&now>x.win.to&&x.strat!=="STACK"&&x.strat!=="PULL")return false;return ageBars(x,now)<=3}
 function rankCmp(a,b){return b.str-a.str||STR[a.status].r-STR[b.status].r||TFI[b.tf]-TFI[a.tf]||b.t-a.t}
